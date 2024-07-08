@@ -21,7 +21,9 @@ public class ReplyService {
         this.boardRepository = boardRepository;
     }
 
-    // 댓글 생성
+    /*
+        Create
+     */
     public ReplyDTO createReply(ReplyDTO replyDTO) {
         // 게시글 ID로 해당하는 Board 엔티티 조회
         Board board = boardRepository.findById(replyDTO.getBoardId())
@@ -37,15 +39,23 @@ public class ReplyService {
                 .boardId(savedReply.getBoard().getId())
                 .build();
     }
-    
-    // 댓글 삭제
-    @Transactional
-    public void deleteReply(Long id) {
-        Reply reply = replyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 댓글을 찾을 수 없습니다. ID: " + id));
 
-        replyRepository.delete(reply);
+    /*
+        Read
+     */
+    public ReplyDTO getReplyById(Long replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다. ID: " + replyId));
+
+        return ReplyDTO.builder()
+                .id(reply.getId())
+                .content(reply.getContent())
+                .boardId(reply.getBoard().getId())
+                .build();
     }
+    /*
+        Update
+     */
 
     // 댓글 수정
     public ReplyDTO updateReply(Long replyId, ReplyDTO replyDTO) {
@@ -65,5 +75,16 @@ public class ReplyService {
                 .content(updatedReply.getContent())
                 .boardId(updatedReply.getBoard().getId())
                 .build();
+    }
+    /*
+        Delete
+     */
+    // 댓글 삭제
+    @Transactional
+    public void deleteReply(Long id) {
+        Reply reply = replyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 댓글을 찾을 수 없습니다. ID: " + id));
+
+        replyRepository.delete(reply);
     }
 }

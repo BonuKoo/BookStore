@@ -13,6 +13,8 @@ public class ReplyDTO {
     private String content;
     private Long boardId;
 
+    public ReplyDTO() {
+    }
 
     public ReplyDTO(String content, Long boardId) {
         this.content = content;

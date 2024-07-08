@@ -5,6 +5,8 @@ import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.board.service.BoardService;
 
+import com.myboard.toy.domain.reply.dto.ReplyDTO;
+import com.myboard.toy.domain.reply.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +20,52 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class BoardController {
     private final BoardService boardService;
+    private final ReplyService replyService;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService,ReplyService replyService) {
         this.boardService = boardService;
+        this.replyService = replyService;
+    }
+
+    /*
+        Create
+     */
+
+    @GetMapping("/boards/new")
+    public String showCreateBoardForm(Model model) {
+        model.addAttribute("createBoard", new BoardDTO());
+        return "createBoardForm"; // 생성 폼 뷰 이름
+    }
+
+    @PostMapping("/boards/new")
+    public String createBoard(@ModelAttribute("createBoard") BoardDTO boardDTO) {
+        BoardDTO createdBoard = boardService.createBoard(boardDTO);
+        return "redirect:/boards/" + createdBoard.getId();
+        // 생성 후 상세 페이지로 리다이렉트
+    }
+
+
+    @PostMapping("/boards/{id}/reply")
+    public String createReply(@PathVariable Long id, @RequestParam String content) {
+        ReplyDTO replyDTO = ReplyDTO.builder()
+                .content(content)
+                .boardId(id)
+                .build();
+        replyService.createReply(replyDTO);
+        return "redirect:/boards/" + id;
+    }
+
+
+    /*
+        Read
+     */
+
+    @GetMapping("/boards/{id}")
+    public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
+        BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
+
+        model.addAttribute("board", boardDTO);
+        return "boardDetail"; // 뷰 이름
     }
 
     @GetMapping("/boards")
@@ -42,13 +87,9 @@ public class BoardController {
         return "boardList";
     }
 
-    @GetMapping("/boards/{id}")
-    public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
-        BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
-
-        model.addAttribute("board", boardDTO);
-        return "boardDetail"; // 뷰 이름
-    }
+    /*
+        UPDATE
+     */
 
     @GetMapping("/boards/{id}/edit")
     public String modifyBoard(@PathVariable Long id, Model model) {
@@ -65,22 +106,13 @@ public class BoardController {
         return "redirect:/boards/" + id;
     }
 
+    /*
+        DELETE
+     */
     @PostMapping("/boards/{id}/delete")
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
         return "redirect:/boards"; // 삭제 후 게시판 목록으로 리다이렉트
     }
 
-    @GetMapping("/boards/new")
-    public String showCreateBoardForm(Model model) {
-        model.addAttribute("createBoard", new BoardDTO());
-        return "createBoardForm"; // 생성 폼 뷰 이름
-    }
-
-    @PostMapping("/boards/new")
-    public String createBoard(@ModelAttribute("createBoard") BoardDTO boardDTO) {
-        BoardDTO createdBoard = boardService.createBoard(boardDTO);
-        return "redirect:/boards/" + createdBoard.getId();
-        // 생성 후 상세 페이지로 리다이렉트
-    }
 }
