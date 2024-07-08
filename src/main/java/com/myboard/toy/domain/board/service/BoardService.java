@@ -1,8 +1,12 @@
 package com.myboard.toy.domain.board.service;
 
 import com.myboard.toy.domain.board.Board;
+import com.myboard.toy.domain.board.BoardSearchCondition;
+import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,20 +17,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public List<Board> getAllBoards(){
-        return boardRepository.findAll();
+    public Page<BoardPageDTO> searchWithPage(BoardSearchCondition condition, Pageable pageable){
+        return boardRepository.searchWithPage(condition, pageable);
     }
-
-    public Optional<Board> getById(Long id){
-        return boardRepository.findById(id);
-    }
-
-    public Board save(Board board){
-        return boardRepository.save(board);
-    }
-
-    public void deleteById(Long id){
-        boardRepository.deleteById(id);
-    }
-
 }

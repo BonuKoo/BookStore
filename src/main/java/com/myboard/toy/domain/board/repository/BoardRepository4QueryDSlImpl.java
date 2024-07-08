@@ -29,6 +29,9 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
 
     @Override
     public Page<BoardPageDTO> searchWithPage(BoardSearchCondition condition, Pageable pageable) {
+
+        //BooleanExpression whereClause = condition.getTitle() != null ? titleEq(condition.getTitle()) : null;
+
         List<BoardPageDTO> query = queryFactory
                 .select(Projections.constructor(BoardPageDTO.class,
                         board.id,
@@ -37,6 +40,7 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
                 .from(board)
                 .leftJoin(board.replies,reply)
                 .where(titleEq(condition.getTitle()))
+                //.where(whereClause)
                 .groupBy(board.id)
                 .orderBy(board.id.asc())
                 .offset(pageable.getOffset())
@@ -46,13 +50,19 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
         long total = queryFactory
                 .select(board.count())
                 .from(board)
+                //.where(whereClause)
                 .where(titleEq(condition.getTitle()))
                 .fetchOne();
 
         return new PageImpl<>(query,pageable,total);
-    }
 
-    private BooleanExpression titleEq(String title){
-        return StringUtils.hasText(title) ? null : board.title.eq(title);
+    }
+    //검색 조건
+    private BooleanExpression titleEq(String title) {
+        if (StringUtils.hasText(title)) {
+            return board.title.contains(title);
+        } else {
+            return null;
+        }
     }
 }
