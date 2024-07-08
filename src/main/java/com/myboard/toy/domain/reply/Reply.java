@@ -31,7 +31,7 @@ public class Reply {
 
     // 댓글 수정용
     public void updateContent(String newContent){
-        this.content=content;
+        this.content=newContent;
     }
 
     // Board를 함께 설정하는 예시

@@ -33,14 +33,13 @@ public class Board {
         this.id = id;
         this.title = title;
         this.content = content;
-        if (replies != null) {
-            this.replies = replies;
-        }
+        this.replies = (replies != null) ? replies : new ArrayList<>();
     }
 
     public Board(String title, String content) {
         this.title = title;
         this.content = content;
+        this.replies = new ArrayList<>();
     }
 
     public void addReply(Reply reply){
@@ -63,5 +62,3 @@ public class Board {
     }
 
 }
-
-//오류 상황: UPDATE 하면 title이 contents가 되어버림

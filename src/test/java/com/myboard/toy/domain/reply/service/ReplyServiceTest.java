@@ -1,6 +1,7 @@
 package com.myboard.toy.domain.reply.service;
 
 import com.myboard.toy.domain.board.Board;
+import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.repository.BoardRepository;
 import com.myboard.toy.domain.reply.Reply;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
@@ -52,6 +53,39 @@ class ReplyServiceTest {
         replyRepository.deleteById(createdReplyDTO.getId());
         boardRepository.deleteById(board.getId());
     }
-    //TODO :: 댓글 수정
-    
+
+    @Test
+    void testUpdateReply(){
+        //Given
+
+        //게시글, 댓글 생성
+        Board board = new Board("게시글 제목","게시글 내용");
+        Reply reply = new Reply("댓글1");
+
+        board.addReply(reply);
+
+        //저장
+        Board savedBoard1 = boardRepository.save(board);
+        Reply savedReply1 = replyRepository.save(reply);
+
+        //When
+        String updatedContent ="Updated Reply Content";
+
+        ReplyDTO updatedReplyDTO = ReplyDTO.builder()
+                .id(savedReply1.getId())
+                .content(updatedContent)
+                .boardId(savedBoard1.getId())
+                .build();
+
+        ReplyDTO updatedReply = replyService.updateReply(savedReply1.getId(), updatedReplyDTO);
+
+        // Then: 업데이트된 내용을 검증
+        assertThat(updatedReplyDTO).isNotNull();
+        assertThat(updatedReplyDTO.getContent()).isEqualTo(updatedContent);
+        assertThat(updatedReplyDTO.getBoardId()).isEqualTo(savedBoard1.getId());
+
+        // 추가 검증: 실제 데이터베이스에 반영되었는지 확인
+        Reply updatedReply2 = replyRepository.findById(savedReply1.getId()).orElseThrow();
+        assertThat(updatedReply2.getContent()).isEqualTo(updatedContent);
+    }
 }
