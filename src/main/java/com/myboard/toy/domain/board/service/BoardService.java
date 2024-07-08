@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-@Service @RequiredArgsConstructor
+@RequiredArgsConstructor
+@Service
 public class BoardService {
 
     private final BoardRepository boardRepository;

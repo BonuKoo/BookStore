@@ -2,10 +2,11 @@ package com.myboard.toy.domain.reply;
 
 import com.myboard.toy.domain.board.Board;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor @Getter
 @Entity
-@NoArgsConstructor
 public class Reply {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
