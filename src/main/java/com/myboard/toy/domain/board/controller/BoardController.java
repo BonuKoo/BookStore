@@ -11,10 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -54,16 +51,36 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{id}/edit")
-    public String editBoard(@PathVariable Long id, Model model) {
+    public String modifyBoard(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
         model.addAttribute("board", boardDTO);
         return "updateForm"; // 수정 폼 뷰 이름
     }
+
     @PostMapping("/boards/{id}")
-    public String updateBoard(@PathVariable Long id,
+    public String modifyBoard(@PathVariable Long id,
                               @RequestParam String title,
                               @RequestParam String content) {
         boardService.modifyBoard(id, title, content);
         return "redirect:/boards/" + id;
+    }
+
+    @PostMapping("/boards/{id}/delete")
+    public String deleteBoard(@PathVariable Long id) {
+        boardService.removeBoard(id);
+        return "redirect:/boards"; // 삭제 후 게시판 목록으로 리다이렉트
+    }
+
+    @GetMapping("/boards/new")
+    public String showCreateBoardForm(Model model) {
+        model.addAttribute("createBoard", new BoardDTO());
+        return "createBoardForm"; // 생성 폼 뷰 이름
+    }
+
+    @PostMapping("/boards/new")
+    public String createBoard(@ModelAttribute("createBoard") BoardDTO boardDTO) {
+        BoardDTO createdBoard = boardService.createBoard(boardDTO);
+        return "redirect:/boards/" + createdBoard.getId();
+        // 생성 후 상세 페이지로 리다이렉트
     }
 }

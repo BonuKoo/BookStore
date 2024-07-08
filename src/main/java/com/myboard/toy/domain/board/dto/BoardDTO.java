@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter @Data
+@Data @NoArgsConstructor
 @Builder
 public class BoardDTO {
     private Long id;
@@ -28,5 +28,11 @@ public class BoardDTO {
         this.title = title;
         this.content = content;
         this.replies = replies;
+    }
+    
+    //게시글 생성용
+    public BoardDTO (String title,String content){
+        this.title=title;
+        this.content=content;
     }
 }

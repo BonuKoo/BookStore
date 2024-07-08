@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-
+    //리스트
     public Page<BoardPageDTO> searchWithPage(BoardSearchCondition condition, Pageable pageable){
         return boardRepository.searchWithPage(condition, pageable);
     }
-
+    //단 건 조회
     public BoardDTO getDetailBoardByIdWithReply(Long id){
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
@@ -32,7 +32,7 @@ public class BoardService {
                 .replies(board.getReplies())
                 .build();
     }
-
+    //수정
     public BoardDTO modifyBoard(Long id, String title, String content){
 
         Board board = boardRepository.findById(id)
@@ -42,5 +42,20 @@ public class BoardService {
         Board modifiedBoard = boardRepository.save(board);
 
         return new BoardDTO(modifiedBoard.getId(), modifiedBoard.getTitle(), modifiedBoard.getContent());
+    }
+
+    //삭제
+    public void removeBoard(Long id){
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글을 찾을 수 없습니다. ID:" + id));
+
+        boardRepository.delete(board);
+    }
+
+    //생성
+    public BoardDTO createBoard(BoardDTO boardDTO){
+        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent());
+        Board savedBoard = boardRepository.save(board);
+        return new BoardDTO(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getContent());
     }
 }

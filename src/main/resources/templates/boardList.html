@@ -18,6 +18,9 @@
     </tr>
 </table>
 
+<!-- "게시글 생성" 버튼 -->
+<a th:href="@{/boards/new}">게시글 생성</a>
+
 <form th:action="@{/boards}" method="get">
     <input type="text" name="title" placeholder="검색어 입력">
     <button type="submit">검색</button>

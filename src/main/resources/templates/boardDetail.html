@@ -24,5 +24,10 @@
     <a th:href="@{/boards/{id}/edit(id=${board.id})}">게시글 수정</a>
 </div>
 
+<div>
+    <form th:action="@{/boards/{id}/delete(id=${board.id})}" method="post">
+        <button type="submit">게시글 삭제</button>
+    </form>
+</div>
 </body>
 </html>

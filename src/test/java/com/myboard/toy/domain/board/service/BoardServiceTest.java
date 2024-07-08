@@ -59,6 +59,30 @@ class BoardServiceTest {
         log.info("modifiedBoard id: {}",modifiedBoard.getId());
         log.info("modifiedBoard title: {}",modifiedBoard.getTitle());
         log.info("modifiedBoard content: {}",modifiedBoard.getContent());
+    }
 
+    @Test
+    void 게시글_작성(){
+        //Given
+        String newTitle = "제목이지롱";
+        String newContent = "내용이지롱";
+
+        BoardDTO boardDTO = new BoardDTO(newTitle,newContent);
+
+        //When
+        BoardDTO createdBoard = boardService.createBoard(boardDTO);
+
+        //Then
+        assertNotNull(createdBoard.getId());
+        assertEquals(boardDTO.getTitle(), createdBoard.getTitle());
+        assertEquals(boardDTO.getContent(), createdBoard.getContent());
+
+        // Verify in the database
+        Optional<Board> savedBoardOptional = boardRepository.findById(createdBoard.getId());
+        assertTrue(savedBoardOptional.isPresent());
+
+        Board savedBoard = savedBoardOptional.get();
+        assertEquals(boardDTO.getTitle(), savedBoard.getTitle());
+        assertEquals(boardDTO.getContent(), savedBoard.getContent());
     }
 }
