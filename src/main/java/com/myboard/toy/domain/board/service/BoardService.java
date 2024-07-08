@@ -25,11 +25,22 @@ public class BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
 
-        return  BoardDTO.builder()
+        return BoardDTO.builder()
                 .id(board.getId())
-                .title(board.getContents())
-                .content(board.getContents())
+                .title(board.getTitle())
+                .content(board.getContent())
                 .replies(board.getReplies())
                 .build();
+    }
+
+    public BoardDTO modifyBoard(Long id, String title, String content){
+
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("해당하는 게시글을 찾을 수 없습니다. ID:"+id));
+
+        board.update(title,content);
+        Board modifiedBoard = boardRepository.save(board);
+
+        return new BoardDTO(modifiedBoard.getId(), modifiedBoard.getTitle(), modifiedBoard.getContent());
     }
 }

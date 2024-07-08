@@ -24,9 +24,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
+//@DataJpaTest
 //@Transactional
-//@SpringBootTest
+@SpringBootTest
 class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
@@ -41,7 +41,10 @@ class BoardRepositoryTest {
         //게시글 2000개
         //각 게시글마다 댓글 6개
         for (int i = 1; i <= 2000; i++) {
-            Board board = new Board("게시글 " + i, "내용 " + i);
+            Board board = Board.builder()
+                    .title("게시글 " + i)
+                    .content("내용 " + i)
+                    .build();
 
             for (int j = 1; j <= 6; j++) {
                 Reply reply = new Reply("댓글 " + j + " for 게시글 " + i);
@@ -152,4 +155,6 @@ class BoardRepositoryTest {
 
     }
      */
+
+
 }

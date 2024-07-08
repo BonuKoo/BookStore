@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-@NoArgsConstructor @AllArgsConstructor @Getter
+@Getter
+@NoArgsConstructor @Builder
 @Entity
 public class Board {
 
@@ -18,18 +18,29 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
-    private String contents;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
-    public Board(String title, String contents) {
+    @Builder
+    public Board(Long id, String title, String content, List<Reply> replies) {
+        this.id = id;
         this.title = title;
-        this.contents = contents;
+        this.content = content;
+        if (replies != null) {
+            this.replies = replies;
+        }
+    }
+
+    public Board(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public void addReply(Reply reply){
@@ -42,4 +53,15 @@ public class Board {
         reply.assignBoard(null);
     }
 
+    public void update(String title, String contents){
+        if (title != null){
+            this.title = title;
+        }
+        if (contents != null){
+            this.content = contents;
+        }
+    }
+
 }
+
+//오류 상황: UPDATE 하면 title이 contents가 되어버림

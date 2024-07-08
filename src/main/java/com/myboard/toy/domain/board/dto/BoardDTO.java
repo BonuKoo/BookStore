@@ -13,8 +13,14 @@ public class BoardDTO {
     private Long id;
     private String title;
     private String content;
-    //ReplyDTO로 바꿔야 하나?
+
     private List<Reply> replies;
+
+    public BoardDTO(Long id, String title, String content) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+    }
 
     @QueryProjection
     public BoardDTO(Long id, String title, String content, List<Reply> replies) {
