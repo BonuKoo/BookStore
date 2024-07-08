@@ -1,9 +1,9 @@
 package com.myboard.toy.domain.board.controller;
 
 import com.myboard.toy.domain.board.BoardSearchCondition;
+import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.board.service.BoardService;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -23,7 +24,7 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public String getBoards(@RequestParam(required = false) String title,
+    public String searchWithPage(@RequestParam(required = false) String title,
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "10") int size,
                             Model model) {
@@ -38,6 +39,14 @@ public class BoardController {
 
         model.addAttribute("boards", boardPage);
 
-        return "boards";
+        return "boardList";
+    }
+
+    @GetMapping("/boards/{id}")
+    public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
+        BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
+
+        model.addAttribute("board", boardDTO);
+        return "boardDetail"; // 뷰 이름
     }
 }

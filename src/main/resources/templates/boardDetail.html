@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 상세 정보</title>
+</head>
+<body>
+<h1>게시글 상세 정보</h1>
+<div>
+    <h2>제목: <span th:text="${board.title}"></span></h2>
+    <p>내용: <span th:text="${board.content}"></span></p>
+    <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
+</div>
+<div>
+    <h3>댓글 목록</h3>
+    <ul>
+        <li th:each="reply : ${board.replies}">
+            <span th:text="${reply.content}"></span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

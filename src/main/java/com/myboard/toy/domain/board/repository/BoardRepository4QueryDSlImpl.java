@@ -6,7 +6,6 @@ import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.reply.QReply;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;

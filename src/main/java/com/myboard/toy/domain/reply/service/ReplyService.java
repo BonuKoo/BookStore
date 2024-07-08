@@ -1,5 +1,6 @@
 package com.myboard.toy.domain.reply.service;
 
+import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,5 @@ public class ReplyService {
     public ReplyService(ReplyRepository replyRepository) {
         this.replyRepository = replyRepository;
     }
-
 
 }
