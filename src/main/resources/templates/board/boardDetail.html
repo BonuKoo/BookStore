@@ -17,13 +17,20 @@
     <ul>
         <li th:each="reply : ${board.replies}">
             <span th:text="${reply.content}"></span>
-            <a th:href="@{/replies/{id}/edit(id=${reply.id})}">수정</a>
-            <form th:action="@{/replies/{id}/delete(id=${reply.id})}" method="post" style="display:inline;">
+            <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" style="display:inline;">
+                <input type="hidden" name="boardId" th:value="${board.id}" />
                 <button type="submit">삭제</button>
+            </form>
+            <!-- 댓글 수정 폼 -->
+            <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" style="display:inline;">
+                <input type="hidden" name="boardId" th:value="${board.id}" />
+                <input type="text" name="content" th:value="${reply.content}" />
+                <button type="submit">수정</button>
             </form>
         </li>
     </ul>
 </div>
+
 
 <!-- 게시글 수정 버튼 -->
 <div>

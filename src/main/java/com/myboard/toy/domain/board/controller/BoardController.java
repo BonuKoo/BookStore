@@ -34,7 +34,7 @@ public class BoardController {
     @GetMapping("/boards/new")
     public String showCreateBoardForm(Model model) {
         model.addAttribute("createBoard", new BoardDTO());
-        return "createBoardForm"; // 생성 폼 뷰 이름
+        return "board/createBoardForm"; // 생성 폼 뷰 이름
     }
 
     @PostMapping("/boards/new")
@@ -65,7 +65,7 @@ public class BoardController {
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
 
         model.addAttribute("board", boardDTO);
-        return "boardDetail"; // 뷰 이름
+        return "board/boardDetail"; // 뷰 이름
     }
 
     @GetMapping("/boards")
@@ -84,7 +84,7 @@ public class BoardController {
 
         model.addAttribute("boards", boardPage);
 
-        return "boardList";
+        return "board/boardList";
     }
 
     /*
@@ -95,7 +95,7 @@ public class BoardController {
     public String modifyBoard(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
         model.addAttribute("board", boardDTO);
-        return "updateForm"; // 수정 폼 뷰 이름
+        return "board/updateForm"; // 수정 폼 뷰 이름
     }
 
     @PostMapping("/boards/{id}")

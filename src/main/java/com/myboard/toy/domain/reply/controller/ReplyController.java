@@ -41,18 +41,16 @@ public class ReplyController {
         Update
      */
 
-    // 수정 페이지로 이동
-    @GetMapping("/{replyId}/edit")
-    public String showUpdateReplyForm(@PathVariable Long replyId, Model model) {
-        ReplyDTO replyDTO = replyService.getReplyById(replyId); // 댓글 ID로 댓글 정보 가져오기
-        model.addAttribute("reply", replyDTO);
-        return "updateReplyForm"; // updateReplyForm.html로 이동
-    }
-
-    @PostMapping("/{replyId}/edit")
-    public String updateReply(@PathVariable Long replyId, @ModelAttribute("reply") ReplyDTO replyDTO) {
-        replyService.updateReply(replyId, replyDTO); // ReplyService를 통해 댓글 수정 로직 처리
-        return "redirect:/boards/" + replyDTO.getBoardId(); // 수정된 댓글이 포함된 게시글 상세 페이지로 리다이렉트
+    @PostMapping("/{replyId}/update")
+    public String updateReply(@PathVariable Long replyId, @RequestParam("boardId") Long boardId,
+                              @RequestParam("content") String content) {
+        ReplyDTO replyDTO = ReplyDTO.builder()
+                .id(replyId)
+                .content(content)
+                .boardId(boardId)
+                .build();
+        replyService.updateReply(replyId, replyDTO);
+        return "redirect:/boards/" + boardId; // 수정 후 게시글 상세 페이지로 리다이렉트
     }
 
     //REST

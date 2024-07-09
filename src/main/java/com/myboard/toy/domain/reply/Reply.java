@@ -30,13 +30,13 @@ public class Reply {
     }
 
     // 댓글 수정용
-    public void updateContent(String newContent){
-        this.content=newContent;
+    public void updateContent(String content){
+        this.content=content;
     }
 
     // Board를 함께 설정하는 예시
-    public void updateContent(String newContent, Board board) {
-        this.content = newContent;
+    public void updateContent(String content, Board board) {
+        this.content = content;
         this.board = board;
     }
 

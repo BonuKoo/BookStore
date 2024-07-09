@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReplyService {
 
-
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
 
@@ -58,6 +57,8 @@ public class ReplyService {
      */
 
     // 댓글 수정
+
+
     public ReplyDTO updateReply(Long replyId, ReplyDTO replyDTO) {
         // 기존의 Reply 엔티티 조회
         Reply reply = replyRepository.findById(replyId)
@@ -76,6 +77,7 @@ public class ReplyService {
                 .boardId(updatedReply.getBoard().getId())
                 .build();
     }
+
     /*
         Delete
      */
