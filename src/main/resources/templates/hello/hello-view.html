@@ -8,9 +8,8 @@
         <h2>상품 조회</h2>
     </div>
     상품명: <span th:text="${hello.helloName}">상품명</span><br/>
-    첨부파일: <a th:if="${hello.attachFile}" th:href="|/attach/${hello.id}|"
-             th:text="${hello.getAttachFile().getUploadFileName()}" /><br/>
-    <img th:each="imageFile : ${hello.imageFiles}" th:src="|/images/${imageFile.getStoreFileName()}|" width="300" height="300"/>
+    첨부파일: <a th:if="${hello.attachFile}" th:href="|/hello/attach/${hello.id}|" th:text="${hello.getAttachFile().getUploadFileName()}" /><br/>
+    <img th:each="imageFile : ${hello.imageFiles}" th:src="|/hello/images/${imageFile.getStoreFileName()}|" width="300" height="300"/>
 </div> <!-- /container -->
 </body>
 </html>

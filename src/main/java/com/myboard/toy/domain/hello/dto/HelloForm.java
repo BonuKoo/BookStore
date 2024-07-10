@@ -9,8 +9,8 @@ public class HelloForm {
 
     private Long helloId;
     private String helloName;
+    private MultipartFile attachFile;
     private List<MultipartFile> imageFiles;
-    private MultipartFile attachFiles;
 }
 
 /*

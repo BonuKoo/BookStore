@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 
@@ -49,7 +48,7 @@ public class HelloController {
     @PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form,RedirectAttributes redirectAttributes) throws IOException {
 
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFiles());
+        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
         List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
 
