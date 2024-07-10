@@ -15,5 +15,11 @@ spring:
         format_sql: true
   logging.level:
     org.hibernate.SQL: debug
+    org.apache.coyote.http11: trace
   profiles:
     active: local
+
+
+
+file:
+  dir: C:/ToyprojectUploadFileRoot/
