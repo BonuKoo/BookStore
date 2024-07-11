@@ -2,9 +2,9 @@ package com.myboard.toy.domain.hello.controller;
 
 import com.myboard.toy.domain.hello.Hello;
 import com.myboard.toy.domain.hello.dto.HelloForm;
-import com.myboard.toy.domain.hello.file.FileStore;
-import com.myboard.toy.domain.hello.file.UploadFile;
-import com.myboard.toy.domain.hello.repository.HelloRepository;
+import com.myboard.toy.domain.file.FileStore;
+import com.myboard.toy.domain.file.UploadFile;
+import com.myboard.toy.domain.hello.repository.HelloRepositoryTest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -24,20 +24,20 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/hello")
+//@RequestMapping("/hello")
 @RequiredArgsConstructor
-public class HelloController {
+public class HelloControllerTest {
 
-    private final HelloRepository helloRepository;
+    private final HelloRepositoryTest helloRepository;
     private final FileStore fileStore;
 
-    @GetMapping("")
+    //@GetMapping("")
     public String hello(){
         return "hello";
     }
     
     // 새로운 Hello 객체를 만들기 위해 form 반환
-    @GetMapping("/new")
+    //@GetMapping("/new")
     private String newHello(@ModelAttribute HelloForm form, RedirectAttributes  redirectAttributes) throws IOException {
         return "hello/hello-form";
     }
@@ -45,7 +45,7 @@ public class HelloController {
     /*
         파일 등록 기능
      */
-    @PostMapping("/new")
+    //@PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form,RedirectAttributes redirectAttributes) throws IOException {
 
         UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
@@ -67,20 +67,20 @@ public class HelloController {
         조회 시 출력
      */
 
-    @GetMapping("/{id}")
+    //@GetMapping("/{id}")
     public String hellos(@PathVariable Long id, Model model){
         Hello hello = helloRepository.findById(id);
         model.addAttribute("hello",hello);
         return "hello/hello-view";
     }
 
-    @ResponseBody
-    @GetMapping("/images/{filename}")
+    //@ResponseBody
+    //@GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:"+fileStore.getFullPath(filename));
     }
 
-    @GetMapping("/attach/{id}")
+    //@GetMapping("/attach/{id}")
     private ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
 
         Hello hello = helloRepository.findById(id);
@@ -101,7 +101,3 @@ public class HelloController {
 
 }
 
-/*
-    문제 상황 : 이미지 다운로드가 안되고 있는 상황이다.
-
- */

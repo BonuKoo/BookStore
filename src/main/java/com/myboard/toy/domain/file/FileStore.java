@@ -1,4 +1,4 @@
-package com.myboard.toy.domain.hello.file;
+package com.myboard.toy.domain.file;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
