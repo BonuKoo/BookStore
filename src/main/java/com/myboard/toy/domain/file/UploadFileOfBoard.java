@@ -1,15 +1,14 @@
 package com.myboard.toy.domain.file;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.myboard.toy.domain.board.Board;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor
+@Table(name = "UploadFile_Board")
 @Entity
-public class UploadFile {
+public class UploadFileOfBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +17,11 @@ public class UploadFile {
     private String uploadFileName; //고객이 업로드한 파일명
     private String storeFileName;  //서버 내부에서 관리하는 파일명 -> uuid
 
-    public UploadFile(String uploadFileName, String storeFileName) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Board board;
+
+    public UploadFileOfBoard(String uploadFileName, String storeFileName) {
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
     }
 }
-
-/*
-    File 전용 DTO 파일
- */

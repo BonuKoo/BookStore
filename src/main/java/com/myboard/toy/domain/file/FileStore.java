@@ -21,7 +21,7 @@ public class FileStore {
     }
 
     //이미지 하나만 저장
-    public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
+    public UploadFileOfBoard storeFile(MultipartFile multipartFile) throws IOException {
 
         if (multipartFile.isEmpty()){
             return null;
@@ -32,13 +32,13 @@ public class FileStore {
         //파일 이름 -> UUID + 확장자
         String storeFileName = createStoreFileName(originalFilename);
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
-        return new UploadFile(originalFilename,storeFileName);
+        return new UploadFileOfBoard(originalFilename,storeFileName);
     }
 
 
     //이미지 여러 개 저장
-    public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
-        List<UploadFile> storeFileResult = new ArrayList<>();
+    public List<UploadFileOfBoard> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
+        List<UploadFileOfBoard> storeFileResult = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles){
             if (!multipartFile.isEmpty()){

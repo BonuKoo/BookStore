@@ -1,17 +1,52 @@
+/* 전체 페이지 스타일 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
+/* header 부분 */
 header {
-    background-color: #333;
+    background-color: #007BFF;
     color: white;
     padding: 10px 0;
+    text-align: center;
 }
 
+.header-title {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+}
+
+/* header의 nav 부분 */
 header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav ul li {
+    display: inline;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+header nav ul li a:hover {
+    background-color: #0056b3;
+    border-radius: 5px;
+}
+
+/* 내비게이션 메뉴 */
+#menu {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -19,30 +54,297 @@ header nav ul {
     justify-content: center;
 }
 
-header nav ul li {
-    margin: 0 15px;
-}
-
-header nav ul li a {
-    color: white;
+#menu li a {
+    display: block;
+    padding: 14px 20px;
+    color: blue;
     text-decoration: none;
-    font-weight: bold;
+    text-align: center;
 }
 
-header nav ul li a:hover {
-    text-decoration: underline;
+#menu li a:hover {
+    background-color: #575757;
 }
 
-main {
+/* 주 내용 */
+#contents {
     padding: 20px;
 }
 
+/* 컨테이너 스타일 */
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* h1 스타일 */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 테이블 스타일 */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.board-table th, .board-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.board-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.board-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.board-table a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.board-table a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 스타일 */
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+}
+
+.create-button {
+    background-color: #28a745;
+    margin-bottom: 20px;
+}
+
+.create-button:hover {
+    background-color: #218838;
+}
+
+.submit-button {
+    background-color: #28a745;
+}
+
+.submit-button:hover {
+    background-color: #218838;
+}
+
+/* 검색창 스타일 */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination a {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+}
+
+/* 항상 보이게 설정 */
+.pagination .prev-button, .pagination .next-button {
+    display: block;
+}
+
+/* footer 부분 */
 footer {
-    background-color: #333;
+    background-color: #007BFF;
     color: white;
     text-align: center;
     padding: 10px 0;
     position: fixed;
-    bottom: 0;
     width: 100%;
+    bottom: 0;
+}
+
+/* 폼 스타일 */
+.post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 폼 그룹 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* 파일 업로드 입력 필드 */
+input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #0056b3;
+}
+
+/* 댓글 목록 스타일 */
+.comments-section {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+}
+
+.comments-section h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.inline-form {
+    display: flex;
+    align-items: center;
+}
+
+.inline-form input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+/* 수정 및 삭제 버튼 스타일 */
+.edit-button {
+    background-color: #007bff;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.update-button {
+    background-color: #007bff;
+}
+
+.update-button:hover {
+    background-color: #e0a800;
 }

@@ -3,7 +3,7 @@ package com.myboard.toy.domain.hello.controller;
 import com.myboard.toy.domain.hello.Hello;
 import com.myboard.toy.domain.hello.dto.HelloForm;
 import com.myboard.toy.domain.file.FileStore;
-import com.myboard.toy.domain.file.UploadFile;
+import com.myboard.toy.domain.file.UploadFileOfBoard;
 import com.myboard.toy.domain.hello.repository.HelloRepositoryTest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +48,9 @@ public class HelloControllerTest {
     //@PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form,RedirectAttributes redirectAttributes) throws IOException {
 
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
+        UploadFileOfBoard attachFile = fileStore.storeFile(form.getAttachFile());
 
-        List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
+        List<UploadFileOfBoard> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
 
         //DB에 저장
 

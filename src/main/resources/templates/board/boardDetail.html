@@ -1,59 +1,60 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>게시글 상세 정보</title>
-</head>
-<body>
-<h1>게시글 상세 정보</h1>
-<div>
-    <h2>제목: <span th:text="${board.title}"></span></h2>
-    <p>내용: <span th:text="${board.content}"></span></p>
-    <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
+<!--html ~layout~-->
+<html layout:decorate="~{layout}">
+<!-- layout:fragment 시작~ -->
+<div layout:fragment="content" id="contents">
+
+<div class="container">
+    <h1 class="page-title">게시글 상세 정보</h1>
+
+    <div class="post-details">
+        <h2>제목: <span th:text="${board.title}"></span></h2>
+        <p>내용: <span th:text="${board.content}"></span></p>
+        <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
+    </div>
+
+    <!-- 댓글 목록 -->
+    <div class="comments-section">
+        <h3>댓글 목록</h3>
+        <ul class="comment-list">
+            <li th:each="reply : ${board.replies}" class="comment-item">
+                <span th:text="${reply.content}"></span>
+                <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" class="inline-form">
+                    <input type="hidden" name="boardId" th:value="${board.id}" />
+                    <button type="submit" class="button delete-button">삭제</button>
+                </form>
+                <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" class="inline-form">
+                    <input type="hidden" name="boardId" th:value="${board.id}" />
+                    <input type="text" name="content" th:value="${reply.content}" class="input-text" />
+                    <button type="submit" class="button update-button">수정</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 게시글 수정 버튼 -->
+    <div class="action-buttons">
+        <a th:href="@{/boards/{id}/edit(id=${board.id})}" class="button edit-button">게시글 수정</a>
+    </div>
+
+    <!-- 게시글 삭제 버튼-->
+    <div class="action-buttons">
+        <form th:action="@{/boards/{id}/delete(id=${board.id})}" method="post">
+            <button type="submit" class="button delete-button">게시글 삭제</button>
+        </form>
+    </div>
+
+    <!-- 댓글 작성 폼 -->
+    <div class="comment-form">
+        <h3>댓글 작성</h3>
+        <form th:action="@{/boards/{id}/reply(id=${board.id})}" method="post">
+            <div class="form-group">
+                <label for="content">댓글 내용:</label>
+                <textarea id="content" name="content" required class="textarea"></textarea>
+            </div>
+            <button type="submit" class="button submit-button">댓글 작성</button>
+        </form>
+    </div>
 </div>
 
-<!-- 댓글 목록 -->
-<div>
-    <h3>댓글 목록</h3>
-    <ul>
-        <li th:each="reply : ${board.replies}">
-            <span th:text="${reply.content}"></span>
-            <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" style="display:inline;">
-                <input type="hidden" name="boardId" th:value="${board.id}" />
-                <button type="submit">삭제</button>
-            </form>
-            <!-- 댓글 수정 폼 -->
-            <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" style="display:inline;">
-                <input type="hidden" name="boardId" th:value="${board.id}" />
-                <input type="text" name="content" th:value="${reply.content}" />
-                <button type="submit">수정</button>
-            </form>
-        </li>
-    </ul>
 </div>
-
-
-<!-- 게시글 수정 버튼 -->
-<div>
-    <a th:href="@{/boards/{id}/edit(id=${board.id})}">게시글 수정</a>
-</div>
-<!-- 게시글 삭제 버튼-->
-<div>
-    <form th:action="@{/boards/{id}/delete(id=${board.id})}" method="post">
-        <button type="submit">게시글 삭제</button>
-    </form>
-</div>
-
-<!-- 댓글 작성 폼 -->
-<div>
-    <h3>댓글 작성</h3>
-    <form th:action="@{/boards/{id}/reply(id=${board.id})}" method="post">
-        <div>
-            <label for="content">댓글 내용:</label>
-            <textarea id="content" name="content" required></textarea>
-        </div>
-        <button type="submit">댓글 작성</button>
-    </form>
-</div>
-
-</body>
 </html>

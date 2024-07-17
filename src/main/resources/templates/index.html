@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"
-      th:layout="thymeleaf/layout">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to MyBoard</title>
-</head>
-<body>
-
-<div th:fragment="content">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
     <section>
+        <br>
         <h2>Welcome to MyBoard!</h2>
+        <br>
         <p>Your one-stop solution for all your board management needs.</p>
         <a th:href="@{/boards/new}">Create a new Board</a>
     </section>
 </div>
-
-</body>
 </html>

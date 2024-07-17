@@ -1,7 +1,7 @@
 package com.myboard.toy.domain.hello.controller;
 
 import com.myboard.toy.domain.file.FileStore;
-import com.myboard.toy.domain.file.UploadFile;
+import com.myboard.toy.domain.file.UploadFileOfBoard;
 import com.myboard.toy.domain.hello.Hello;
 import com.myboard.toy.domain.hello.dto.HelloForm;
 import com.myboard.toy.domain.hello.repository.HelloRepository;
@@ -47,8 +47,8 @@ public class HelloControllerV1 {
     @PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form, RedirectAttributes redirectAttributes) throws IOException, IOException {
 
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
-        List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
+        UploadFileOfBoard attachFile = fileStore.storeFile(form.getAttachFile());
+        List<UploadFileOfBoard> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
 
         Hello hello = new Hello(form.getHelloName(), attachFile, storeImageFiles);
         helloRepository.save(hello);

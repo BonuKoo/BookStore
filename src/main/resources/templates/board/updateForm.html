@@ -1,23 +1,35 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>게시글 수정</title>
-</head>
-<body>
-<h1>게시글 수정</h1>
-<form th:action="@{/boards/{id}(id=${board.id})}" method="post">
-    <input type="hidden" name="_method" value="put">
-    <div>
-        <label for="title">제목:</label>
-        <input type="text" id="title" name="title" th:value="${board.title}">
+<!--html ~layout~-->
+<html layout:decorate="~{layout}">
+<!-- layout:fragment 시작~ -->
+<div layout:fragment="content" id="contents">
+
+    <div class="container">
+
+        <h1>게시글 수정</h1>
+        <form class="post-form" th:action="@{/boards/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_method" value="put">
+            <div class="form-group">
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title" th:value="${board.title}" required>
+            </div>
+            <div class="form-group">
+                <label for="content">내용:</label>
+                <textarea id="content" name="content" th:text="${board.content}" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="file">파일 업로드:</label>
+                <input type="file" id="file" name="file">
+            </div>
+            <div class="buttons-container">
+                <button type="submit" class="button edit-button">수정 완료</button>
+                <form th:action="@{/boards/{id}/delete(id=${board.id})}" method="post" class="delete-form">
+                    <button type="submit" class="button delete-button">삭제</button>
+                </form>
+            </div>
+        </form>
+
     </div>
-    <div>
-        <label for="content">내용:</label>
-        <textarea id="content" name="content" th:text="${board.content}"></textarea>
-    </div>
-    <div>
-        <button type="submit">수정 완료</button>
-    </div>
-</form>
-</body>
+
+</div>
+<!-- layout:fragment 끝~ -->
 </html>

@@ -1,24 +1,20 @@
 package com.myboard.toy.domain.board;
 
-import com.myboard.toy.domain.file.File;
-import com.myboard.toy.domain.file.UploadFile;
+import com.myboard.toy.domain.file.UploadFileOfBoard;
 import com.myboard.toy.domain.reply.Reply;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 @Getter
-@Builder
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Board {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -31,11 +27,9 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
-    /*
     @Builder.Default
-    @OneToMany
-    private List<File> files = new ArrayList<>();
-     */
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<UploadFileOfBoard> files = new ArrayList<>();
 
     @Builder
     public Board(Long id, String title, String content, List<Reply> replies) {

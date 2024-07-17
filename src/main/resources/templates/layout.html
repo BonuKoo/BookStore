@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Board</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--css-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <!--script-->
+    <script src="/js/script.js"></script>
+</head>
+<body>
+<!-- header 시작 -->
+<header>
+    <h1 class="header-title">사이트</h1>
+</header>
+<!-- header 끝-->
+
+<!-- nav 시작  -->
+<nav>
+    <ul id="menu">
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/boards}">Boards</a></li>
+        <li><a th:href="@{/about}">About</a></li>
+    </ul>
+</nav>
+<!-- nav 끝-->
+
+<!-- content 부분 -->
+<th:block layout:fragment="content"></th:block>
+<!-- footer -->
+<footer>
+    <p>&copy; 2024 게시판. All rights reserved.</p>
+</footer>
+</body>
+</html>

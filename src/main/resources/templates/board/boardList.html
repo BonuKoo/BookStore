@@ -1,97 +1,42 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
-    <title>게시판</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header, footer {
-            background-color: #f8f9fa;
-            text-align: center;
-            padding: 1rem;
-        }
-        #main {
-            background-color: #ffffff;
-            padding: 2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-        #posts {
-            max-width: 600px;
-            width: 100%;
-            margin: 2rem 0;
-            padding: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .post {
-            border-bottom: 1px solid #ccc;
-            padding: 1rem 0;
-        }
-        .post:last-child {
-            border-bottom: none;
-        }
-        .post h3 {
-            margin: 0;
-        }
-        .post p {
-            margin: 0.5rem 0 0;
-        }
-        a.button {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: inline-block;
-            padding: 1rem 2rem;
-            background-color: #343a40;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        a.button:hover {
-            background-color: #495057;
-        }
-    </style>
-</head>
-<body>
-<h1>게시판</h1>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Reply Count</th>
-    </tr>
-    <tr th:each="board : ${boards.content}">
-        <td th:text="${board.id}"></td>
-        <td><a th:href="@{/boards/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
-        <td th:text="${board.replyCount}"></td>
-    </tr>
-</table>
+<!--html ~layout~-->
+<html layout:decorate="~{layout}">
+<!-- layout:fragment 시작~ -->
+<div layout:fragment="content" id="contents">
+    <!-- section 시작 -->
+    <section>
+    <h1>게시판</h1>
+    <!--table = board-table -->
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Reply Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${boards.content}">
+            <td th:text="${board.id}"></td>
+            <td><a th:href="@{/boards/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
+            <td th:text="${board.replyCount}"></td>
+        </tr>
+        </tbody>
+    <!--table = board-table -->
+    </table>
 
-<!-- "게시글 생성" 버튼 -->
-<a th:href="@{/boards/new}">게시글 생성</a>
-
-<form th:action="@{/boards}" method="get">
-    <input type="text" name="title" placeholder="검색어 입력">
-    <button type="submit">검색</button>
-</form>
-
-<div>
-    <a th:if="${boards.hasPrevious()}" th:href="@{/boards(page=${boards.number - 1}, size=${boards.size})}">Previous</a>
-    <a th:if="${boards.hasNext()}" th:href="@{/boards(page=${boards.number + 1}, size=${boards.size})}">Next</a>
+    <a class="create-button" th:href="@{/boards/new}">게시글 생성</a>
+    <form class="search-form" th:action="@{/boards}" method="get">
+        <input type="text" name="title" placeholder="검색어 입력">
+        <button type="submit">검색</button>
+    </form>
+        <!-- 페이지 시작 -->
+        <div class="pagination">
+            <a class="prev-button" th:if="${boards.hasPrevious()}" th:href="@{/boards(page=${boards.number - 1}, size=${boards.size})}">Previous</a>
+            <a class="next-button" th:if="${boards.hasNext()}" th:href="@{/boards(page=${boards.number + 1}, size=${boards.size})}">Next</a>
+        </div>
+        <!-- section 끝 -->
+    </section>
+    <!-- layout:fragment 끝~ -->
 </div>
-</body>
+<!--html ~layout~-->
 </html>
