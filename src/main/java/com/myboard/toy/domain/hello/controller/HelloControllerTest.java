@@ -23,13 +23,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
-@Controller
+//@Controller
 //@RequestMapping("/hello")
 @RequiredArgsConstructor
 public class HelloControllerTest {
-
+    /*
     private final HelloRepositoryTest helloRepository;
     private final FileStore fileStore;
+    */
 
     //@GetMapping("")
     public String hello(){
@@ -38,13 +39,18 @@ public class HelloControllerTest {
     
     // 새로운 Hello 객체를 만들기 위해 form 반환
     //@GetMapping("/new")
+    /*
     private String newHello(@ModelAttribute HelloForm form, RedirectAttributes  redirectAttributes) throws IOException {
         return "hello/hello-form";
     }
 
+     */
+
     /*
         파일 등록 기능
      */
+    /*
+
     //@PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form,RedirectAttributes redirectAttributes) throws IOException {
 
@@ -62,10 +68,12 @@ public class HelloControllerTest {
 
         return "redirect:/hello/{helloId}";
     }
+    */
 
     /*
         조회 시 출력
      */
+    /*
 
     //@GetMapping("/{id}")
     public String hellos(@PathVariable Long id, Model model){
@@ -73,13 +81,17 @@ public class HelloControllerTest {
         model.addAttribute("hello",hello);
         return "hello/hello-view";
     }
+     */
+
+    /*
 
     //@ResponseBody
     //@GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:"+fileStore.getFullPath(filename));
     }
-
+    */
+    /*
     //@GetMapping("/attach/{id}")
     private ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
 
@@ -98,6 +110,6 @@ public class HelloControllerTest {
                 .header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition)
                 .body(resource);
     }
-
+    */
 }
 

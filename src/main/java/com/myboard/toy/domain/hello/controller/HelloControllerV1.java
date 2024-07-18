@@ -25,24 +25,26 @@ import java.util.List;
 @Controller
 @RequestMapping("/hello")
 public class HelloControllerV1 {
-
+    /*
     private final HelloRepository helloRepository;
     private final FileStore fileStore;
-
+    */
     @GetMapping("")
     public String hello(){
         return "hello";
     }
-
+    /*
     public HelloControllerV1(HelloRepository helloRepository, FileStore fileStore) {
         this.helloRepository = helloRepository;
         this.fileStore = fileStore;
-    }
+    }*/
 
     @GetMapping("/new")
     private String newHello(@ModelAttribute HelloForm form, RedirectAttributes redirectAttributes){
         return "/hello/hello-form";
     }
+
+    /*
 
     @PostMapping("/new")
     public String saveHello(@ModelAttribute HelloForm form, RedirectAttributes redirectAttributes) throws IOException, IOException {
@@ -57,20 +59,23 @@ public class HelloControllerV1 {
 
         return "redirect:/hello/{helloId}";
     }
-
+    */
+    /*
     @GetMapping("/{id}")
     public String hellos(@PathVariable Long id, Model model) {
         Hello hello = helloRepository.findById(id).orElse(null);
         model.addAttribute("hello", hello);
         return "hello/hello-view";
     }
-
+    */
+    /*
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
-
+     */
+    /*
     @GetMapping("/attach/{id}")
     private ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
         Hello hello = helloRepository.findById(id).orElse(null);
@@ -92,5 +97,5 @@ public class HelloControllerV1 {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
     }
-
+    */
 }

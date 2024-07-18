@@ -6,8 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
+//@Repository
 public class HelloRepositoryTest {
+
+    /*
+
     private final Map<Long, Hello> store = new HashMap<>();
     private long sequence = 0L;
 
@@ -20,4 +23,5 @@ public class HelloRepositoryTest {
     public Hello findById(Long id){
         return store.get(id);
     }
+     */
 }

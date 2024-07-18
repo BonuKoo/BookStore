@@ -2,17 +2,20 @@ package com.myboard.toy.domain.hello;
 
 import com.myboard.toy.domain.file.UploadFileOfBoard;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@Entity
+//@Data
+//@NoArgsConstructor @AllArgsConstructor
+//@Entity
 public class Hello {
-    
+
+    /*
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -31,4 +34,6 @@ public class Hello {
         this.attachFile = attachFile;
         this.imageFiles = imageFiles;
     }
+
+     */
 }

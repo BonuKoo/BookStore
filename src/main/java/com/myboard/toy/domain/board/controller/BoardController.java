@@ -55,7 +55,6 @@ public class BoardController {
         return "redirect:/boards/" + id;
     }
 
-
     /*
         Read
      */
@@ -114,5 +113,7 @@ public class BoardController {
         boardService.removeBoard(id);
         return "redirect:/boards"; // 삭제 후 게시판 목록으로 리다이렉트
     }
+
+
 
 }

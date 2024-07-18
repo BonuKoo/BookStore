@@ -1,4 +1,4 @@
-/* 전체 페이지 스타일 */
+/* body 부분 */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
@@ -8,6 +8,7 @@ body {
 
 /* header 부분 */
 header {
+    position: relative;
     background-color: #007BFF;
     color: white;
     padding: 10px 0;
@@ -18,40 +19,51 @@ header {
     padding: 20px;
     background-color: #f8f8f8;
     border-bottom: 1px solid #ddd;
+    color: #333;
 }
 
-/* header의 nav 부분 */
-header nav ul {
+/* user-nav 부분 */
+.user-nav {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+}
+
+.user-nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: center;
-    gap: 20px;
+    gap: 10px;
 }
 
-header nav ul li {
+.user-nav ul li {
     display: inline;
 }
 
-header nav ul li a {
+.user-nav ul li a {
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
 }
 
-header nav ul li a:hover {
+.user-nav ul li a:hover {
     background-color: #0056b3;
     border-radius: 5px;
 }
 
-/* 내비게이션 메뉴 */
+/* nav 부분 */
 #menu {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     justify-content: center;
+}
+
+#menu li {
+    margin: 0;
+    padding: 0;
 }
 
 #menu li a {
@@ -71,7 +83,7 @@ header nav ul li a:hover {
     padding: 20px;
 }
 
-/* 컨테이너 스타일 */
+/* 컨테이너 */
 .container {
     width: 80%;
     max-width: 1200px;

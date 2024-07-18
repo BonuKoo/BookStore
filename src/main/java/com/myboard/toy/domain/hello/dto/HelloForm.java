@@ -4,13 +4,15 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-@Data
+
 public class HelloForm {
 
+    /*
     private Long helloId;
     private String helloName;
     private MultipartFile attachFile;
     private List<MultipartFile> imageFiles;
+     */
 }
 
 /*
