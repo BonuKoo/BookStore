@@ -1,5 +1,6 @@
-package com.myboard.toy.domain.file;
+package com.myboard.toy.domain.file.service;
 
+import com.myboard.toy.domain.file.board.UploadFileOfBoard;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

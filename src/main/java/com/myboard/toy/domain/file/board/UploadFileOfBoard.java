@@ -1,4 +1,4 @@
-package com.myboard.toy.domain.file;
+package com.myboard.toy.domain.file.board;
 
 import com.myboard.toy.domain.board.Board;
 import jakarta.persistence.*;

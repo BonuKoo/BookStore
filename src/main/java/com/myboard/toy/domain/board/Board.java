@@ -1,6 +1,6 @@
 package com.myboard.toy.domain.board;
 
-import com.myboard.toy.domain.file.UploadFileOfBoard;
+import com.myboard.toy.domain.file.board.UploadFileOfBoard;
 import com.myboard.toy.domain.reply.Reply;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +30,11 @@ public class Board {
     @Builder.Default
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<UploadFileOfBoard> files = new ArrayList<>();
+
+    //조회 수
+    /*
+    private int cnt;
+     */
 
     @Builder
     public Board(Long id, String title, String content, List<Reply> replies) {

@@ -1,26 +1,7 @@
 package com.myboard.toy.domain.hello.controller;
 
-import com.myboard.toy.domain.hello.Hello;
-import com.myboard.toy.domain.hello.dto.HelloForm;
-import com.myboard.toy.domain.file.FileStore;
-import com.myboard.toy.domain.file.UploadFileOfBoard;
-import com.myboard.toy.domain.hello.repository.HelloRepositoryTest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriUtils;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Slf4j
 //@Controller

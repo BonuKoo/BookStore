@@ -4,7 +4,6 @@ import com.myboard.toy.domain.board.BoardSearchCondition;
 import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.board.service.BoardService;
-
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.domain.reply.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,17 +14,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/boards1")
+@RequestMapping("/boards2")
 @Controller
 @Slf4j
-public class BoardController {
+public class BoardControllerV2 {
     private final BoardService boardService;
     private final ReplyService replyService;
 
-    public BoardController(BoardService boardService,ReplyService replyService) {
+    public BoardControllerV2(BoardService boardService, ReplyService replyService) {
         this.boardService = boardService;
         this.replyService = replyService;
     }
+
+    /*
+        Version2에는 파일 업로드 로직을 추가한다 !
+     */
 
     /*
         Create
@@ -40,7 +43,7 @@ public class BoardController {
     @PostMapping("/new")
     public String createBoard(@ModelAttribute("createBoard") BoardDTO boardDTO) {
         BoardDTO createdBoard = boardService.createBoard(boardDTO);
-        return "redirect:/boards1/" + createdBoard.getId();
+        return "redirect:/boards2/" + createdBoard.getId();
         // 생성 후 상세 페이지로 리다이렉트
     }
 
@@ -52,7 +55,7 @@ public class BoardController {
                 .boardId(id)
                 .build();
         replyService.createReply(replyDTO);
-        return "redirect:/boards1/" + id;
+        return "redirect:/boards2/" + id;
     }
 
     /*
@@ -67,7 +70,7 @@ public class BoardController {
         return "board/boardDetail"; // 뷰 이름
     }
 
-//    @GetMapping("")
+    @GetMapping("")
     public String searchWithPage(@RequestParam(required = false) String title,
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "10") int size,
@@ -102,7 +105,7 @@ public class BoardController {
                               @RequestParam String title,
                               @RequestParam String content) {
         boardService.modifyBoard(id, title, content);
-        return "redirect:/boards1/" + id;
+        return "redirect:/boards2/" + id;
     }
 
     /*
@@ -111,7 +114,7 @@ public class BoardController {
     @PostMapping("/{id}/delete")
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
-        return "redirect:/boards1"; // 삭제 후 게시판 목록으로 리다이렉트
+        return "redirect:/boards2"; // 삭제 후 게시판 목록으로 리다이렉트
     }
 
 }

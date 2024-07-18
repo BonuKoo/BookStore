@@ -20,4 +20,4 @@ spring:
     active: local
 
 file:
-  dir: C:/ToyprojectUploadFileRoot/
+  dir: C:/BoardFileRoot/

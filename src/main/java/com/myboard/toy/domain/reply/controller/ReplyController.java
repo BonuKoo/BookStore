@@ -33,7 +33,7 @@ public class ReplyController {
     @PostMapping("/new")
     public String createReply(@ModelAttribute("reply") ReplyDTO replyDTO) {
         replyService.createReply(replyDTO); // ReplyService를 통해 댓글 생성 로직 처리
-        return "redirect:/boards/" + replyDTO.getBoardId(); // 생성한 댓글이 포함된 게시글 상세 페이지로 리다이렉트
+        return "redirect:/boards2/" + replyDTO.getBoardId(); // 생성한 댓글이 포함된 게시글 상세 페이지로 리다이렉트
     }
 
 
@@ -50,7 +50,7 @@ public class ReplyController {
                 .boardId(boardId)
                 .build();
         replyService.updateReply(replyId, replyDTO);
-        return "redirect:/boards/" + boardId; // 수정 후 게시글 상세 페이지로 리다이렉트
+        return "redirect:/boards2/" + boardId; // 수정 후 게시글 상세 페이지로 리다이렉트
     }
 
     //REST
@@ -62,7 +62,7 @@ public class ReplyController {
     @PostMapping("/{replyId}/delete")
     public String deleteReply(@PathVariable Long replyId, @RequestParam("boardId") Long boardId) {
         replyService.deleteReply(replyId); // ReplyService를 통해 댓글 삭제 로직 처리
-        return "redirect:/boards/" + boardId; // 삭제 후 게시글 상세 페이지로 리다이렉트
+        return "redirect:/boards2/" + boardId; // 삭제 후 게시글 상세 페이지로 리다이렉트
     }
 
     //REST
