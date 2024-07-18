@@ -1,29 +1,45 @@
 package com.myboard.toy.domain.board.controller;
 
+import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.board.BoardSearchCondition;
 import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.board.service.BoardService;
+import com.myboard.toy.domain.file.service.FileService;
+import com.myboard.toy.domain.file.service.FileStore;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.domain.reply.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 @RequestMapping("/boards2")
 @Controller
 @Slf4j
 public class BoardControllerV2 {
+
     private final BoardService boardService;
     private final ReplyService replyService;
+    private final FileService fileService;
+    private final FileStore fileStore;
 
-    public BoardControllerV2(BoardService boardService, ReplyService replyService) {
+    public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore) {
         this.boardService = boardService;
         this.replyService = replyService;
+        this.fileService = fileService;
+        this.fileStore = fileStore;
     }
 
     /*
@@ -31,7 +47,7 @@ public class BoardControllerV2 {
      */
 
     /*
-        Create
+        ----------------Create----------------
      */
 
     @GetMapping("/new")
@@ -40,14 +56,14 @@ public class BoardControllerV2 {
         return "board/createBoardForm"; // 생성 폼 뷰 이름
     }
 
+    //게시글 생성
     @PostMapping("/new")
-    public String createBoard(@ModelAttribute("createBoard") BoardDTO boardDTO) {
-        BoardDTO createdBoard = boardService.createBoard(boardDTO);
-        return "redirect:/boards2/" + createdBoard.getId();
-        // 생성 후 상세 페이지로 리다이렉트
+    public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO, RedirectAttributes redirectAttributes) throws IOException {
+        BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
+        redirectAttributes.addAttribute("id",createdBoard.getId());
+        return "redirect:/boards2/{id}";
     }
-
-
+    //댓글 생성
     @PostMapping("/{id}/reply")
     public String createReply(@PathVariable Long id, @RequestParam String content) {
         ReplyDTO replyDTO = ReplyDTO.builder()
@@ -61,15 +77,16 @@ public class BoardControllerV2 {
     /*
         Read
      */
-
+    //단 건 조회
     @GetMapping("/{id}")
     public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
-        BoardDTO boardDTO = boardService.getDetailBoardByIdWithReply(id);
+        BoardDTO boardDTO = boardService.getDetailBoardByIdWithReplyV2(id);
 
         model.addAttribute("board", boardDTO);
         return "board/boardDetail"; // 뷰 이름
     }
 
+    //전체조회
     @GetMapping("")
     public String searchWithPage(@RequestParam(required = false) String title,
                             @RequestParam(defaultValue = "0") int page,
@@ -89,6 +106,18 @@ public class BoardControllerV2 {
         return "board/boardList";
     }
 
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
+
+    @GetMapping("/attach/{id}")
+    private ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
+        return fileService.downloadAttach(id);
+    }
+
+    
     /*
         UPDATE
      */

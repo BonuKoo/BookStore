@@ -8,6 +8,14 @@
 
     <div class="post-details">
         <h2>제목: <span th:text="${board.title}"></span></h2>
+
+<!--        첨부파일: <a th:if="${hello.attachFile}" th:href="|/hello/attach/${hello.id}|" th:text="${hello.getAttachFile().getUploadFileName()}" /><br/>-->
+
+        <div th:if="${board.formattedFiles != null}">
+            <img th:each="imageFile : ${board.formattedFiles}"
+                 th:src="@{/boards2/images/{filename}(filename=${imageFile.storeFileName})}" width="300" height="300"/>
+        </div>
+
         <p>내용: <span th:text="${board.content}"></span></p>
         <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
     </div>

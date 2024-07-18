@@ -4,7 +4,9 @@
 <div layout:fragment="content" id="contents">
     <div class="container">
         <h1>게시글 생성</h1>
-        <form class="post-form" th:action="@{/boards2/new}" method="post" th:object="${createBoard}">
+        <form class="post-form" th:action="@{/boards2/new}" method="post" th:object="${createBoard}" enctype="multipart/form-data">
+            <!-- 폼에 mmultipart/form-data 가 없어서 인코딩이 안됐을지도 -->
+
             <!--제목-->
             <div class="form-group">
                 <label for="title">제목:</label>
@@ -17,9 +19,10 @@
             </div>
             <!--파일 업로드-->
             <div class="form-group">
-                <label for="file">파일 업로드:</label>
-                <input type="file" id="file" name="file">
+                <label for="imageFiles">파일 업로드:</label>
+                <input type="file" id="imageFiles" name="imageFiles" th:field="*{imageFiles}" multiple>
             </div>
+            <!--게시글 생성-->
             <button class="submit-button" type="submit">게시글 생성</button>
         </form>
     </div>

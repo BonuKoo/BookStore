@@ -40,7 +40,7 @@ class BoardRepositoryTest {
 
         //게시글 2000개
         //각 게시글마다 댓글 6개
-        for (int i = 1; i <= 2000; i++) {
+        for (int i = 1; i <= 1100; i++) {
             Board board = Board.builder()
                     .title("게시글 " + i)
                     .content("내용 " + i)

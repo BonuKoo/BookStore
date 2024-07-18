@@ -14,7 +14,8 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-    @Value("${file.dir}")                       // 파일 저장 경로
+    //Board용 파일 저장 경로
+    @Value("${file.dir}")
     private String fileDir;
 
     public String getFullPath(String filename){ //파일 저장 경로 + 파일이름

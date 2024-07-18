@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 public class Board {
 
@@ -36,18 +35,28 @@ public class Board {
     private int cnt;
      */
 
+    //AllArgs
     @Builder
-    public Board(Long id, String title, String content, List<Reply> replies) {
+    public Board(Long id, String title, String content, List<Reply> replies, List<UploadFileOfBoard> files) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.replies = (replies != null) ? replies : new ArrayList<>();
+        this.files = (files != null) ? files : new ArrayList<>();
+    }
+
+    public Board(String title, String content,List<UploadFileOfBoard> files) {
+        this.title = title;
+        this.content = content;
+        this.replies = new ArrayList<>();
+        this.files = (files != null) ? files : new ArrayList<>();
     }
 
     public Board(String title, String content) {
         this.title = title;
         this.content = content;
-        this.replies = new ArrayList<>();
+        this.replies = (replies != null) ? replies : new ArrayList<>();
+        this.files = (files != null) ? files : new ArrayList<>();
     }
 
     public void update(String title, String contents){
@@ -76,16 +85,14 @@ public class Board {
         File 연관
      */
 
-    /*
-    public void addFile(File file){
+    public void addFile(UploadFileOfBoard file) {
         files.add(file);
-        file.attachFile(this);
+        file.attachBoard(this);
     }
 
-    public void removeFile(File file){
+    public void removeFile(UploadFileOfBoard file) {
         files.remove(file);
-        file.attachFile(null);
+        file.attachBoard(null);
     }
-     */
 
 }
