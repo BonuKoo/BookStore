@@ -21,6 +21,17 @@ header {
     border-bottom: 1px solid #ddd;
     color: #333;
 }
+    /* 로고 부분 */
+.logo {
+    width: 150px; /* 원하는 너비로 설정 */
+    height: auto; /* 비율에 맞게 높이 자동 조정 */
+    display: block;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+.header-title {
+    text-align: center;
+}
 
 /* user-nav 부분 */
 .user-nav {
