@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> 문의하기 </h1>
+<form name="inquireForm" action="/sendMail" method="post">
+    <table>
+        <!-- 제목 -->
+        <tr>
+            <td>제목</td>
+            <td><input type="text" name="subject"></td>
+        </tr>
+
+        <!-- 메일주소 -->
+        <tr>
+            <td>이메일</td>
+            <td>
+                <textarea name="from"></textarea>
+            </td>
+        </tr>
+        <!-- 내용 -->
+        <tr>
+            <td>내용</td>
+            <td>
+                <textarea name="text"></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit" value="저장">
+    <input type="reset" value="다시쓰기">
+    <input type="button" value="글목록" onclick="location.href='/board/'">
+</form>
+</body>
+</html>
