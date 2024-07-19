@@ -18,6 +18,5 @@ public class HelloControllerTest {
     public String hello(){
         return "hello";
     }
-
 }
 
