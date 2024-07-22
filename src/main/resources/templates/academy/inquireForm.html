@@ -8,31 +8,90 @@
 <h1> 문의하기 </h1>
 <form name="inquireForm" action="/sendMail" method="post">
     <table>
+
         <!-- 제목 -->
         <tr>
             <td>제목</td>
-            <td><input type="text" name="subject"></td>
+            <td><input type="text" name="title"></td>
         </tr>
 
         <!-- 메일주소 -->
         <tr>
             <td>이메일</td>
-            <td>
-                <textarea name="from"></textarea>
-            </td>
+            <td><input type="email" name="email"></td>
+        </tr>
+
+        <tr>
+            <td>이름</td>
+            <td><input type="text" name="name"></td>
         </tr>
         <!-- 내용 -->
         <tr>
             <td>내용</td>
             <td>
-                <textarea name="text"></textarea>
+                <textarea name="content"></textarea>
             </td>
         </tr>
+        <!--전화번호-->
+        <tr>
+            <td>전화번호</td>
+                <td>
+                    <input type="text" name="phoneNum">
+                </td>
+        </tr>
+
     </table>
 
-    <input type="submit" value="저장">
+    <input type="submit" value="문의하기" onclick="sendMail()">
     <input type="reset" value="다시쓰기">
-    <input type="button" value="글목록" onclick="location.href='/board/'">
+
+    <a href="javascript:void(0);" onclick="findPw()">비밀번호 찾기</a>
+
 </form>
+<script>
+    function sendMail() {
+    console.log("되라");
+        const form = document.inquireForm;
+
+        var title;
+        const to = "zxcqew32@naver.com";
+        var text;
+
+    title = form.name.value + "님이 문의하신 내용입니다.";
+
+    text = `<table>
+    <tr><td>제목</td><td>${form.title.value}</td></tr>
+    <tr><td>이메일</td><td>${form.email.value}</td>></tr>
+    <tr><td>이름</td><td>${form.name.value}</td>></tr>
+    <tr><td>전화번호</td><td>${form.phoneNum.value}</td>></tr>
+    <tr><td>내용</td><td>${form.content.value}</td>></tr>
+    </table>`;
+
+    var titleInput = document.createElement('input');
+    titleInput.type = 'hidden';
+    titleInput.name = 'title';
+    titleInput.value = title;
+
+    var toInput = document.createElement('input');
+    toInput.type = 'hidden';
+    toInput.name = 'to';
+    toInput.value = to;
+
+    var textInput = document.createElement('input');
+    textInput.type = 'hidden';
+    textInput.name = 'text';
+    textInput.value = text;
+    console.log(text);
+
+    form.appendChild(titleInput);
+    form.appendChild(toInput);
+    form.appendChild(textInput);
+
+    form.submit();
+
+    }
+</script>
+
 </body>
 </html>
+

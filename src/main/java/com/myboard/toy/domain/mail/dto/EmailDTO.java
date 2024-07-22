@@ -7,17 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 public class EmailDTO {
-    
-    //수신자
+
+    private String title;
     private String to;
-    //발신자
-    private String from;
-    //제목
-    private String subject;
-    //내용
     private String text;
-
-
+    private String email;
+    private String name;
+    private String content;
+    private String phoneNum;
 }
 
 

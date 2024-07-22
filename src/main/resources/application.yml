@@ -1,20 +1,22 @@
 spring:
-  mail:
-    host: smtp.gmail.com                #이메일 서버의 호스트명 (여기서는 Gmail의 SMTP 서버)
-    port: 587                           #Gmail의 경우 587
-    username: simseo034@gmail.com     #Gmail 계정 아이디
-    password: ccqsvdntttlmuspc
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-        debug: true
-        connectiontimeout: 5000
-        timeout: 5000
-        writetimeout: 5000
+  #gmail
+#  mail:
+#    host: smtp.gmail.com                #이메일 서버의 호스트명 (여기서는 Gmail의 SMTP 서버)
+#    port: 587                           #Gmail의 경우 587
+#    username: simseo034@gmail.com     #Gmail 계정 아이디
+#    password: ccqs vdnt ttlm uspc
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#        debug: true
+#        connectiontimeout: 5000
+#        timeout: 5000
+#        writetimeout: 5000
+
 #  mail:
 #    host: smtp.naver.com                #이메일 서버의 호스트명 (여기서는 naver SMTP 서버)
 #    port: 587                           #Gmail의 경우 587
@@ -31,7 +33,26 @@ spring:
 #        connectiontimeout: 5000
 #        timeout: 5000
 #        writetimeout: 5000
-
+  mail:
+    host: smtp.kakao.com                #이메일 서버의 호스트명 (여기서는 Gmail의 SMTP 서버)
+    port: 465                           #Gmail의 경우 587
+    username: zxcqew32@kakao.com     #Gmail 계정 아이디
+    password: bunwoo5%5%
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        debug: true
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
+#smtp.ssl.enable=true
+#properties.mail.smtp.auth=trues
 
   h2:
     console:
