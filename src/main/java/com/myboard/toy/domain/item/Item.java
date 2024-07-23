@@ -1,5 +1,6 @@
 package com.myboard.toy.domain.item;
 
+import com.myboard.toy.common.exception.NotEnoughStockException;
 import jakarta.persistence.*;
 import jdk.jfr.Category;
 import lombok.Data;
@@ -31,13 +32,13 @@ public abstract class Item {
     }
 
     //재고 줄어듬
-    /*
-    public void removeStock(int quantity){
+
+    public void removeStock(int quantity) {
         int restStock = this.stockQuantity - quantity;
 
-        if (restStock <0){
-            throw new NotEnoughStockException("재고가 부족합니다.");
+        if (restStock < 0) {
+            throw new NotEnoughStockException();
         }
         this.stockQuantity = restStock;
-    */
+    }
 }

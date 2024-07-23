@@ -1,19 +1,26 @@
 package com.myboard.toy.domain.order;
 
 import com.myboard.toy.domain.delivery.Delivery;
+import com.myboard.toy.domain.delivery.DeliveryStatus;
+import com.myboard.toy.domain.order.status.OrderStatus;
 import com.myboard.toy.domain.orderitem.OrderItem;
 import com.myboard.toy.domain.user.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 @Entity
 public class Order {
@@ -36,6 +43,18 @@ public class Order {
 
     private LocalDateTime orderDate; //주문시간
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+
+    // Builder용 생성자
+    public Order(User user, Delivery delivery, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate) {
+        this.user = user;
+        this.delivery = delivery;
+        this.orderItems = orderItems;
+        this.status = status;
+        this.orderDate = orderDate;
+    }
 
 
 
@@ -44,6 +63,7 @@ public class Order {
         this.user = user;
         user.getOrders().add(this);
     }
+
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
@@ -53,4 +73,76 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
+
+    /* 주문 요청 */
+    public static Order createOrder(User user, Delivery delivery, OrderItem... orderItems) {
+        List<OrderItem> orderItemList = Arrays.asList(orderItems);
+        return new Builder()
+                .user(user)
+                .delivery(delivery)
+                .orderItems(orderItemList)
+                .status(OrderStatus.ORDER)
+                .orderDate(LocalDateTime.now())
+                .build();
+    }
+
+    /* 주문 취소 요청*/
+    public void cancel(){
+        if (delivery.getStatus() == DeliveryStatus.COMP){
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems){
+            orderItem.cancel();
+        }
+    }
+
+    //==조회 로직==//
+    /** 전체 주문 가격 조회 */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
+    public static class Builder {
+        private User user;
+        private Delivery delivery;
+        private List<OrderItem> orderItems = new ArrayList<>();
+        private OrderStatus status;
+        private LocalDateTime orderDate;
+
+        public Builder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder delivery(Delivery delivery) {
+            this.delivery = delivery;
+            return this;
+        }
+
+        public Builder orderItems(List<OrderItem> orderItems) {
+            this.orderItems = orderItems;
+            return this;
+        }
+
+        public Builder status(OrderStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder orderDate(LocalDateTime orderDate) {
+            this.orderDate = orderDate;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(user, delivery, orderItems, status, orderDate);
+        }
+    }
+
+
 }
