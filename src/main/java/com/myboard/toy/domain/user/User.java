@@ -1,24 +1,37 @@
 package com.myboard.toy.domain.user;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import com.myboard.toy.domain.address.Address;
+import com.myboard.toy.domain.order.Order;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+@Data
+@NoArgsConstructor @AllArgsConstructor
+@Table(name = "users")
+@Entity
 public class User {
 
-    //PK
+    @Id @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
-
+    
     private String loginId;     //로그인 용 Id
     private String password;    //비밀번호
     private String name;        //이름
     private String role;        //시큐리티 용 권한
-    private String birthDate;   //생년월일
-    private int age;            //나이
 
-//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-//    private Set<ChatMessageEntity> chatMessages;
+    /* 추후 추가 목록 - 세부사항 */
+
+    //private String birthDate;   //생년월일
+
+    @Embedded
+    private Address address;
+
+    private List<Order> orders = new ArrayList<>();
 
 }
