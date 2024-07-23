@@ -1,8 +1,8 @@
 package com.myboard.toy.domain.item;
 
 import com.myboard.toy.common.exception.NotEnoughStockException;
+import com.myboard.toy.domain.category.Category;
 import jakarta.persistence.*;
-import jdk.jfr.Category;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public abstract class Item {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 

@@ -18,7 +18,7 @@ import java.util.UUID;
 @Slf4j
 @Controller
 @RequestMapping("/hello")
-public class HelloControllerTest {
+public class HelloControllerForJavaMail {
 
     @Autowired
     private HelloUserService userService;

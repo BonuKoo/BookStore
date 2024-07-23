@@ -11,7 +11,7 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 public class Delivery {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")
     private Long id;
 
