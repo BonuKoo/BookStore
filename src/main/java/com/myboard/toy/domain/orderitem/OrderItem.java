@@ -3,18 +3,16 @@ package com.myboard.toy.domain.orderitem;
 import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.domain.order.Order;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Builder
-@Getter
+@Data
+@NoArgsConstructor
 @Table(name = "order_item")
 @Entity
 public class OrderItem {
 
-    @Id @GeneratedValue
     @Column(name = "order_item_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +28,13 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @Builder
+    public OrderItem(Item item, int orderPrice, int count) {
+        this.item = item;
+        this.orderPrice = orderPrice;
+        this.count = count;
     }
 
     /* 생성 메서드 */

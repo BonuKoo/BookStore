@@ -32,6 +32,7 @@ public class User {
     @Embedded
     private Address address;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
 }

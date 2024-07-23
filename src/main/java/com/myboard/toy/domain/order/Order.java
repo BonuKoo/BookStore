@@ -20,17 +20,17 @@ import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "orders")
 @Entity
 public class Order {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    @Id @GeneratedValue
     private Long id;
 
-    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
     
     //다 대 다
@@ -39,6 +39,7 @@ public class Order {
 
     //주문 상태
     @OneToOne(cascade = ALL,fetch = LAZY)
+    @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
     private LocalDateTime orderDate; //주문시간
@@ -76,14 +77,11 @@ public class Order {
 
     /* 주문 요청 */
     public static Order createOrder(User user, Delivery delivery, OrderItem... orderItems) {
-        List<OrderItem> orderItemList = Arrays.asList(orderItems);
-        return new Builder()
-                .user(user)
-                .delivery(delivery)
-                .orderItems(orderItemList)
-                .status(OrderStatus.ORDER)
-                .orderDate(LocalDateTime.now())
-                .build();
+        Order order = new Order(user, delivery, Arrays.asList(orderItems), OrderStatus.ORDER, LocalDateTime.now());
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
     }
 
     /* 주문 취소 요청*/
@@ -143,6 +141,5 @@ public class Order {
             return new Order(user, delivery, orderItems, status, orderDate);
         }
     }
-
 
 }

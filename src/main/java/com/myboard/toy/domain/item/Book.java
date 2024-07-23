@@ -4,10 +4,10 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Data;
 
-@Data
+
 @DiscriminatorValue("B")
 @Entity
-public class Book {
+public class Book extends Item{
 
     private String author;
     private String isbn;
