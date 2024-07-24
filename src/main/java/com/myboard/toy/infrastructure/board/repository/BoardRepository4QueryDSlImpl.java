@@ -39,7 +39,7 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
                 .from(board)
                 .leftJoin(board.replies,reply)
                 .where(titleEq(condition.getTitle()))
-                //.where(whereClause)
+
                 .groupBy(board.id)
                 .orderBy(board.id.asc())
                 .offset(pageable.getOffset())

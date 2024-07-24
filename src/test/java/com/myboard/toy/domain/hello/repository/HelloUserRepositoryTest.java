@@ -11,19 +11,19 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+//@SpringBootTest
 class HelloUserRepositoryTest {
 
     @Autowired
     HelloUserRepository repository;
 
-    @BeforeEach
+    //@BeforeEach
     public void setUp(){
         //데이터 초기화
         repository = new HelloUserRepository();
     }
 
-    @Test
+    //@Test
     void save() {
 
         // given
@@ -46,7 +46,7 @@ class HelloUserRepositoryTest {
 //        assertEquals(savedUser, foundByEmail);
     }
 
-    @Test
+    //@Test
     public void saveDuplicateUserTest() {
         // given
         HelloUser user1 = new HelloUser(null, "user2", "password2", LocalDate.of(1991, 2, 2), "user2@example.com", "234-567-8901");

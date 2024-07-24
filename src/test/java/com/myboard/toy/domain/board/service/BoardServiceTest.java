@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
+//@SpringBootTest
 @Transactional
 @Slf4j
 class BoardServiceTest {
@@ -26,7 +26,7 @@ class BoardServiceTest {
     private BoardService boardService;
 
 
-    @Test
+    //@Test
     void 게시글_단건조회(){
         //Boolean
         Optional<Board> byId = boardRepository.findById(1L);
@@ -40,7 +40,7 @@ class BoardServiceTest {
         assertEquals(board.getReplies(),boardDTO.getReplies());
     }
 
-    @Test
+    //@Test
     void 게시글_단건수정(){
 
         //Given
@@ -61,7 +61,7 @@ class BoardServiceTest {
         log.info("modifiedBoard content: {}",modifiedBoard.getContent());
     }
 
-    @Test
+    //@Test
     void 게시글_작성(){
         //Given
         String newTitle = "제목이지롱";

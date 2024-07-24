@@ -28,6 +28,7 @@ public class BoardService {
     public Page<BoardPageDTO> searchWithPage(BoardSearchCondition condition, Pageable pageable){
         return boardRepository.searchWithPage(condition, pageable);
     }
+
     //단 건 조회
     public BoardDTO getDetailBoardByIdWithReply(Long id){
         Board board = boardRepository.findById(id)
@@ -40,6 +41,7 @@ public class BoardService {
                 .replies(board.getReplies())
                 .build();
     }
+
     //단 건 조회 + 파일도 불러오기 실험
     public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
         Board board = boardRepository.findById(id)

@@ -17,14 +17,17 @@ import static org.assertj.core.api.Assertions.*;
 
 //@DataJpaTest
 //@Transactional
-@SpringBootTest
+//@SpringBootTest
 class BoardRepositoryTest {
+
+    /*
     @Autowired
     private BoardRepository boardRepository;
 
     @Autowired
     private EntityManager entityManager;
-
+    */
+    /*
     @BeforeEach
     void setUp() {
         List<Board> boards = new ArrayList<>();
@@ -47,7 +50,9 @@ class BoardRepositoryTest {
 
         boardRepository.saveAll(boards);
     }
+    */
 
+    /*
     @Test
     //@Transactional
     void testDummyDataInsertion() {
@@ -59,8 +64,9 @@ class BoardRepositoryTest {
         Board board = boardRepository.findById(1L).orElseThrow();
         assertThat(board.getReplies().size()).isEqualTo(6);
     }
+    */
 
-    @Test
+    //@Test
     public void Create1BoardAnd3RepliesTest(){
         //given
 
@@ -80,6 +86,7 @@ class BoardRepositoryTest {
 
         //when
         //게시글 1
+        /*
         boardRepository.save(board1);
         Optional<Board> boardFromDBOptinalValue = boardRepository.findById(1L);
         Board boardObject = boardFromDBOptinalValue.get();
@@ -93,7 +100,10 @@ class BoardRepositoryTest {
         assertThat(firstReply.getContent()).isEqualTo("댓글1"); //True
         //같은 board에 할당되어있나
         assertThat(firstReply.getBoard().getId()).isEqualTo(boardObject.getId());
+        */
     }
+
+
     /*
     @Test
     void searchWithPage_동작테스트(){

@@ -88,8 +88,8 @@ public class BoardControllerV2 {
     //전체조회
     @GetMapping("")
     public String searchWithPage(@RequestParam(required = false) String title,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size,
                             Model model) {
 
         BoardSearchCondition condition = new BoardSearchCondition();

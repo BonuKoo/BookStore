@@ -4,6 +4,13 @@
 <div layout:fragment="content" id="contents">
     <!-- section 시작 -->
     <section>
+
+        <a class="create-button" th:href="@{/boards2/new}">게시글 생성</a>
+        <form class="search-form" th:action="@{/boards2}" method="get">
+            <input type="text" name="title" placeholder="검색어 입력">
+            <button type="submit">검색</button>
+        </form>
+
     <h1>게시판</h1>
     <!--table = board-table -->
     <table class="board-table">
@@ -24,11 +31,8 @@
     <!--table = board-table -->
     </table>
 
-    <a class="create-button" th:href="@{/boards2/new}">게시글 생성</a>
-    <form class="search-form" th:action="@{/boards2}" method="get">
-        <input type="text" name="title" placeholder="검색어 입력">
-        <button type="submit">검색</button>
-    </form>
+
+
         <!-- 페이지 시작 -->
         <div class="pagination">
             <a class="prev-button" th:if="${boards.hasPrevious()}" th:href="@{/boards2(page=${boards.number - 1}, size=${boards.size})}">Previous</a>
