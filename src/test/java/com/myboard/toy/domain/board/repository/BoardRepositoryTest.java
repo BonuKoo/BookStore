@@ -1,24 +1,15 @@
 package com.myboard.toy.domain.board.repository;
 
 import com.myboard.toy.domain.board.Board;
-import com.myboard.toy.domain.board.BoardSearchCondition;
-import com.myboard.toy.domain.board.dto.BoardDTO;
-import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.reply.Reply;
-import com.myboard.toy.domain.reply.repository.ReplyRepository;
+import com.myboard.toy.infrastructure.board.repository.BoardRepository;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,12 +1,11 @@
 package com.myboard.toy.domain.reply.service;
 
+import com.myboard.toy.application.reply.service.ReplyService;
 import com.myboard.toy.domain.board.Board;
-import com.myboard.toy.domain.board.dto.BoardDTO;
-import com.myboard.toy.domain.board.repository.BoardRepository;
+import com.myboard.toy.infrastructure.board.repository.BoardRepository;
 import com.myboard.toy.domain.reply.Reply;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
-import com.myboard.toy.domain.reply.repository.ReplyRepository;
-import org.assertj.core.api.Assertions;
+import com.myboard.toy.infrastructure.reply.repository.ReplyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

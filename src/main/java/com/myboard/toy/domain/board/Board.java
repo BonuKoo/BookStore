@@ -35,7 +35,6 @@ public class Board {
     private int cnt;
      */
 
-    //AllArgs
     @Builder
     public Board(Long id, String title, String content, List<Reply> replies, List<UploadFileOfBoard> files) {
         this.id = id;

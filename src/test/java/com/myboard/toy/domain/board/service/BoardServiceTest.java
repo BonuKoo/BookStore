@@ -1,9 +1,9 @@
 package com.myboard.toy.domain.board.service;
 
+import com.myboard.toy.application.board.service.BoardService;
 import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.board.dto.BoardDTO;
-import com.myboard.toy.domain.board.repository.BoardRepository;
-import lombok.extern.log4j.Log4j;
+import com.myboard.toy.infrastructure.board.repository.BoardRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

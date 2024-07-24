@@ -1,6 +1,7 @@
 package com.myboard.toy.domain.hello.repository;
 
 import com.myboard.toy.domain.hello.HelloUser;
+import com.myboard.toy.infrastructure.hello.repository.HelloUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class HelloUserRepositoryTest {
 
-    @Autowired HelloUserRepository repository;
+    @Autowired
+    HelloUserRepository repository;
 
     @BeforeEach
     public void setUp(){
