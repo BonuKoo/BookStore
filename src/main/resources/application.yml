@@ -77,7 +77,7 @@ spring:
 file:
   dir: C:/BWProject/toyProject/boardFile/\
 
-map:
+naver:
   key:
     client_id: ol6ufIkPouDkI1SwOF_x
     client_secret: jiPERDkQiD
