@@ -1,6 +1,9 @@
 package com.myboard.toy.web.naver.client;
 
+import com.myboard.toy.domain.naver.dto.NaverBookDetailViewResponseDto;
+import com.myboard.toy.domain.naver.dto.NaverBookListResponseDto;
 import com.myboard.toy.web.naver.client.config.NaverFeignConfiguration;
+import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,20 +14,43 @@ import org.springframework.web.bind.annotation.RequestParam;
         name = "bookClient",configuration = NaverFeignConfiguration.class)
 public interface NaverApiClient {
 
+    //== V1 - String 반환 == //
+
     //전체 리스트
     @GetMapping("/book.json")
-    ResponseEntity<String> getBookInformationList(
+    ResponseEntity<String> getBookInformationListV1(
             @RequestParam("query") String query,
             @RequestParam(value = "display", required = false) Integer display,
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "sort", required = false) String sort
     );
 
+
     //상세 정보
     @GetMapping("/book_adv.xml")
-    ResponseEntity<String> getBookDetail(
+    ResponseEntity<String> getBookDetailV1(
             @RequestParam(value = "d_titl", required = false) String title,
             @RequestParam(value = "d_isbn", required = false) String isbn,
+            @RequestParam(value = "display", required = false, defaultValue = "10") Integer display,
+            @RequestParam(value = "start", required = false, defaultValue = "1") Integer start,
+            @RequestParam(value = "sort", required = false, defaultValue = "sim") String sort
+    );
+
+    //== V2 DTO 반환 == //
+    @GetMapping("/book.json")
+    ResponseEntity<NaverBookListResponseDto> getBookInformationListV2(
+            @RequestParam("query") String query,
+            @RequestParam(value = "display", required = false) Integer display,
+            @RequestParam(value = "start", required = false) Integer start,
+            @RequestParam(value = "sort", required = false) String sort
+    );
+
+
+//            @RequestParam(value = "d_titl", required = false) String title,
+    @GetMapping("/book_adv.xml")
+    @Headers("Content-Type: application/xml")
+    ResponseEntity<NaverBookDetailViewResponseDto> getBookDetailV2(
+            @RequestParam(value = "query", required = false) String isbn,
             @RequestParam(value = "display", required = false, defaultValue = "10") Integer display,
             @RequestParam(value = "start", required = false, defaultValue = "1") Integer start,
             @RequestParam(value = "sort", required = false, defaultValue = "sim") String sort

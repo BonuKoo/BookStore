@@ -159,7 +159,7 @@ h1 {
 }
 
 .create-button {
-    background-color: #28a745;
+    background-color: #00FA9A;
     margin-bottom: 20px;
 }
 
@@ -234,8 +234,8 @@ footer {
     background-color: #007BFF;
     color: white;
     text-align: center;
-    padding: 10px 0;
-    position: fixed;
+    padding: 5px 0;
+    position: flex;
     width: 100%;
     bottom: 0;
 }

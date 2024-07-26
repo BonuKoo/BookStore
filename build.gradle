@@ -55,6 +55,15 @@ dependencies {
 	// openAPI 호출용
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+// Jackson Databind
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+
+	// Jackson Dataformat XML
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
+
+	// Jackson Core (필요시)
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
+
 	// WebSocket
 	// implementation 'org.springframework.boot:spring-boot-starter-websocket'
 

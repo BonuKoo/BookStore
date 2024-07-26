@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@EnableFeignClients(basePackages = "com.myboard.toy")
 public class NaverFeignConfiguration {
 
     //Key
