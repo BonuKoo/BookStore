@@ -1,35 +1,75 @@
 package com.myboard.toy.domain.naver.dto;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class NaverBookDetailViewResponseDto {
 
-    @JacksonXmlProperty(localName = "title")
-    private String title;
+    @JacksonXmlProperty(localName = "channel")
+    private Channel channel;
 
-    @JacksonXmlProperty(localName = "link")
-    private String link;
+    @Data
+    public static class Channel{
 
-    @JacksonXmlProperty(localName = "image")
-    private String image;
+        @JacksonXmlProperty(localName = "title")
+        private String title;
 
-    @JacksonXmlProperty(localName = "author")
-    private String author;
+        @JacksonXmlProperty(localName = "link")
+        private String link;
 
-    @JacksonXmlProperty(localName = "discount")
-    private String discount;
+        @JacksonXmlProperty(localName = "description")
+        private String description;
 
-    @JacksonXmlProperty(localName = "publisher")
-    private String publisher;
+        @JacksonXmlProperty(localName = "lastBuildDate")
+        private String lastBuildDate;
 
-    @JacksonXmlProperty(localName = "pubdate")
-    private String pubdate;
+        @JacksonXmlProperty(localName = "total")
+        private Integer total;
 
-    @JacksonXmlProperty(localName = "isbn")
-    private String isbn;
+        @JacksonXmlProperty(localName = "start")
+        private Integer start;
 
-    @JacksonXmlProperty(localName = "description")
-    private String description;
+        @JacksonXmlProperty(localName = "display")
+        private Integer display;
+
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "item")
+        private List<Item> items;
+
+    @Data
+    public static class Item{
+
+        @JacksonXmlProperty(localName = "title")
+        private String title;
+
+        @JacksonXmlProperty(localName = "link")
+        private String link;
+
+        @JacksonXmlProperty(localName = "image")
+        private String image;
+
+        @JacksonXmlProperty(localName = "author")
+        private String author;
+
+        @JacksonXmlProperty(localName = "discount")
+        private String discount;
+
+        @JacksonXmlProperty(localName = "publisher")
+        private String publisher;
+
+        @JacksonXmlProperty(localName = "pubdate")
+        private String pubdate;
+
+        @JacksonXmlProperty(localName = "isbn")
+        private String isbn;
+
+        @JacksonXmlProperty(localName = "description")
+        private String description;
+
+        }
+    }
 }

@@ -2,16 +2,16 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div layout:fragment="content" id="contents">
-    <section>
-        <h1 th:text="${bookDetail.title}"></h1>
-        <p><a th:href="${bookDetail.link}" target="_blank">도서 정보 URL</a></p>
-        <img th:src="${bookDetail.image}" alt="도서 이미지"/>
-        <p>저자: <span th:text="${bookDetail.author}"></span></p>
-        <p>판매 가격: <span th:text="${bookDetail.discount}"></span></p>
-        <p>출판사: <span th:text="${bookDetail.publisher}"></span></p>
-        <p>ISBN: <span th:text="${bookDetail.isbn}"></span></p>
-        <p>출간일: <span th:text="${bookDetail.pubdate}"></span></p>
-        <p>소개: <span th:text="${bookDetail.description}"></span></p>
+    <section th:each="item : ${bookDetail.channel.items}">
+        <h1 th:text="${item.title}"></h1>
+        <p><a th:href="${item.link}" target="_blank">도서 정보 URL</a></p>
+        <img th:src="${item.image}" alt="도서 이미지"/>
+        <p>저자: <span th:text="${item.author}"></span></p>
+        <p>판매 가격: <span th:text="${item.discount}"></span></p>
+        <p>출판사: <span th:text="${item.publisher}"></span></p>
+        <p>ISBN: <span th:text="${item.isbn}"></span></p>
+        <p>출간일: <span th:text="${item.pubdate}"></span></p>
+        <p>소개: <span th:text="${item.description}"></span></p>
     </section>
 </div>
 </body>

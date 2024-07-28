@@ -39,7 +39,7 @@ public class NaverBookService {
         return response;
     }
 
-    // 정의된 DTO
+                                    //== 정의된 DTO==//
     public NaverBookListResponseDto getBookListByDTO(NaverBookListRequestDto requestDto) {
 
         ResponseEntity<NaverBookListResponseDto> response = naverApiClient.getBookInformationListV2(

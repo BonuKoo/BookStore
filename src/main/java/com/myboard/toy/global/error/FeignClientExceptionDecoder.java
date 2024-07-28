@@ -15,7 +15,9 @@ public class FeignClientExceptionDecoder implements ErrorDecoder{
     @Override
     public Exception decode(String methodKey, Response response) {
         log.error("{} 요청 실패, status : {}, reason : {}", methodKey, response.status(), response.reason());
+
         FeignException exception = FeignException.errorStatus(methodKey, response);
+
         HttpStatus httpStatus = HttpStatus.valueOf(response.status());
         if (httpStatus.is5xxServerError()) {
             return new RetryableException(

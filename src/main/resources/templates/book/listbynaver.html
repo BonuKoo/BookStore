@@ -42,7 +42,7 @@
             <tbody>
             <tr th:each="item : ${bookList.items}">
                 <td>
-                    <a th:href="@{/book/detail(isbn=${item.isbn})}" th:text="${item.title}"></a>
+                    <a th:href="@{/bookDetail(isbn=${item.isbn})}" th:text="${item.title}"></a>
                 </td>
                 <td><img th:src="${item.image}" alt="도서 이미지"/></td>
                 <td th:text="${item.author}"></td>

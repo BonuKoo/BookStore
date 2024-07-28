@@ -57,8 +57,7 @@ public class NaverBookController {
         return "/book/listbynaver";
     }
 
-
-    @GetMapping("/book/detail")
+    @GetMapping("/bookDetail")
     public String searchBookDetailByString(@RequestParam String isbn, Model model) {
         // ISBN을 사용하여 상세 정보 가져오기
         NaverBookDetailRequestDto requestDto = new NaverBookDetailRequestDto(isbn);
@@ -71,22 +70,5 @@ public class NaverBookController {
         return "/book/detailbynaver";
     }
 
-    //== Rest Body 반환 ==//
-    @GetMapping("/api/search-books")
-    public ResponseEntity<String> searchBookListByRest(
-            @RequestParam("query") String query,
-            @RequestParam(value = "display", required = false) Integer display,
-            @RequestParam(value = "start", required = false) Integer start,
-            @RequestParam(value = "sort", required = false) String sort
-    ) {
-        return naverBookService.getRestBookList(query, display, start, sort);
-    }
 
-    @GetMapping("/api/book/detail")
-    public ResponseEntity<String> searchBookDetailByRest(
-            @RequestParam String title,
-            @RequestParam String isbn
-    ) {
-        return naverBookService.getRestBookDetail(title, isbn);
-    }
 }

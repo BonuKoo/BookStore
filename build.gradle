@@ -55,7 +55,7 @@ dependencies {
 	// openAPI 호출용
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-// Jackson Databind
+	// Jackson Databind
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
 
 	// Jackson Dataformat XML

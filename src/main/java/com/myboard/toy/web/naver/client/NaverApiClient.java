@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface NaverApiClient {
 
     //== V1 - String 반환 == //
-
     //전체 리스트
     @GetMapping("/book.json")
     ResponseEntity<String> getBookInformationListV1(
@@ -45,12 +44,10 @@ public interface NaverApiClient {
             @RequestParam(value = "sort", required = false) String sort
     );
 
-
-//            @RequestParam(value = "d_titl", required = false) String title,
     @GetMapping("/book_adv.xml")
     @Headers("Content-Type: application/xml")
     ResponseEntity<NaverBookDetailViewResponseDto> getBookDetailV2(
-            @RequestParam(value = "query", required = false) String isbn,
+            @RequestParam(value = "d_isbn", required = false) String isbn,
             @RequestParam(value = "display", required = false, defaultValue = "10") Integer display,
             @RequestParam(value = "start", required = false, defaultValue = "1") Integer start,
             @RequestParam(value = "sort", required = false, defaultValue = "sim") String sort
