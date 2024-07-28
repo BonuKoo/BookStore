@@ -54,7 +54,8 @@
 </head>
 <body>
 
-<div layout:fragment="content" id="contents">
+<div layout:fragment="content" id="contents" class="content-container">
+    <div class="left-section">
     <section th:each="item : ${bookDetail.channel.items}" class="book-detail">
         <table class="book-table">
             <thead>
@@ -65,34 +66,44 @@
             </tr>
             </thead>
             <tbody>
+
+            <!--
             <tr>
                 <td>도서 정보 URL</td>
                 <td><a th:href="${item.link}" target="_blank" class="book-link">클릭하세요</a></td>
             </tr>
+            -->
+            <!-- 도서 이미지 -->
             <tr>
                 <td>도서 이미지</td>
                 <td><img th:src="${item.image}" alt="도서 이미지" class="book-image"/></td>
             </tr>
+            <!-- 저자 -->
             <tr>
                 <td>저자</td>
                 <td><span th:text="${item.author}"></span></td>
             </tr>
+            <!-- 판매 가격 -->
             <tr>
                 <td>판매 가격</td>
-                <td><span th:text="${item.discount}"></span></td>
+                <td><span th:text="${item.discount} +' 원'"></span></td>
             </tr>
+            <!-- 출판사 -->
             <tr>
                 <td>출판사</td>
                 <td><span th:text="${item.publisher}"></span></td>
             </tr>
+            <!-- ISBN-->
             <tr>
                 <td>ISBN</td>
                 <td><span th:text="${item.isbn}"></span></td>
             </tr>
+            <!-- 출간일 -->
             <tr>
                 <td>출간일</td>
                 <td><span th:text="${item.pubdate}"></span></td>
             </tr>
+            <!-- 소개 -->
             <tr>
                 <td>소개</td>
                 <td><span th:text="${item.description}"></span></td>
@@ -100,6 +111,14 @@
             </tbody>
         </table>
     </section>
+    </div>
+
+    <!-- TODO : 장바구니 기능 구현-->
+    <div class="right-section">
+        <button type="button" class="btn-add-to-cart">장바구니에 담기</button>
+        <button type="button" class="btn-buy-now">구매</button>
+    </div>
+
 </div>
 </body>
 </html>

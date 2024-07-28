@@ -37,12 +37,10 @@ public class NaverBookController {
             Model model
     ) {
 
-        NaverBookListRequestDto requestDto = new NaverBookListRequestDto();
-        requestDto.setQuery(query);
-        requestDto.setDisplay(display != null ? display.toString() : null);
-        requestDto.setStart(start != null ? start.toString() : null);
-        requestDto.setSort(sort);
-
+        NaverBookListRequestDto requestDto = new NaverBookListRequestDto(                query,
+                display != null ? display.toString() : null,
+                start != null ? start.toString() : null,
+                sort);
 
         NaverBookListResponseDto responseDto = naverBookService.getBookListByDTO(requestDto);
 
