@@ -7,6 +7,7 @@ import com.myboard.toy.domain.user.User;
 import com.myboard.toy.infrastructure.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,6 +24,11 @@ public class OrderController {
     /*
     *   User getId가 존재한다는 가정 하에 실행
     * */
+    @GetMapping(value = "/orderForm")
+    public String orderForm(){
+        return "/order/orderForm";
+    }
+
     @PostMapping(value = "/order")
     public String orderV1(
                         //@RequestParam("userId") Long userId,
