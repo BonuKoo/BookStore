@@ -24,13 +24,27 @@ public class OrderService {
     private final ItemRepository itemRepository;
 
     /* 주문 */
-    public Long order(Long userId, Long itemId, int count){
+    /*
+        V1 - 유저 조건 X
+     */
+    /*
+    public Long orderV1(String isbn, int count){
+        Item item = itemRepository.findByIsbn(isbn);
+        Delivery delivery = new Delivery()
+    }
+    */
+
+    /*
+    *   V2 = 유저 포함
+    * */
+    public Long orderV2(Long userId, String isbn, int count){
 
         //엔티티 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(ItemNotFoundException::new);
+
+        Item item = itemRepository.findByIsbn(isbn);
+                //.orElseThrow(ItemNotFoundException::new);
 
         //배송정보 생성
         Delivery delivery = new Delivery(user.getAddress(), DeliveryStatus.READY);
@@ -45,6 +59,7 @@ public class OrderService {
         orderRepository.save(order);
         return order.getId();
     }
+
     /* 주문 취소 */
     public void cancelOrder(Long orderId){
         //주문 엔티티 조회

@@ -1,6 +1,7 @@
 package com.myboard.toy.domain.user;
 
 import com.myboard.toy.domain.address.Address;
+import com.myboard.toy.domain.hello.HelloWallet;
 import com.myboard.toy.domain.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,16 @@ public class User {
     private String password;    //비밀번호
     private String name;        //이름
     private String role;        //시큐리티 용 권한
+    
+    
+    
+    /*
+    * 임시 지갑 역할
+     */
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private HelloWallet wallet;
+
 
     /* 추후 추가 목록 - 세부사항 */
 
