@@ -1,17 +1,104 @@
-<html xmlns:layout="http://www.thymeleaf.org"
-      xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        /* styles.css */
+
+    /* 기존 스타일은 그대로 두고 필요한 부분만 추가 */
+    .content-container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-detail {
+        margin-bottom: 20px;
+    }
+
+    .book-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .book-link {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    .book-image {
+        max-width: 150px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .book-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .book-table th, .book-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .book-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    </style>
+</head>
 <body>
+
 <div layout:fragment="content" id="contents">
-    <section th:each="item : ${bookDetail.channel.items}">
-        <h1 th:text="${item.title}"></h1>
-        <p><a th:href="${item.link}" target="_blank">도서 정보 URL</a></p>
-        <img th:src="${item.image}" alt="도서 이미지"/>
-        <p>저자: <span th:text="${item.author}"></span></p>
-        <p>판매 가격: <span th:text="${item.discount}"></span></p>
-        <p>출판사: <span th:text="${item.publisher}"></span></p>
-        <p>ISBN: <span th:text="${item.isbn}"></span></p>
-        <p>출간일: <span th:text="${item.pubdate}"></span></p>
-        <p>소개: <span th:text="${item.description}"></span></p>
+    <section th:each="item : ${bookDetail.channel.items}" class="book-detail">
+        <table class="book-table">
+            <thead>
+            <tr>
+                <th colspan="2">
+                    <h1 th:text="${item.title}" class="book-title"></h1>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>도서 정보 URL</td>
+                <td><a th:href="${item.link}" target="_blank" class="book-link">클릭하세요</a></td>
+            </tr>
+            <tr>
+                <td>도서 이미지</td>
+                <td><img th:src="${item.image}" alt="도서 이미지" class="book-image"/></td>
+            </tr>
+            <tr>
+                <td>저자</td>
+                <td><span th:text="${item.author}"></span></td>
+            </tr>
+            <tr>
+                <td>판매 가격</td>
+                <td><span th:text="${item.discount}"></span></td>
+            </tr>
+            <tr>
+                <td>출판사</td>
+                <td><span th:text="${item.publisher}"></span></td>
+            </tr>
+            <tr>
+                <td>ISBN</td>
+                <td><span th:text="${item.isbn}"></span></td>
+            </tr>
+            <tr>
+                <td>출간일</td>
+                <td><span th:text="${item.pubdate}"></span></td>
+            </tr>
+            <tr>
+                <td>소개</td>
+                <td><span th:text="${item.description}"></span></td>
+            </tr>
+            </tbody>
+        </table>
     </section>
 </div>
 </body>
