@@ -38,4 +38,9 @@ public class Bucket {
         items.remove(item);
         item.setBucket(null);
     }
+
+    public Bucket(User user) {
+        this.user = user;
+        user.setBucket(this);
+    }
 }

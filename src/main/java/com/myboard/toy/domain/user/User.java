@@ -54,4 +54,15 @@ public class User {
         this.bucket = bucket;
         bucket.setUser(this);
     }
+
+    // 장바구니 초기화 메서드
+    public void initializeBucket() {
+        if (this.bucket != null) {
+            this.bucket.getItems().clear();
+        } else {
+            this.bucket = new Bucket();
+            this.bucket.setUser(this);
+        }
+    }
+
 }
