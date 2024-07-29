@@ -2,7 +2,7 @@ package com.myboard.toy.application.item.service;
 
 import com.myboard.toy.common.exception.ItemNotFoundException;
 import com.myboard.toy.domain.item.Item;
-import com.myboard.toy.infrastructure.item.repository.ItemRepository;
+import com.myboard.toy.infrastructure.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

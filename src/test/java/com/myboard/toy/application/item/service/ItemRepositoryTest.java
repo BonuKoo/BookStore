@@ -1,7 +1,7 @@
 package com.myboard.toy.application.item.service;
 
 import com.myboard.toy.domain.item.Item;
-import com.myboard.toy.infrastructure.item.repository.ItemRepository;
+import com.myboard.toy.infrastructure.item.ItemRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
