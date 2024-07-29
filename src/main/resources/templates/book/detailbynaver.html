@@ -115,13 +115,23 @@
 
     <!-- TODO : 장바구니 기능 구현-->
     <div class="right-section">
-
-<!--        <button type="button" class="btn-add-to-cart">장바구니에 담기</button>-->
-
         <!-- 주문 폼으로 이동 -->
-        <button type="button" class="btn-buy-now">주문</button>
+        <button type="button" class="btn-buy-now" onclick="orderNow()">주문</button>
     </div>
 
 </div>
+
+<script>
+    function orderNow() {
+        const title = /*[[${item.title}]]*/'';
+        const isbn = /*[[${item.isbn}]]*/'';
+        const discount = /*[[${item.discount}]]*/'';
+
+        const url = `/orderForm?title=${encodeURIComponent(title)}&isbn=${encodeURIComponent(isbn)}&discount=${discount}`;
+        window.location.href = url;
+    }
+</script>
+
+<script src="/path/to/your/js/scripts.js"></script>
 </body>
 </html>

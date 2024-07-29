@@ -1,6 +1,7 @@
 package com.myboard.toy.domain.user;
 
 import com.myboard.toy.domain.address.Address;
+import com.myboard.toy.domain.bucket.dto.Bucket;
 import com.myboard.toy.domain.hello.HelloWallet;
 import com.myboard.toy.domain.order.Order;
 import jakarta.persistence.*;
@@ -46,4 +47,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Bucket bucket;
+
+    public void setBucket(Bucket bucket) {
+        this.bucket = bucket;
+        bucket.setUser(this);
+    }
 }

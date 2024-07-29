@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,9 +19,9 @@
         </thead>
         <tbody>
         <tr>
-            <td>{{ item.title }}</td>
-            <td>{{ item.isbn }}</td>
-            <td>{{ item.discount }}</td>
+            <td th:text="${toBucketForm.title}">제목</td>
+            <td th:text="${toBucketForm.isbn}">ISBN</td>
+            <td th:text="${toBucketForm.discount}">할인 가격</td>
         </tr>
         </tbody>
     </table>

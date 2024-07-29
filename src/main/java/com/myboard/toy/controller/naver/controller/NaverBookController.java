@@ -60,7 +60,7 @@ public class NaverBookController {
         // ISBN을 사용하여 상세 정보 가져오기
         NaverBookDetailRequestDto requestDto = new NaverBookDetailRequestDto(isbn);
 
-        log.info("Controller에서 넘어온 파라미터=======================ISBN {}", isbn);
+        //log.info("Controller에서 넘어온 파라미터=======================ISBN {}", isbn);
 
         NaverBookDetailViewResponseDto bookDetail = naverBookService.getBookDetailByDTO(requestDto);
 
