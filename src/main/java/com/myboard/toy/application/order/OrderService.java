@@ -9,8 +9,8 @@ import com.myboard.toy.infrastructure.item.ItemRepository;
 import com.myboard.toy.domain.order.Order;
 import com.myboard.toy.infrastructure.order.OrderRepository;
 import com.myboard.toy.domain.orderitem.OrderItem;
-import com.myboard.toy.domain.user.User;
-import com.myboard.toy.infrastructure.user.UserRepository;
+import com.myboard.toy.securityproject.domain.entity.Account;
+import com.myboard.toy.securityproject.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,23 +36,23 @@ public class OrderService {
     /*
     *   V2 = 유저 포함
     * */
-    public Long orderV2(Long userId, String isbn, int count){
+    public Long orderV2(Long accountId, String isbn, int count){
 
         //엔티티 조회
-        User user = userRepository.findById(userId)
+        Account account = userRepository.findById(accountId)
                 .orElseThrow(UserNotFoundException::new);
 
         Item item = itemRepository.findByIsbn(isbn);
                 //.orElseThrow(ItemNotFoundException::new);
 
         //배송정보 생성
-        Delivery delivery = new Delivery(user.getAddress(), DeliveryStatus.READY);
+        Delivery delivery = new Delivery(account.getAddress(), DeliveryStatus.READY);
 
         //주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         //주문
-        Order order = Order.createOrder(user,delivery,orderItem);
+        Order order = Order.createOrder(account,delivery,orderItem);
 
         //주문 저장
         orderRepository.save(order);

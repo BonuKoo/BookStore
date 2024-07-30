@@ -1,7 +1,7 @@
 package com.myboard.toy.domain.bucket.dto;
 
 import com.myboard.toy.domain.bucketitem.BucketItem;
-import com.myboard.toy.domain.user.User;
+import com.myboard.toy.securityproject.domain.entity.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +23,8 @@ public class Bucket {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BucketItem> items = new ArrayList<>();
@@ -39,8 +39,8 @@ public class Bucket {
         item.setBucket(null);
     }
 
-    public Bucket(User user) {
-        this.user = user;
-        user.setBucket(this);
+    public Bucket(Account account) {
+        this.account = account;
+        account.setBucket(this);
     }
 }

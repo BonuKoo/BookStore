@@ -2,10 +2,9 @@ package com.myboard.toy.controller.order;
 
 import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.application.order.OrderService;
-import com.myboard.toy.application.user.UserService;
 import com.myboard.toy.domain.bucket.dto.ItemToBucketDTO;
-import com.myboard.toy.domain.user.User;
-import com.myboard.toy.infrastructure.user.UserRepository;
+import com.myboard.toy.securityproject.users.repository.UserRepository;
+import com.myboard.toy.securityproject.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
