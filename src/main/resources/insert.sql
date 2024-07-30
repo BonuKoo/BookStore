@@ -19,3 +19,6 @@ INSERT INTO role_resources (role_id, resource_id) VALUES (1, 1);  -- ROLE_ADMIN 
 INSERT INTO role_resources (role_id, resource_id) VALUES (2, 2);  -- ROLE_MANAGER has access to /manager/**
 INSERT INTO role_resources (role_id, resource_id) VALUES (3, 3);  -- ROLE_USER has access to /user/**
 INSERT INTO role_resources (role_id, resource_id) VALUES (4, 1);  -- ROLE_DBA has access to /admin/**
+
+
+UPDATE ACCOUNT SET ROLES = 'ROLE_ADMIN' WHERE ID = 3202;
