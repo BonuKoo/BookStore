@@ -21,4 +21,8 @@ INSERT INTO role_resources (role_id, resource_id) VALUES (3, 3);  -- ROLE_USER h
 INSERT INTO role_resources (role_id, resource_id) VALUES (4, 1);  -- ROLE_DBA has access to /admin/**
 
 
+-- 3202번 계정을 관리자로 바꾸었다는 가정 하에 진행
+
+UPDATE ACCOUNT_ROLES SET ROLE_ID = '3' WHERE ACCOUNT_ID = 3202;
+
 UPDATE ACCOUNT SET ROLES = 'ROLE_ADMIN' WHERE ID = 3202;
