@@ -22,20 +22,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
 
-    /* 주문 */
-    /*
-        V1 - 유저 조건 X
-     */
-    /*
-    public Long orderV1(String isbn, int count){
-        Item item = itemRepository.findByIsbn(isbn);
-        Delivery delivery = new Delivery()
-    }
-    */
-
     /*
     *   V2 = 유저 포함
     * */
+
     public Long orderV2(Long accountId, String isbn, int count){
 
         //엔티티 조회

@@ -1,6 +1,7 @@
 package com.myboard.toy.securityproject.domain.entity;
 
 import com.myboard.toy.domain.address.Address;
+import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.bucket.dto.Bucket;
 import com.myboard.toy.domain.order.Order;
 import jakarta.persistence.*;
@@ -40,7 +41,14 @@ public class Account implements Serializable {
             inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     @ToString.Exclude
+    @Builder.Default
     private Set<Role> userRoles = new HashSet<>();
+
+    /*
+    //게시글
+    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Board> boards = new ArrayList<>();
+    */
 
     @Embedded
     private Address address;

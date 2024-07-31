@@ -2,6 +2,7 @@ package com.myboard.toy.domain.board;
 
 import com.myboard.toy.domain.file.board.UploadFileOfBoard;
 import com.myboard.toy.domain.reply.Reply;
+import com.myboard.toy.securityproject.domain.entity.Account;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,20 +17,20 @@ public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    /*
+    //계정 추가
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Account account;
+    */
+
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true
-
-    )
-
-
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
     @Builder.Default
