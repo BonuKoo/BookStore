@@ -1,6 +1,7 @@
 package com.myboard.toy.securityproject.domain.entity;
 
 import com.myboard.toy.domain.address.Address;
+import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.bucket.dto.Bucket;
 import com.myboard.toy.domain.order.Order;
 import jakarta.persistence.*;
@@ -32,6 +33,10 @@ public class Account implements Serializable {
 
     @Column
     private String password;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Board> boards = new ArrayList<>();
 
     //@Builder.Default
     @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
