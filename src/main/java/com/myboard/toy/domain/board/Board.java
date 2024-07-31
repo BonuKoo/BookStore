@@ -23,11 +23,11 @@ public class Board {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    /*
+
     //계정 추가
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Account account;
-    */
+
 
     @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,6 +42,16 @@ public class Board {
     /*
     private int cnt;
      */
+
+    @Builder
+    public Board(Long id, String title, String content, Account account, List<Reply> replies, List<UploadFileOfBoard> files) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.account = account;
+        this.replies = (replies != null) ? replies : new ArrayList<>();
+        this.files = (files != null) ? files : new ArrayList<>();
+    }
 
     @Builder
     public Board(Long id, String title, String content, List<Reply> replies, List<UploadFileOfBoard> files) {

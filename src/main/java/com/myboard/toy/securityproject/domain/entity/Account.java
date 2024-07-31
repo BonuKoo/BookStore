@@ -44,11 +44,12 @@ public class Account implements Serializable {
     @Builder.Default
     private Set<Role> userRoles = new HashSet<>();
 
-    /*
+
     //게시글
+    @Builder.Default
     @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
     List<Board> boards = new ArrayList<>();
-    */
+
 
     @Embedded
     private Address address;
