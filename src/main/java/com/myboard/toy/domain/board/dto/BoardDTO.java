@@ -17,9 +17,7 @@ public class BoardDTO {
     private Long id;
     private String title;
     private String content;
-    //글쓴이
     private Account account;
-
     private List<Reply> replies;
     private List<MultipartFile> imageFiles; // 파일 업로드 필드
     //service -> 컨트롤러
@@ -64,6 +62,10 @@ public class BoardDTO {
         this.title = title;
         this.content = content;
         this.replies = replies;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
 }
