@@ -5,7 +5,8 @@
     <!-- section 시작 -->
     <section>
 
-        <a class="create-button" th:href="@{/boards2/new}">게시글 생성</a>
+        <a class="create-button" th:href="@{/boards2/new}" sec:authorize="isAuthenticated()">게시글 생성</a>
+
         <form class="search-form" th:action="@{/boards2}" method="get">
             <input type="text" name="title" placeholder="검색어 입력">
             <button type="submit">검색</button>

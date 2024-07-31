@@ -87,10 +87,13 @@ public class BoardService {
     //파일 업로드 기능 추가
     public BoardDTO createBoardV2(BoardDTO boardDTO) throws IOException {
 
-        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent());
+        Board board = Board.builder()
+                .title(boardDTO.getTitle())
+                .content(boardDTO.getContent())
+                .account(boardDTO.getAccount())
+                .build();
 
         // 파일 저장 로직
-
         List<UploadFileOfBoard> savedFiles = boardDTO.getImageFiles().stream()
                 .map(file -> {
                     try {
@@ -114,7 +117,9 @@ public class BoardService {
         return new BoardDTO(savedBoard.getId(),
                 savedBoard.getTitle(),
                 savedBoard.getContent(),
+                savedBoard.getAccount(),
                 savedBoard.getReplies(),
                 savedBoard.getFiles());
     }
+
 }

@@ -38,7 +38,7 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
     List<Board> boards = new ArrayList<>();
 
-    //@Builder.Default
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
     @JoinTable(name = "account_roles", joinColumns = {
             @JoinColumn(name = "account_id") },
@@ -56,6 +56,14 @@ public class Account implements Serializable {
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Bucket bucket;
+
+
+    public Account(Long id, String username, String password, int age) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.age = age;
+    }
 
     public void setBucket(Bucket bucket) {
         this.bucket = bucket;

@@ -19,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
     @Transactional
     public void createUser(Account account){
 
@@ -31,4 +32,7 @@ public class UserService {
 
     }
 
+    public Account getAccountByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
 }

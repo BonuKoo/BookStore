@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>404 Brain NOT FOUND</title>
@@ -17,19 +18,28 @@
     <!-- 로그인, 회원가입 -->
     <nav class="user-nav">
         <ul>
-            <li><a th:href="@{/login}">로그인</a></li>
-            <li><a th:href="@{/signup}">회원가입</a></li>
+            <!-- 로그인 상태가 아니면 로그인 링크를 보여줍니다 -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">로그인</a>
+            </li>
+            <!-- 로그인 상태가 아니면 회원가입 링크를 보여줍니다 -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/signup}">회원가입</a>
+            </li>
+            <!-- 로그인 상태이면 로그아웃 링크를 보여줍니다 -->
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}">로그아웃</a>
+            </li>
         </ul>
     </nav>
-</header>
-<!-- header 끝-->
+</header><!-- header 끝-->
 
 <!-- nav 시작  -->
 <nav>
     <ul id="menu">
         <li><a th:href="@{/}">Home</a></li>
         <li><a th:href="@{/boards2}">Boards</a></li>
-        <li><a th:href="@{/about}">About</a></li>
+<!--        <li><a th:href="@{/about}">About</a></li>-->
         <li><a th:href="@{/search-books}">Book</a></li>
     </ul>
 </nav>

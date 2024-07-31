@@ -8,13 +8,21 @@ import com.myboard.toy.application.file.FileService;
 import com.myboard.toy.application.file.FileStore;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.application.reply.ReplyService;
+import com.myboard.toy.securityproject.domain.dto.AccountContext;
+import com.myboard.toy.securityproject.domain.dto.AccountDto;
+import com.myboard.toy.securityproject.domain.entity.Account;
+import com.myboard.toy.securityproject.users.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.Principal;
 
 @RequestMapping("/boards2")
 @Controller
@@ -32,12 +41,13 @@ public class BoardControllerV2 {
     private final ReplyService replyService;
     private final FileService fileService;
     private final FileStore fileStore;
-
-    public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore) {
+    private final UserService userService;
+    public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore, UserService userService) {
         this.boardService = boardService;
         this.replyService = replyService;
         this.fileService = fileService;
         this.fileStore = fileStore;
+        this.userService = userService;
     }
 
     /*
@@ -56,11 +66,23 @@ public class BoardControllerV2 {
 
     //게시글 생성
     @PostMapping("/new")
-    public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO, RedirectAttributes redirectAttributes) throws IOException {
+    public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO,
+                                @AuthenticationPrincipal AccountContext accountContext,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        //로그인한 계정의 username을 가져온다.
+        String username = accountContext.getUsername();
+        //username을 토대로 account 값을 db에서 조회한다.
+        Account account = userService.getAccountByUsername(username);
+        //게시판에 담는다.
+        boardDTO.setAccount(account);
+
+        //게시글 생성
         BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
-        redirectAttributes.addAttribute("id",createdBoard.getId());
+        redirectAttributes.addAttribute("id", createdBoard.getId());
         return "redirect:/boards2/{id}";
     }
+
 
     //댓글 생성
     @PostMapping("/{id}/reply")
@@ -116,7 +138,7 @@ public class BoardControllerV2 {
         return fileService.downloadAttach(id);
     }
 
-    
+
     /*
         UPDATE
      */
