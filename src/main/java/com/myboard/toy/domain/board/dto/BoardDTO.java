@@ -19,6 +19,10 @@ public class BoardDTO {
     private String content;
     private Account account;
     private List<Reply> replies;
+
+    //임시로
+    private List<ReplyDTO> replyDTOList;
+
     private List<MultipartFile> imageFiles; // 파일 업로드 필드
     //service -> 컨트롤러
     private List<UploadFileOfBoard> formattedFiles;
@@ -64,7 +68,7 @@ public class BoardDTO {
         this.replies = replies;
     }
 
-    public void setAccount(Account account) {
+    public void registerAccount(Account account) {
         this.account = account;
     }
 

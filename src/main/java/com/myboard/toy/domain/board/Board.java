@@ -29,7 +29,6 @@ public class Board {
 
     //@Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-
     private List<Reply> replies = new ArrayList<>();
 
     //@Builder.Default

@@ -8,12 +8,10 @@ import com.myboard.toy.application.file.FileService;
 import com.myboard.toy.application.file.FileStore;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.application.reply.ReplyService;
-import com.myboard.toy.securityproject.domain.dto.AccountContext;
 import com.myboard.toy.securityproject.domain.dto.AccountDto;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import com.myboard.toy.securityproject.users.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -22,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,22 +66,13 @@ public class BoardControllerV2 {
     @PostMapping("/new")
     public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO,
                                 Principal principal,
-
                                 RedirectAttributes redirectAttributes) throws IOException {
 
         if (principal instanceof UsernamePasswordAuthenticationToken) {
 
-            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-            AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
-            String username = accountDto.getUsername();
+            Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
 
-            // username을 토대로 account 값을 db에서 조회한다.
-            Account account = userService.getAccountByUsername(username);
-            System.out.println("Fetched account: " + account);
-
-            System.out.println("BoardDTO before setting account: " + boardDTO);
-            boardDTO.setAccount(account);
-            System.out.println("BoardDTO after setting account: " + boardDTO);
+            boardDTO.registerAccount(account);
 
             // 게시글 생성
             BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
@@ -96,13 +83,23 @@ public class BoardControllerV2 {
     }
 
 
+
     //댓글 생성
     @PostMapping("/{id}/reply")
-    public String createReply(@PathVariable Long id, @RequestParam String content) {
+    public String createReply(@PathVariable Long id,
+                              @RequestParam String content,
+                              Principal principal
+                              ) {
+
+        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+
+
         ReplyDTO replyDTO = ReplyDTO.builder()
                 .content(content)
                 .boardId(id)
+                .account(account)
                 .build();
+
         replyService.createReply(replyDTO);
         return "redirect:/boards2/" + id;
     }
@@ -110,6 +107,7 @@ public class BoardControllerV2 {
     /*
         Read
      */
+
     //단 건 조회
     @GetMapping("/{id}")
     public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
@@ -179,6 +177,18 @@ public class BoardControllerV2 {
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
         return "redirect:/boards2"; // 삭제 후 게시판 목록으로 리다이렉트
+    }
+
+
+    private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
+        UsernamePasswordAuthenticationToken authenticationToken = principal;
+        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+        String username1 = accountDto.getUsername();
+        String username = username1;
+
+        // username을 토대로 account 값을 db에서 조회한다.
+        Account account = userService.getAccountByUsername(username);
+        return account;
     }
 
 }

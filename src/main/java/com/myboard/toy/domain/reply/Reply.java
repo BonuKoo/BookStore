@@ -1,6 +1,7 @@
 package com.myboard.toy.domain.reply;
 
 import com.myboard.toy.domain.board.Board;
+import com.myboard.toy.securityproject.domain.entity.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,10 @@ public class Reply {
     private Long id;
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reply_id")
+    private Account account;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "board_id")
     private Board board;
@@ -24,9 +29,10 @@ public class Reply {
         this.content = content;
     }
 
-    public Reply(String content, Board board) {
+    public Reply(String content, Board board, Account account) {
         this.content = content;
         this.board = board;
+        this.account = account;
     }
 
     // 댓글 수정용

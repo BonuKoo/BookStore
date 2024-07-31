@@ -4,6 +4,7 @@ import com.myboard.toy.domain.address.Address;
 import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.bucket.dto.Bucket;
 import com.myboard.toy.domain.order.Order;
+import com.myboard.toy.domain.reply.Reply;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,11 @@ public class Account implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
     List<Board> boards = new ArrayList<>();
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Reply> replys = new ArrayList<>();
 
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})

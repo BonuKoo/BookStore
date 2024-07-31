@@ -4,6 +4,7 @@ import com.myboard.toy.domain.board.BoardSearchCondition;
 import com.myboard.toy.domain.board.QBoard;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.reply.QReply;
+import com.myboard.toy.securityproject.domain.entity.QAccount;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +20,7 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
 
     private final JPAQueryFactory queryFactory;
 
+    QAccount account = new QAccount(QAccount.account);
     QBoard board = new QBoard(QBoard.board);
     QReply reply = new QReply(QReply.reply);
 
@@ -35,6 +37,7 @@ public class BoardRepository4QueryDSlImpl implements BoardRepository4QueryDSl{
                 .select(Projections.constructor(BoardPageDTO.class,
                         board.id,
                         board.title,
+                        board.account.username,
                         board.replies.size().longValue()))
                 .from(board)
                 .leftJoin(board.replies,reply)

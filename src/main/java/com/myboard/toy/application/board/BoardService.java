@@ -4,6 +4,7 @@ import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.board.BoardSearchCondition;
 import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
+import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.infrastructure.board.BoardRepository;
 import com.myboard.toy.domain.file.board.UploadFileOfBoard;
 import com.myboard.toy.application.file.FileStore;
@@ -44,14 +45,25 @@ public class BoardService {
 
     //단 건 조회 + 파일도 불러오기 실험
     public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
+
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
+
+        List<ReplyDTO> replyDTOS = board.getReplies().stream()
+                .map(reply -> ReplyDTO.builder()
+                        .id(reply.getId())
+                        .content(reply.getContent())
+                        .boardId(reply.getBoard().getId())
+                        .account(reply.getAccount())
+                        .build()
+                )
+                .toList();
 
         return BoardDTO.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .replies(board.getReplies())
+                .replyDTOList(replyDTOS)
                 .formattedFiles(board.getFiles())
                 .build();
     }
