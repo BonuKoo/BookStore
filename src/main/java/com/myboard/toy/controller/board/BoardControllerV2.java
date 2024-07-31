@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,23 +65,34 @@ public class BoardControllerV2 {
         return "board/createBoardForm"; // 생성 폼 뷰 이름
     }
 
-    //게시글 생성
+    // 게시글 생성
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
     public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO,
-                                @AuthenticationPrincipal AccountContext accountContext,
+                                Principal principal,
+
                                 RedirectAttributes redirectAttributes) throws IOException {
 
-        //로그인한 계정의 username을 가져온다.
-        String username = accountContext.getUsername();
-        //username을 토대로 account 값을 db에서 조회한다.
-        Account account = userService.getAccountByUsername(username);
-        //게시판에 담는다.
-        boardDTO.setAccount(account);
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
 
-        //게시글 생성
-        BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
-        redirectAttributes.addAttribute("id", createdBoard.getId());
-        return "redirect:/boards2/{id}";
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+            AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+            String username = accountDto.getUsername();
+
+            // username을 토대로 account 값을 db에서 조회한다.
+            Account account = userService.getAccountByUsername(username);
+            System.out.println("Fetched account: " + account);
+
+            System.out.println("BoardDTO before setting account: " + boardDTO);
+            boardDTO.setAccount(account);
+            System.out.println("BoardDTO after setting account: " + boardDTO);
+
+            // 게시글 생성
+            BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
+            redirectAttributes.addAttribute("id", createdBoard.getId());
+            return "redirect:/boards2/{id}";
+        }
+        throw new IllegalArgumentException("Principal is not of type UsernamePasswordAuthenticationToken");
     }
 
 
@@ -113,6 +125,8 @@ public class BoardControllerV2 {
                                 @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
                             Model model) {
+
+
 
         BoardSearchCondition condition = new BoardSearchCondition();
         //검색 조건 설정
