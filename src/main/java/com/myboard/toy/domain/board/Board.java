@@ -16,6 +16,8 @@ public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
     @Column(nullable = false)
     private String title;
 
@@ -23,11 +25,16 @@ public class Board {
     private String content;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true
+
+    )
+
+
     private List<Reply> replies = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true,
+    fetch = FetchType.EAGER)
     private List<UploadFileOfBoard> files = new ArrayList<>();
 
     //조회 수
