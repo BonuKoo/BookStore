@@ -2,7 +2,7 @@ package com.myboard.toy.securityproject.domain.entity;
 
 import com.myboard.toy.domain.address.Address;
 import com.myboard.toy.domain.board.Board;
-import com.myboard.toy.domain.bucket.dto.Bucket;
+import com.myboard.toy.domain.bucket.Bucket;
 import com.myboard.toy.domain.order.Order;
 import com.myboard.toy.domain.reply.Reply;
 import jakarta.persistence.*;

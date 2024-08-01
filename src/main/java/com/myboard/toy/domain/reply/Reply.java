@@ -4,6 +4,7 @@ import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,7 +30,9 @@ public class Reply {
         this.content = content;
     }
 
-    public Reply(String content, Board board, Account account) {
+    @Builder
+    public Reply(Long id, String content, Board board, Account account) {
+        this.id = id;
         this.content = content;
         this.board = board;
         this.account = account;

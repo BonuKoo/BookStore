@@ -17,22 +17,22 @@
         </div>
 
         <p>내용: <span th:text="${board.content}"></span></p>
-        <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
+        <p>댓글 수: <span th:text="${board.replyDTOList != null ? board.replyDTOList.size() : 0}"></span></p>
     </div>
 
     <!-- 댓글 목록 -->
     <div class="comments-section">
         <h3>댓글 목록</h3>
         <ul class="comment-list">
-            <li th:each="reply : ${board.replies}" class="comment-item">
-                <span th:text="${reply.account.username}">
+            <li th:each="reply : ${board.replyDTOList}" class="comment-item">
+                <span th:text="${reply.account.username}"></span> <!-- 닫힌 span 태그 -->
                 <span th:text="${reply.content}"></span>
-                <!--삭제-->
+                <!-- 삭제 -->
                 <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
                     <button type="submit" class="button delete-button">삭제</button>
                 </form>
-                <!--수정-->
+                <!-- 수정 -->
                 <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
                     <input type="text" name="content" th:value="${reply.content}" class="input-text" />

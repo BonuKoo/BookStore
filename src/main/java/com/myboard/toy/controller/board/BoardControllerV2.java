@@ -112,6 +112,8 @@ public class BoardControllerV2 {
     @GetMapping("/{id}")
     public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReplyV2(id);
+        //로그 확인
+        log.info("replyDto" + boardDTO.getReplyDTOList());
 
         model.addAttribute("board", boardDTO);
         return "board/boardDetail"; // 뷰 이름

@@ -1,6 +1,6 @@
 package com.myboard.toy.domain.bucketitem;
 
-import com.myboard.toy.domain.bucket.dto.Bucket;
+import com.myboard.toy.domain.bucket.Bucket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

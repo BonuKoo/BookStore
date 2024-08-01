@@ -38,7 +38,14 @@ public class ReplyService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + replyDTO.getAccount().getUsername()));
 
         // Reply 엔티티 생성 및 저장
-        Reply reply = new Reply(replyDTO.getContent(), board, account);
+
+        Reply reply =
+        Reply.builder()
+                .content(replyDTO.getContent())
+                .board(board)
+                .account(account)
+                .build();
+
         Reply savedReply = replyRepository.save(reply);
 
         // ReplyDTO로 변환하여 반환
@@ -76,9 +83,7 @@ public class ReplyService {
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다. ID: " + replyId));
 
         // 수정할 내용 업데이트
-        reply = new Reply(reply.getId(),replyDTO.getContent(), reply.getBoard());
-
-        // 변경된 Reply 엔티티 저장
+        reply.updateContent(replyDTO.getContent());
         Reply updatedReply = replyRepository.save(reply);
 
         // 수정된 ReplyDTO로 변환하여 반환
