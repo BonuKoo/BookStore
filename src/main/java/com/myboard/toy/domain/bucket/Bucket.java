@@ -1,4 +1,4 @@
-package com.myboard.toy.domain.bucket.dto;
+package com.myboard.toy.domain.bucket;
 
 import com.myboard.toy.domain.bucketitem.BucketItem;
 import com.myboard.toy.securityproject.domain.entity.Account;

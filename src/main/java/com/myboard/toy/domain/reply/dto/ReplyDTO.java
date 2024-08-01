@@ -1,5 +1,6 @@
 package com.myboard.toy.domain.reply.dto;
 
+import com.myboard.toy.securityproject.domain.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class ReplyDTO {
     private Long id;
     private String content;
     private Long boardId;
+    private Account account;
 
     public ReplyDTO() {
     }
@@ -20,4 +22,5 @@ public class ReplyDTO {
         this.content = content;
         this.boardId = boardId;
     }
+
 }

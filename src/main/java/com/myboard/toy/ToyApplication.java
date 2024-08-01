@@ -19,5 +19,4 @@ public class ToyApplication  {
 		SpringApplication.run(ToyApplication.class, args);
 	}
 
-
 }

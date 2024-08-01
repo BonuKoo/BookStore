@@ -2,7 +2,6 @@ package com.myboard.toy.controller.order;
 
 import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.application.order.OrderService;
-import com.myboard.toy.domain.bucket.dto.ItemToBucketDTO;
 import com.myboard.toy.securityproject.users.repository.UserRepository;
 import com.myboard.toy.securityproject.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -25,12 +26,13 @@ public class OrderController {
     /*
     *   User getId가 존재한다는 가정 하에 실행
     * */
+
+    // TODO
     @GetMapping("/orderForm")
-    public String orderForm(@RequestParam String title,
-                            @RequestParam String isbn,
-                            @RequestParam int discount,
+    public String orderForm(@RequestParam(required = false) String title,
+                            @RequestParam(required = false) String isbn,
+                            @RequestParam(required = false) int discount,
                             Model model) {
-        model.addAttribute("toBucketForm", new ItemToBucketDTO(title, isbn, discount));
         return "/order/orderForm";
     }
 

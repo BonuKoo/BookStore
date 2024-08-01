@@ -5,7 +5,8 @@
     <!-- section 시작 -->
     <section>
 
-        <a class="create-button" th:href="@{/boards2/new}">게시글 생성</a>
+        <a class="create-button" th:href="@{/boards2/new}" sec:authorize="isAuthenticated()">게시글 생성</a>
+
         <form class="search-form" th:action="@{/boards2}" method="get">
             <input type="text" name="title" placeholder="검색어 입력">
             <button type="submit">검색</button>
@@ -18,6 +19,7 @@
         <tr>
             <th>ID</th>
             <th>Title</th>
+            <th>글쓴이</th>
             <th>Reply Count</th>
         </tr>
         </thead>
@@ -25,6 +27,7 @@
         <tr th:each="board : ${boards.content}">
             <td th:text="${board.id}"></td>
             <td><a th:href="@{/boards2/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
+            <td><span th:if="${board.username != null}" th:text="${board.username}"></span></td>
             <td th:text="${board.replyCount}"></td>
         </tr>
         </tbody>

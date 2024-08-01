@@ -8,6 +8,9 @@ import com.myboard.toy.application.file.FileService;
 import com.myboard.toy.application.file.FileStore;
 import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.application.reply.ReplyService;
+import com.myboard.toy.securityproject.domain.dto.AccountDto;
+import com.myboard.toy.securityproject.domain.entity.Account;
+import com.myboard.toy.securityproject.users.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -15,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.Principal;
 
 @RequestMapping("/boards2")
 @Controller
@@ -32,12 +38,13 @@ public class BoardControllerV2 {
     private final ReplyService replyService;
     private final FileService fileService;
     private final FileStore fileStore;
-
-    public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore) {
+    private final UserService userService;
+    public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore, UserService userService) {
         this.boardService = boardService;
         this.replyService = replyService;
         this.fileService = fileService;
         this.fileStore = fileStore;
+        this.userService = userService;
     }
 
     /*
@@ -54,21 +61,45 @@ public class BoardControllerV2 {
         return "board/createBoardForm"; // 생성 폼 뷰 이름
     }
 
-    //게시글 생성
+    // 게시글 생성
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
-    public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO, RedirectAttributes redirectAttributes) throws IOException {
-        BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
-        redirectAttributes.addAttribute("id",createdBoard.getId());
-        return "redirect:/boards2/{id}";
+    public String createBoardV2(@ModelAttribute("createBoard") BoardDTO boardDTO,
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
+
+            Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+
+            boardDTO.registerAccount(account);
+
+            // 게시글 생성
+            BoardDTO createdBoard = boardService.createBoardV2(boardDTO);
+            redirectAttributes.addAttribute("id", createdBoard.getId());
+            return "redirect:/boards2/{id}";
+        }
+        throw new IllegalArgumentException("Principal is not of type UsernamePasswordAuthenticationToken");
     }
+
+
 
     //댓글 생성
     @PostMapping("/{id}/reply")
-    public String createReply(@PathVariable Long id, @RequestParam String content) {
+    public String createReply(@PathVariable Long id,
+                              @RequestParam String content,
+                              Principal principal
+                              ) {
+
+        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+
+
         ReplyDTO replyDTO = ReplyDTO.builder()
                 .content(content)
                 .boardId(id)
+                .account(account)
                 .build();
+
         replyService.createReply(replyDTO);
         return "redirect:/boards2/" + id;
     }
@@ -76,10 +107,13 @@ public class BoardControllerV2 {
     /*
         Read
      */
+
     //단 건 조회
     @GetMapping("/{id}")
     public String viewDetailBoardWithReplyList(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReplyV2(id);
+        //로그 확인
+        log.info("replyDto" + boardDTO.getReplyDTOList());
 
         model.addAttribute("board", boardDTO);
         return "board/boardDetail"; // 뷰 이름
@@ -91,6 +125,8 @@ public class BoardControllerV2 {
                                 @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
                             Model model) {
+
+
 
         BoardSearchCondition condition = new BoardSearchCondition();
         //검색 조건 설정
@@ -116,7 +152,7 @@ public class BoardControllerV2 {
         return fileService.downloadAttach(id);
     }
 
-    
+
     /*
         UPDATE
      */
@@ -143,6 +179,18 @@ public class BoardControllerV2 {
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
         return "redirect:/boards2"; // 삭제 후 게시판 목록으로 리다이렉트
+    }
+
+
+    private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
+        UsernamePasswordAuthenticationToken authenticationToken = principal;
+        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+        String username1 = accountDto.getUsername();
+        String username = username1;
+
+        // username을 토대로 account 값을 db에서 조회한다.
+        Account account = userService.getAccountByUsername(username);
+        return account;
     }
 
 }

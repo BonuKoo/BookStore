@@ -4,6 +4,7 @@ import com.myboard.toy.domain.board.Board;
 import com.myboard.toy.domain.board.BoardSearchCondition;
 import com.myboard.toy.domain.board.dto.BoardDTO;
 import com.myboard.toy.domain.board.dto.BoardPageDTO;
+import com.myboard.toy.domain.reply.dto.ReplyDTO;
 import com.myboard.toy.infrastructure.board.BoardRepository;
 import com.myboard.toy.domain.file.board.UploadFileOfBoard;
 import com.myboard.toy.application.file.FileStore;
@@ -44,14 +45,25 @@ public class BoardService {
 
     //단 건 조회 + 파일도 불러오기 실험
     public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
+
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
+
+        List<ReplyDTO> replyDTOS = board.getReplies().stream()
+                .map(reply -> ReplyDTO.builder()
+                        .id(reply.getId())
+                        .content(reply.getContent())
+                        .boardId(reply.getBoard().getId())
+                        .account(reply.getAccount())
+                        .build()
+                )
+                .toList();
 
         return BoardDTO.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .replies(board.getReplies())
+                .replyDTOList(replyDTOS)
                 .formattedFiles(board.getFiles())
                 .build();
     }
@@ -87,10 +99,13 @@ public class BoardService {
     //파일 업로드 기능 추가
     public BoardDTO createBoardV2(BoardDTO boardDTO) throws IOException {
 
-        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent());
+        Board board = Board.builder()
+                .title(boardDTO.getTitle())
+                .content(boardDTO.getContent())
+                .account(boardDTO.getAccount())
+                .build();
 
         // 파일 저장 로직
-
         List<UploadFileOfBoard> savedFiles = boardDTO.getImageFiles().stream()
                 .map(file -> {
                     try {
@@ -114,7 +129,9 @@ public class BoardService {
         return new BoardDTO(savedBoard.getId(),
                 savedBoard.getTitle(),
                 savedBoard.getContent(),
+                savedBoard.getAccount(),
                 savedBoard.getReplies(),
                 savedBoard.getFiles());
     }
+
 }

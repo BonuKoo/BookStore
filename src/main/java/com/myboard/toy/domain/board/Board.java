@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +23,15 @@ public class Board {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-
     //계정 추가
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Account account;
 
-
-    @Builder.Default
+    //@Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
-    @Builder.Default
+    //@Builder.Default
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true,
     fetch = FetchType.EAGER)
     private List<UploadFileOfBoard> files = new ArrayList<>();
@@ -44,20 +42,11 @@ public class Board {
      */
 
     @Builder
-    public Board(Long id, String title, String content, Account account, List<Reply> replies, List<UploadFileOfBoard> files) {
+    public Board(Long id, String title,String content,Account account, List<Reply> replies, List<UploadFileOfBoard> files) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.account = account;
-        this.replies = (replies != null) ? replies : new ArrayList<>();
-        this.files = (files != null) ? files : new ArrayList<>();
-    }
-
-    @Builder
-    public Board(Long id, String title, String content, List<Reply> replies, List<UploadFileOfBoard> files) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
         this.replies = (replies != null) ? replies : new ArrayList<>();
         this.files = (files != null) ? files : new ArrayList<>();
     }
