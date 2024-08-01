@@ -115,20 +115,36 @@
     </div>
 
     <!-- TODO : 장바구니 기능 구현-->
+
     <div class="right-section">
         <!-- 주문 폼으로 이동 -->
         <button type="button" class="btn-buy-now" onclick="orderNow()">주문</button>
+
+        <!-- 장바구니에 담기 버튼 : 버튼을 누르면 Cart에 담김 -->
+
+        <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/cart/add}" method="post">
+            <input type="hidden" name="isbn" th:value="${item.isbn}"/>
+            <div class="d-flex">
+                <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
+                       style="max-width: 3rem"/>
+                <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    장바구니
+                </button>
+            </div>
+        </form>
+        <!-- 장바구니 버튼 끝-->
     </div>
 
 </div>
 
 <script>
     function orderNow() {
-        const title = /*[[${item.title}]]*/'';
-        const isbn = /*[[${item.isbn}]]*/'';
-        const discount = /*[[${item.discount}]]*/'';
+        const title = document.querySelector('.book-title').innerText;
+        const isbn = document.querySelector('tr:nth-child(6) span').innerText; // ISBN 값 추출
+        const discount = document.querySelector('tr:nth-child(4) span').innerText.split(' ')[0]; // 가격 값 추출
 
-        const url = `/orderForm?title=${encodeURIComponent(title)}&isbn=${encodeURIComponent(isbn)}&discount=${discount}`;
+        const url = `/orderForm?title=${encodeURIComponent(title)}&isbn=${encodeURIComponent(isbn)}&discount=${encodeURIComponent(discount)}`;
         window.location.href = url;
     }
 </script>

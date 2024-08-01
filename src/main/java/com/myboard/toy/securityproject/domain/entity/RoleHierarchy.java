@@ -26,6 +26,7 @@ public class RoleHierarchy implements Serializable {
     @JoinColumn(name = "parent_id", referencedColumnName = "id", insertable = false, updatable = false)
     private RoleHierarchy parent;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private Set<RoleHierarchy> children = new HashSet<>();
 }

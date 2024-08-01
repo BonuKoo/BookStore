@@ -2,7 +2,6 @@ package com.myboard.toy.securityproject.domain.entity;
 
 import com.myboard.toy.domain.address.Address;
 import com.myboard.toy.domain.board.Board;
-import com.myboard.toy.domain.bucket.Bucket;
 import com.myboard.toy.domain.order.Order;
 import com.myboard.toy.domain.reply.Reply;
 import jakarta.persistence.*;
@@ -60,8 +59,6 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Bucket bucket;
 
 
     public Account(Long id, String username, String password, int age) {
@@ -70,12 +67,13 @@ public class Account implements Serializable {
         this.password = password;
         this.age = age;
     }
-
+    /*
     public void setBucket(Bucket bucket) {
         this.bucket = bucket;
         bucket.setAccount(this);
-    }
+    }*/
 
+    /*
     // 장바구니 초기화 메서드
     public void initializeBucket() {
         if (this.bucket != null) {
@@ -85,4 +83,5 @@ public class Account implements Serializable {
             this.bucket.setAccount(this);
         }
     }
+    */
 }

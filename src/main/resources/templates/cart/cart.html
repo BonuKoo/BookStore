@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>장바구니</title>
+    <style>
+        /* 간단한 스타일링 */
+        .cart-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cart-container">
+    <h1>장바구니</h1>
+    <div th:each="cartItem : ${cartItems}" class="cart-item">
+        <div th:text="${cartItem.item.title}"></div>
+        <div th:text="${cartItem.count + ' 개'}"></div>
+        <div th:text="${cartItem.item.price + ' 원'}"></div>
+    </div>
+</div>
+
+</body>
+</html>

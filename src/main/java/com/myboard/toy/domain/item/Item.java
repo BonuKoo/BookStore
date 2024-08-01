@@ -3,6 +3,7 @@ package com.myboard.toy.domain.item;
 import com.myboard.toy.common.exception.NotEnoughStockException;
 import com.myboard.toy.domain.category.Category;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name ="dtype")
 @Entity
+@Builder
 public class Item {
 
     /* TODO : 나중엔 Long id도 String isbn으로 변경
@@ -21,6 +23,7 @@ public class Item {
     @Column(name = "item_id")
     private Long id;
 
+    private String title;
     private String isbn;        //ISBN 번호
 
     private int price;          //가격
