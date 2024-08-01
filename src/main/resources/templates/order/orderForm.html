@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 폼</title>
+    <link rel="stylesheet" href="/path/to/your/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>주문 폼</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>ISBN</th>
+            <th>할인 가격</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${toBucketForm.title}">제목</td>
+            <td th:text="${toBucketForm.isbn}">ISBN</td>
+            <td th:text="${toBucketForm.discount}">할인 가격</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form action="/order/submit" method="post">
+        <div class="form-group">
+            <label for="count">주문수량</label>
+            <input type="number" name="count" class="form-control" id="count" placeholder="주문 수량을 입력하세요" required>
+        </div>
+        <button type="submit" class="btn btn-primary">결제</button>
+    </form>
+</div>
+
+<script src="/path/to/your/js/scripts.js"></script>
+</body>
+</html>

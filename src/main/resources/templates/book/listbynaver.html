@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 검색 결과</title>
+    <style>
+        .book-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .book-table th, .book-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .book-table th {
+            background-color: #f4f4f4;
+        }
+        .book-table img {
+            width: 50px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" id="contents">
+    <section>
+        <form class="search-form" th:action="@{/search-books}" method="get">
+            <input type="text" name="query" placeholder="검색어 입력">
+            <button type="submit">검색</button>
+        </form>
+        <h1>도서 검색 결과</h1>
+        <table class="book-table">
+            <thead>
+            <tr>
+                <th>제목</th>
+                <th>이미지</th>
+                <th>저자</th>
+                <th>판매가격</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${bookList.items}">
+                <td>
+                    <a th:href="@{/bookDetail(isbn=${item.isbn})}" th:text="${item.title}"></a>
+                </td>
+                <td><img th:src="${item.image}" alt="도서 이미지"/></td>
+                <td th:text="${item.author}"></td>
+                <td th:text="${item.discountFormatted}+' 원'"></td> <!-- 포맷된 할인 가격 -->
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

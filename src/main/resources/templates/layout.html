@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title> 404 Brain NOT FOUND </title>
+    <title>404 Brain NOT FOUND</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <!--css-->
     <link rel="stylesheet" href="/css/styles.css">
@@ -12,14 +12,13 @@
 <body>
 <!-- header 시작 -->
 <header>
-    <h1 class="header-title">사이트</h1>
-    <!-- 로고 이미지 추가 -->
     <img src="/img/logo.jpg" alt="사이트 로고" class="logo">
+    <h1 class="header-title">사이트</h1>
     <!-- 로그인, 회원가입 -->
     <nav class="user-nav">
         <ul>
-            <li><a th:href="@{/user/login}">Sign in</a></li>
-            <li><a href="#">Sign up</a></li>
+            <li><a th:href="@{/login}">로그인</a></li>
+            <li><a th:href="@{/signup}">회원가입</a></li>
         </ul>
     </nav>
 </header>
@@ -31,12 +30,17 @@
         <li><a th:href="@{/}">Home</a></li>
         <li><a th:href="@{/boards2}">Boards</a></li>
         <li><a th:href="@{/about}">About</a></li>
+        <li><a th:href="@{/search-books}">Book</a></li>
     </ul>
 </nav>
 <!-- nav 끝-->
 
 <!-- content 부분 -->
-<th:block layout:fragment="content"></th:block>
+<div id="contents">
+    <th:block layout:fragment="content">
+    </th:block>
+</div>
+
 <!-- footer -->
 <footer>
     <p>&copy; 2024 게시판. All rights reserved.</p>

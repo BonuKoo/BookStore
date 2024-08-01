@@ -5,45 +5,43 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
 @Table(name = "UploadFile_Board")
 @Entity
 public class UploadFileOfBoard {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uploadFileName; //고객이 업로드한 파일명
-    private String storeFileName;  //서버 내부에서 관리하는 파일명 -> uuid
+    private String uploadFileName; // 고객이 업로드한 파일명
+    private String storeFileName;  // 서버 내부에서 관리하는 파일명 -> uuid
 
-    /*경로*/
     @Column(nullable = false)
-    private String filePath;
+    private String filePath;      // 파일 저장 경로
 
-
-    /*타입
     @Column(nullable = false)
-    private String fileType;
-     */
+    private String fileType;      // 파일 타입 (MIME type)
 
-    /* 크기 */
     @Column(nullable = false)
-    private long fileSize;
+    private long fileSize;        // 파일 크기 (바이트 단위)
 
-
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private Board board;          // 해당 파일이 속한 게시물
 
-    //파일 이름
-    public UploadFileOfBoard(String uploadFileName, String storeFileName) {
+    // 파일 이름과 저장된 파일 이름을 사용하는 생성자
+    public UploadFileOfBoard(String uploadFileName, String storeFileName, String filePath, String fileType, long fileSize) {
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
+        this.filePath = filePath;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
     }
 
-    //board와 연관관계 매서드
+    // 게시물과의 연관 관계 설정 메서드
     public void attachBoard(Board board){
-        this.board=board;
+        this.board = board;
     }
-
 }
