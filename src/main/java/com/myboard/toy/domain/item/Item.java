@@ -9,16 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name ="dtype")
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name ="dtype")
 @Entity
-public abstract class Item {
+public class Item {
 
+    /* TODO : 나중엔 Long id도 String isbn으로 변경
+    *  지금은 우선 주어진 기능에 맞춰서 개발하자
+    */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
-    private String name;        //제품명
+    private String isbn;        //ISBN 번호
+
     private int price;          //가격
     private int stockQuantity;  //재고
 
@@ -41,4 +45,13 @@ public abstract class Item {
         }
         this.stockQuantity = restStock;
     }
+
+    /*
+    *   Test Code용 setIsbn
+    *
+    *   */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
 }

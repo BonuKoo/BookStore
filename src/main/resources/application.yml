@@ -58,13 +58,13 @@ spring:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:tcp://localhost/~/toy
+    url: jdbc:h2:tcp://localhost/~/toy3
     driver-class-name: org.h2.Driver
     username: sa
-    password:
+    password: 1234
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -75,5 +75,9 @@ spring:
     active: local
 
 file:
-  dir: C:/BoardFileRoot/
+  dir: C:/BWProject/toyProject/boardFile/
 
+naver:
+  key:
+    client_id: ol6ufIkPouDkI1SwOF_x
+    client_secret: jiPERDkQiD

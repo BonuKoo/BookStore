@@ -17,19 +17,22 @@
         </div>
 
         <p>내용: <span th:text="${board.content}"></span></p>
-        <p>댓글 수: <span th:text="${board.replies.size()}"></span></p>
+        <p>댓글 수: <span th:text="${board.replyDTOList != null ? board.replyDTOList.size() : 0}"></span></p>
     </div>
 
     <!-- 댓글 목록 -->
     <div class="comments-section">
         <h3>댓글 목록</h3>
         <ul class="comment-list">
-            <li th:each="reply : ${board.replies}" class="comment-item">
+            <li th:each="reply : ${board.replyDTOList}" class="comment-item">
+                <span th:text="${reply.account.username}"></span> <!-- 닫힌 span 태그 -->
                 <span th:text="${reply.content}"></span>
+                <!-- 삭제 -->
                 <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
                     <button type="submit" class="button delete-button">삭제</button>
                 </form>
+                <!-- 수정 -->
                 <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
                     <input type="text" name="content" th:value="${reply.content}" class="input-text" />
@@ -41,13 +44,13 @@
 
     <!-- 게시글 수정 버튼 -->
     <div class="action-buttons">
-        <a th:href="@{/boards2/{id}/edit(id=${board.id})}" class="button edit-button">게시글 수정</a>
+        <a th:href="@{/boards2/{id}/edit(id=${board.id})}" class="button edit-button" sec:authorize="isAuthenticated()">게시글 수정</a>
     </div>
 
     <!-- 게시글 삭제 버튼-->
     <div class="action-buttons">
         <form th:action="@{/boards2/{id}/delete(id=${board.id})}" method="post">
-            <button type="submit" class="button delete-button">게시글 삭제</button>
+            <button type="submit" class="button delete-button" sec:authorize="isAuthenticated()">게시글 삭제</button>
         </form>
     </div>
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title> 404 Brain NOT FOUND </title>
+    <title>404 Brain NOT FOUND</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <!--css-->
     <link rel="stylesheet" href="/css/styles.css">
@@ -12,31 +13,44 @@
 <body>
 <!-- header 시작 -->
 <header>
-    <h1 class="header-title">사이트</h1>
-    <!-- 로고 이미지 추가 -->
     <img src="/img/logo.jpg" alt="사이트 로고" class="logo">
+    <h1 class="header-title">사이트</h1>
     <!-- 로그인, 회원가입 -->
     <nav class="user-nav">
         <ul>
-            <li><a th:href="@{/user/login}">Sign in</a></li>
-            <li><a href="#">Sign up</a></li>
+            <!-- 로그인 상태가 아니면 로그인 링크를 보여줍니다 -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">로그인</a>
+            </li>
+            <!-- 로그인 상태가 아니면 회원가입 링크를 보여줍니다 -->
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/signup}">회원가입</a>
+            </li>
+            <!-- 로그인 상태이면 로그아웃 링크를 보여줍니다 -->
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}">로그아웃</a>
+            </li>
         </ul>
     </nav>
-</header>
-<!-- header 끝-->
+</header><!-- header 끝-->
 
 <!-- nav 시작  -->
 <nav>
     <ul id="menu">
         <li><a th:href="@{/}">Home</a></li>
         <li><a th:href="@{/boards2}">Boards</a></li>
-        <li><a th:href="@{/about}">About</a></li>
+<!--        <li><a th:href="@{/about}">About</a></li>-->
+        <li><a th:href="@{/search-books}">Book</a></li>
     </ul>
 </nav>
 <!-- nav 끝-->
 
 <!-- content 부분 -->
-<th:block layout:fragment="content"></th:block>
+<div id="contents">
+    <th:block layout:fragment="content">
+    </th:block>
+</div>
+
 <!-- footer -->
 <footer>
     <p>&copy; 2024 게시판. All rights reserved.</p>

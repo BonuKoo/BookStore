@@ -5,16 +5,28 @@ import jakarta.persistence.Entity;
 import lombok.Data;
 
 
-@DiscriminatorValue("B")
-@Entity
-public class Book extends Item{
+//@DiscriminatorValue("B")
+//@Entity
+public class Book
+        //extends Item
+{
 
-    private String author;
     private String isbn;
+
+    //private String author;
+
+
+    /*
+    *   실험용 setter
+    * */
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
 
 }
 
 /*
     이 프로젝트에선 Book만 다룸
-    - 네이버 Book API 다뤄야 하기 때문
+    -> item을 일단 Public Class로 바꾸고
+    엔티티 자체로 다뤄버리자.
  */

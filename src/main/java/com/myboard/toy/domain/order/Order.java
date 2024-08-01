@@ -4,10 +4,8 @@ import com.myboard.toy.domain.delivery.Delivery;
 import com.myboard.toy.domain.delivery.DeliveryStatus;
 import com.myboard.toy.domain.order.status.OrderStatus;
 import com.myboard.toy.domain.orderitem.OrderItem;
-import com.myboard.toy.domain.user.User;
+import com.myboard.toy.securityproject.domain.entity.Account;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,8 +28,8 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "account_id")
+    private Account account;
     
     //다 대 다
     @OneToMany(mappedBy = "order", cascade = ALL)
@@ -49,8 +47,8 @@ public class Order {
 
 
     // Builder용 생성자
-    public Order(User user, Delivery delivery, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate) {
-        this.user = user;
+    public Order(Account account, Delivery delivery, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate) {
+        this.account = account;
         this.delivery = delivery;
         this.orderItems = orderItems;
         this.status = status;
@@ -58,11 +56,10 @@ public class Order {
     }
 
 
-
     /* 연관관계 */
-    public void setUser(User user){
-        this.user = user;
-        user.getOrders().add(this);
+    public void setAccount(Account account){
+        this.account = account;
+        account.getOrders().add(this);
     }
 
     public void addOrderItem(OrderItem orderItem) {
@@ -76,8 +73,8 @@ public class Order {
     }
 
     /* 주문 요청 */
-    public static Order createOrder(User user, Delivery delivery, OrderItem... orderItems) {
-        Order order = new Order(user, delivery, Arrays.asList(orderItems), OrderStatus.ORDER, LocalDateTime.now());
+    public static Order createOrder(Account account, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order(account, delivery, Arrays.asList(orderItems), OrderStatus.ORDER, LocalDateTime.now());
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
@@ -106,14 +103,14 @@ public class Order {
     }
 
     public static class Builder {
-        private User user;
+        private Account account;
         private Delivery delivery;
         private List<OrderItem> orderItems = new ArrayList<>();
         private OrderStatus status;
         private LocalDateTime orderDate;
 
-        public Builder user(User user) {
-            this.user = user;
+        public Builder account(Account account) {
+            this.account = account;
             return this;
         }
 
@@ -138,7 +135,7 @@ public class Order {
         }
 
         public Order build() {
-            return new Order(user, delivery, orderItems, status, orderDate);
+            return new Order(account, delivery, orderItems, status, orderDate);
         }
     }
 

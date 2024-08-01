@@ -1,0 +1,138 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        /* styles.css */
+
+    /* 기존 스타일은 그대로 두고 필요한 부분만 추가 */
+    .content-container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-detail {
+        margin-bottom: 20px;
+    }
+
+    .book-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .book-link {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    .book-image {
+        max-width: 150px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .book-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .book-table th, .book-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .book-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content" id="contents" class="content-container">
+    <div class="left-section">
+    <section th:each="item : ${bookDetail.channel.items}" class="book-detail">
+        <table class="book-table">
+            <thead>
+            <tr>
+                <th colspan="2">
+                    <h1 th:text="${item.title}" class="book-title"></h1>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!--
+            <tr>
+                <td>도서 정보 URL</td>
+                <td><a th:href="${item.link}" target="_blank" class="book-link">클릭하세요</a></td>
+            </tr>
+            -->
+
+            <!-- 도서 이미지 -->
+            <tr>
+                <td>도서 이미지</td>
+                <td><img th:src="${item.image}" alt="도서 이미지" class="book-image"/></td>
+            </tr>
+            <!-- 저자 -->
+            <tr>
+                <td>저자</td>
+                <td><span th:text="${item.author}"></span></td>
+            </tr>
+            <!-- 판매 가격 -->
+            <tr>
+                <td>판매 가격</td>
+                <td><span th:text="${item.discount} +' 원'"></span></td>
+            </tr>
+            <!-- 출판사 -->
+            <tr>
+                <td>출판사</td>
+                <td><span th:text="${item.publisher}"></span></td>
+            </tr>
+            <!-- ISBN-->
+            <tr>
+                <td>ISBN</td>
+                <td><span th:text="${item.isbn}"></span></td>
+            </tr>
+            <!-- 출간일 -->
+            <tr>
+                <td>출간일</td>
+                <td><span th:text="${item.pubdate}"></span></td>
+            </tr>
+            <!-- 소개 -->
+            <tr>
+                <td>소개</td>
+                <td><span th:text="${item.description}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    </div>
+
+    <!-- TODO : 장바구니 기능 구현-->
+    <div class="right-section">
+        <!-- 주문 폼으로 이동 -->
+        <button type="button" class="btn-buy-now" onclick="orderNow()">주문</button>
+    </div>
+
+</div>
+
+<script>
+    function orderNow() {
+        const title = /*[[${item.title}]]*/'';
+        const isbn = /*[[${item.isbn}]]*/'';
+        const discount = /*[[${item.discount}]]*/'';
+
+        const url = `/orderForm?title=${encodeURIComponent(title)}&isbn=${encodeURIComponent(isbn)}&discount=${discount}`;
+        window.location.href = url;
+    }
+</script>
+
+<script src="/path/to/your/js/scripts.js"></script>
+</body>
+</html>
