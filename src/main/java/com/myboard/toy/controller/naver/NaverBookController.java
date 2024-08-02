@@ -1,5 +1,6 @@
 package com.myboard.toy.controller.naver;
 
+import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.application.naver.NaverBookService;
 import com.myboard.toy.domain.naver.dto.NaverBookDetailRequestDto;
 import com.myboard.toy.domain.naver.dto.NaverBookDetailViewResponseDto;
@@ -8,6 +9,7 @@ import com.myboard.toy.domain.naver.dto.NaverBookListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import java.util.Locale;
 public class NaverBookController {
 
     private final NaverBookService naverBookService;
+    private final ItemService itemService;
 
     //== String 타입 반환 ==//
 
@@ -50,19 +53,24 @@ public class NaverBookController {
         model.addAttribute("bookList", responseDto);
         return "/book/listbynaver";
     }
-
+    
+    //네이버에서 값을 그대로 가져오는 중
     @GetMapping("/bookDetail")
-    public String searchBookDetailByString(@RequestParam String isbn, Model model) {
+    public String searchBookDetailByStringV1(@RequestParam String isbn, Model model) {
+
         // ISBN을 사용하여 상세 정보 가져오기
         NaverBookDetailRequestDto requestDto = new NaverBookDetailRequestDto(isbn);
 
-        //log.info("Controller에서 넘어온 파라미터=======================ISBN {}", isbn);
-
         NaverBookDetailViewResponseDto bookDetail = naverBookService.getBookDetailByDTO(requestDto);
-
+        //받아온 데이터 저장
+        setUpItemData(bookDetail);
         model.addAttribute("bookDetail", bookDetail);
         return "/book/detailbynaver";
     }
 
+    void setUpItemData(NaverBookDetailViewResponseDto data){
+        itemService.saveItem(data);
+    }
 
 }
+
