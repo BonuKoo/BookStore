@@ -120,8 +120,8 @@
 
         <section th:each="item : ${bookDetail.channel.items}" class="book-detail">
         <!-- 주문 폼으로 이동 -->
-        <button type="button" class="btn-buy-now" onclick="orderNow()">주문</button>
 
+            <a th:href="@{/orderForm}" class="btn btn-primary">주문</a>
         <!-- 장바구니에 추가 -->
         <form class="d-flex" th:action="@{/cart/add}" method="post">
             <!-- hidden input field to pass the ISBN of the item -->
