@@ -24,6 +24,7 @@ public class ItemService {
     public void saveItem(NaverBookDetailViewResponseDto dto){
 
         Optional<Item> findIsbn = itemRepository.findByIsbn(dto.getChannel().getItems().get(0).getIsbn());
+
         if (findIsbn.isEmpty()){
             int discount = Integer.parseInt(dto.getChannel().getItems().get(0).getDiscount());
             int defau_Quantity = 9999;
@@ -36,6 +37,7 @@ public class ItemService {
                     .build();
             itemRepository.save(item);
         }
+
     }
 
     public List<Item> findItems(){
@@ -43,6 +45,7 @@ public class ItemService {
         return itemRepository.findAll();
 
     }
+
 
     public Item findByIsbn(String isbn) {
         return itemRepository.findById(isbn)

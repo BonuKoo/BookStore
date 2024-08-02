@@ -59,13 +59,13 @@ spring:
   #    enabled: true
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/toy3
+    url: jdbc:h2:tcp://localhost/~/toy
     driver-class-name: org.h2.Driver
     username: sa
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true

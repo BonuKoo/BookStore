@@ -22,13 +22,13 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //어차피 1:1이니까
-    @OneToOne(fetch = FetchType.EAGER)
+    //TODO OneToOne을 Lazy vs Eager 쿼리 발생 테스트
+    @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
     @Builder.Default
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
     //날짜도 포함하자 나중에
@@ -42,7 +42,7 @@ public class Cart {
         this.count = count;
     }
 
-    public static Cart createCart(Account account){
+    public Cart createCart(Account account){
         Cart cart = new Cart();
         cart.setCount(0);
         cart.setAccount(account);

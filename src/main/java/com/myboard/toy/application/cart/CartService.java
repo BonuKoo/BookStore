@@ -7,6 +7,8 @@ import com.myboard.toy.securityproject.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -15,11 +17,25 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     public Cart findCartByAccount(Account account){
-        return cartRepository.findByAccount(account)
-                .orElse(null);
+
+        Optional<Cart> cart = cartRepository.findByAccount(account);
+
+        if (cart.isEmpty()){
+            Cart newCart = new Cart();
+            newCart.createCart(account);
+            return newCart;
+        } else
+            return cart.get();
+
     }
 
     public void save(Cart cart){
         cartRepository.save(cart);
     }
 }
+
+/*
+*
+* findCartByAccount
+* 값을 받아서,
+* */

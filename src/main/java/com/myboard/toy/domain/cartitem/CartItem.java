@@ -25,13 +25,7 @@ public class CartItem {
 
     private int count; //상품 개수
 
-    public static CartItem createCartItem(Cart cart, Item item, int amount){
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setItem(item);
-        cartItem.setCount(amount);
-        return cartItem;
-    }
+
 
     public void addCount(int count){
         this.count += count;
