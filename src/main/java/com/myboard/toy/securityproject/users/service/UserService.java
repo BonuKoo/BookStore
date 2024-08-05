@@ -1,5 +1,6 @@
 package com.myboard.toy.securityproject.users.service;
 
+import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.securityproject.admin.repository.RoleRepository;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import com.myboard.toy.securityproject.domain.entity.Role;
@@ -28,6 +29,13 @@ public class UserService {
         roles.add(role);
 
         account.setUserRoles(roles);
+
+        Cart cart = Cart.builder()
+                .account(account)
+                .count(0)
+                .build();
+        account.setCart(cart);
+
         userRepository.save(account);
 
     }

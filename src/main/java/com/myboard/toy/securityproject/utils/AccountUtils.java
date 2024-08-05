@@ -14,6 +14,7 @@ public class AccountUtils {
     private final UserService userService;
 
     public Account getAccountByPrincipal(UsernamePasswordAuthenticationToken principal) {
+
         UsernamePasswordAuthenticationToken authenticationToken = principal;
         AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
         String username = accountDto.getUsername();

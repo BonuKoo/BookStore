@@ -22,7 +22,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO OneToOne을 Lazy vs Eager 쿼리 발생 테스트
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -31,7 +30,6 @@ public class Cart {
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
-    //날짜도 포함하자 나중에
     private int count; //카트에 담긴 상품 개수
 
     private void setAccount(Account account) {

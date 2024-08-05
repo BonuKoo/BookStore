@@ -1,6 +1,7 @@
 package com.myboard.toy.securityproject.security.listener;
 
 
+import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.securityproject.admin.repository.ResourcesRepository;
 import com.myboard.toy.securityproject.admin.repository.RoleHierarchyRepository;
 import com.myboard.toy.securityproject.admin.repository.RoleRepository;
@@ -64,15 +65,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         // User Dummy 데이터 삽입
         createUserIfNotFound("admin", "admin@admin.com", "pass", Set.of(admin));
 
-        createUserIfNotFound("manager","manager@google.com","pass", Set.of(manager));
         createUserIfNotFound("simseoyeon","simseoyeon@google.com","1234", Set.of(manager));
 
         createUserIfNotFound("zzonduk","zzonduk@naver.com","omulomul", Set.of(user));
-        createUserIfNotFound("chocobar","choco@google.com","choco", Set.of(user));
-        createUserIfNotFound("daldidan","daldidan@kakao.com","bamyangang", Set.of(user));
-        createUserIfNotFound("hand","hand@daum.com","cream", Set.of(user));
-        createUserIfNotFound("head","hand@google.com","set", Set.of(user));
-        createUserIfNotFound("kaka","kakaotalk@naver.com","otalk", Set.of(user));
     }
 
     public Role createRoleIfNotFound(String roleName, String roleDesc) {
@@ -90,13 +85,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public void createUserIfNotFound(final String userName,final String email,final String password,final Set<Role> roleSet) {
         Account account = userRepository.findByUsername(userName);
 
+
+
         if (account == null) {
+
             account = Account.builder()
                     .username(userName)
                     .password(passwordEncoder.encode(password))
                     .userRoles(roleSet)
                     .build();
         }
+            Cart cart = Cart.builder()
+                    .account(account)
+                    .count(0)
+                    .build();
+            account.setCart(cart);
         userRepository.save(account);
     }
 
