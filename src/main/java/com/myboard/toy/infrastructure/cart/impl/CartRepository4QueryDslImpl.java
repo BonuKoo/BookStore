@@ -2,6 +2,7 @@ package com.myboard.toy.infrastructure.cart.impl;
 
 import com.myboard.toy.domain.cart.QCart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
+import com.myboard.toy.domain.cart.dto.CartTotalPriceDto;
 import com.myboard.toy.domain.cartitem.CartItem;
 import com.myboard.toy.domain.cartitem.QCartItem;
 import com.myboard.toy.domain.item.QItem;
@@ -30,33 +31,31 @@ public class CartRepository4QueryDslImpl implements CartRepository4QueryDsl {
 
     @Override
     public List<CartListDto> getCartList(Long cartId) {
-        List<CartListDto> cartListDtos = queryFactory
+
+        return queryFactory
                 .select(Projections.constructor(CartListDto.class,
                         item.title.as("name"),
                         item.price.as("price"),
                         cartItem.count.as("amount"),
-                        cartItem.count.multiply(item.price).as("totPrice"),
-                        cart.totPrice.as("cartTotPrice")
+                        cartItem.count.multiply(item.price).as("totPrice")
                 ))
                 .from(cartItem)
                 .join(cartItem.item, item)
                 .where(cartItem.cart.id.eq(cartId))
                 .fetch();
-
-        return cartListDtos;
     }
 
+    @Override
+    public CartTotalPriceDto getCartTotalPrice(Long cardId){
 
+        return queryFactory
+                .select(Projections.constructor(CartTotalPriceDto.class,
+                        cart.totPrice.as("cartTotPrice")
+                ))
+                .from(cart)
+                .where(cart.id.eq(cardId))
+                .fetchOne();
 
+    }
 
 }
-/*
-
-    private String name;
-    private String price;
-    private String amount;  //상품마다 몇 개가 담겨있는 지 확인
-    private int eachPrice;  //상품 개별 가격
-    private int totPrice;   //장바구니에 담긴 총 가격
-
-
- */

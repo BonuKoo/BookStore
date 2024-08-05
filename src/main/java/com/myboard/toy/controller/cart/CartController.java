@@ -5,6 +5,7 @@ import com.myboard.toy.application.cartitem.CartItemService;
 import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
+import com.myboard.toy.domain.cart.dto.CartTotalPriceDto;
 import com.myboard.toy.domain.cartitem.CartItem;
 import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.securityproject.domain.dto.AccountDto;
@@ -69,6 +70,7 @@ public class CartController {
          Read
 
       */
+
     //TODO : Cart의 tot Price를 따로 빼서 변수에 model에 담고
     // 한번만 출력하도록 바꿔야 함
     @GetMapping("/cart/list")
@@ -78,9 +80,10 @@ public class CartController {
 
         Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
         List<CartListDto> cartList = cartService.getCartList(account);
+        CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(account);
 
         model.addAttribute("cartList",cartList);
-
+        model.addAttribute("cartTotalPrice",cartTotalPrice);
         return "cart/list";
     }
 

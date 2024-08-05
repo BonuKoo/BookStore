@@ -2,6 +2,7 @@ package com.myboard.toy.application.cart;
 
 import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
+import com.myboard.toy.domain.cart.dto.CartTotalPriceDto;
 import com.myboard.toy.infrastructure.cart.CartRepository;
 import com.myboard.toy.infrastructure.cartitem.CartItemRepository;
 import com.myboard.toy.securityproject.domain.entity.Account;
@@ -55,6 +56,11 @@ public class CartService {
     public List<CartListDto> getCartList(Account account){
         Long cartId = account.getCart().getId();
         return cartRepository.getCartList(cartId);
+    };
+    public CartTotalPriceDto getCartTotalPrice(Account account){
+        Long cartId = account.getCart().getId();
+        CartTotalPriceDto cartTotalPrice = cartRepository.getCartTotalPrice(cartId);
+        return cartTotalPrice;
     };
 
 }
