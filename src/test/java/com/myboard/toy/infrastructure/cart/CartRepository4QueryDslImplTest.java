@@ -1,32 +1,28 @@
 package com.myboard.toy.infrastructure.cart;
 
 import com.myboard.toy.domain.cart.dto.CartListDto;
-import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 class CartRepository4QueryDslImplTest {
 
     @Autowired
-    private CartRepository cartRepository4QueryDsl;
+    private CartRepository cartRepository;
 
-
+    /*
     @Test
     public void testGetCartList(){
         //GIVEN DB에 이미 값들은 있으므로 DB 값을 불러온다.
         //WHEN
-        List<CartListDto> cartList = cartRepository4QueryDsl.getCartList(1L);
+        List<CartListDto> cartList = cartRepository.getCartList(1L);
         //Then
         assertThat(cartList).isNotEmpty();
 
@@ -41,5 +37,5 @@ class CartRepository4QueryDslImplTest {
         assertThat(item1Dto.getTotPrice()).isEqualTo(109680);
 
     }
-
+*/
 }

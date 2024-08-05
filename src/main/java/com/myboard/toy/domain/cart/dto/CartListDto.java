@@ -8,16 +8,16 @@ public class CartListDto {
 
     private String name;
     private Integer price;
-    private Integer amount;  //상품마다 몇 개가 담겨있는 지 확인
-    private Integer eachPrice;  //상품 개별 가격
-    private Integer totPrice;   //장바구니에 담긴 총 가격
+    private Integer amount;     //상품마다 몇 개가 담겨있는 지 확인
+    private Integer totPrice;   //장바구니에 담긴 상품 하나의 총합
+    private Integer cartTotPrice;
 
     @QueryProjection
-    public CartListDto(String name, Integer price, Integer amount, Integer eachPrice, Integer totPrice) {
+    public CartListDto(String name, Integer price, Integer amount, Integer totPrice, Integer cartTotPrice) {
         this.name = name;
         this.price = price;
         this.amount = amount;
-        this.eachPrice = eachPrice;
         this.totPrice = totPrice;
+        this.cartTotPrice = cartTotPrice;
     }
 }

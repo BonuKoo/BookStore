@@ -1,20 +1,15 @@
-package com.myboard.toy.infrastructure.cart;
+package com.myboard.toy.infrastructure.cart.impl;
 
-import com.myboard.toy.domain.board.BoardSearchCondition;
-import com.myboard.toy.domain.board.QBoard;
-import com.myboard.toy.domain.board.dto.BoardPageDTO;
 import com.myboard.toy.domain.cart.QCart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
+import com.myboard.toy.domain.cartitem.CartItem;
 import com.myboard.toy.domain.cartitem.QCartItem;
 import com.myboard.toy.domain.item.QItem;
-import com.myboard.toy.domain.reply.QReply;
+import com.myboard.toy.infrastructure.cart.CartRepository4QueryDsl;
 import com.myboard.toy.securityproject.domain.entity.QAccount;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -40,15 +35,20 @@ public class CartRepository4QueryDslImpl implements CartRepository4QueryDsl {
                         item.title.as("name"),
                         item.price.as("price"),
                         cartItem.count.as("amount"),
-                        item.price.as("eachPrice"),
-                        cartItem.count.multiply(item.price).as("totPrice")
+                        cartItem.count.multiply(item.price).as("totPrice"),
+                        cart.totPrice.as("cartTotPrice")
                 ))
                 .from(cartItem)
                 .join(cartItem.item, item)
                 .where(cartItem.cart.id.eq(cartId))
                 .fetch();
+
         return cartListDtos;
     }
+
+
+
+
 }
 /*
 

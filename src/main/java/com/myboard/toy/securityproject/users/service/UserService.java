@@ -32,7 +32,7 @@ public class UserService {
 
         Cart cart = Cart.builder()
                 .account(account)
-                .count(0)
+                .totPrice(0)
                 .build();
         account.setCart(cart);
 

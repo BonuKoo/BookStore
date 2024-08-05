@@ -97,7 +97,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
             Cart cart = Cart.builder()
                     .account(account)
-                    .count(0)
+                    .totPrice(0)
                     .build();
             account.setCart(cart);
         userRepository.save(account);

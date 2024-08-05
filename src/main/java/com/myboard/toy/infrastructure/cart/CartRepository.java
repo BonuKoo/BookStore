@@ -1,6 +1,7 @@
 package com.myboard.toy.infrastructure.cart;
 
 import com.myboard.toy.domain.cart.Cart;
+import com.myboard.toy.domain.cartitem.CartItem;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,10 +1,8 @@
 package com.myboard.toy.controller.cart;
 
-import com.myboard.toy.application.account.AccountService;
 import com.myboard.toy.application.cart.CartService;
 import com.myboard.toy.application.cartitem.CartItemService;
 import com.myboard.toy.application.item.service.ItemService;
-import com.myboard.toy.common.exception.ItemNotFoundException;
 import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
 import com.myboard.toy.domain.cartitem.CartItem;
@@ -12,15 +10,12 @@ import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.securityproject.domain.dto.AccountDto;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import com.myboard.toy.securityproject.users.service.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,8 +33,8 @@ public class CartController {
 
 
     /*
-    *   SAVE
-    * */
+       SAVE
+     */
 
     @PostMapping("/cart/add")
     public String putItemToCart(
@@ -47,23 +42,19 @@ public class CartController {
             @RequestParam("amount") int amount,
             Principal principal,
             RedirectAttributes redirectAttributes){
+
         // 로그인 사용자 정보
         Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
 
         // 상품 정보 찾기
         Item item = itemService.findByIsbn(isbn);
 
-        if (item==null){
-            // 상품이 존재하지 않을 경우, 적절한 처리 (예: 에러 페이지로 리다이렉트)
-            // TODO
-            return "redirect:/error/item-not-found";
-        }
-
         // 카트 가져오거나 생성
         Cart cart = cartService.getOrCreateCart(account);
 
         // 카트 아이템 생성 및 저장
-        CartItem cartItem = cartItemService.createCartItem(cart, item, amount);
+        CartItem cartItem = cartItemService.createCartItemOrIncreaseAmount(cart, item, amount);
+
         cartItemService.saveCartItem(cartItem);
 
         //장바구니에 아이템 추가
@@ -78,7 +69,8 @@ public class CartController {
          Read
 
       */
-
+    //TODO : Cart의 tot Price를 따로 빼서 변수에 model에 담고
+    // 한번만 출력하도록 바꿔야 함
     @GetMapping("/cart/list")
     private String getCartList(
             Principal principal,
@@ -95,8 +87,7 @@ public class CartController {
     private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
         UsernamePasswordAuthenticationToken authenticationToken = principal;
         AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
-        String username1 = accountDto.getUsername();
-        String username = username1;
+        String username = accountDto.getUsername();
 
         // username을 토대로 account 값을 db에서 조회한다.
         Account account = userService.getAccountByUsername(username);

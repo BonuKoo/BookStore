@@ -30,6 +30,12 @@
             <li sec:authorize="isAuthenticated()">
                 <a th:href="@{/logout}">로그아웃</a>
             </li>
+            <!-- 로그인 상태이면 장바구니 이미지 링크를 보여줍니다 -->
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/cart/list}">
+                    <img src="/img/cartImg.png" alt="장바구니 링크" class="cart-img"/>
+                </a>
+            </li>
         </ul>
     </nav>
 </header><!-- header 끝-->
