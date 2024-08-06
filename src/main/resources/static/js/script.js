@@ -57,7 +57,7 @@
     function delFile(button) {
     	button.parentElement.remove();
     }
-
+/*
 function galarySubmit() {
 	var chkbxs = document.querySelectorAll('input[type="checkbox"]');
 	for(var i=0;i<chkbxs.length;i++) {
@@ -69,17 +69,6 @@ function galarySubmit() {
 	}
 	document.galaryForm.submit();
 }
-
-//      버튼 추가 기능
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const fileInputsContainer = document.getElementById('fileInputsContainer');
-
-            fileInputsContainer.addEventListener('change', function(event) {
-                if (event.target && event.target.classList.contains('file-input')) {
-                    addFileInput();
-                }
-            });
-//
             function addFileInput() {
                 // Check if the last file input is empty, don't add new input if it is
                 const fileInputs = document.querySelectorAll('.file-input');
@@ -110,8 +99,8 @@ function galarySubmit() {
             if (document.querySelectorAll('.file-input').length === 1) {
                 addFileInput();
             }
-        });
-
+        );
+*/
      /* 시큐리티 관련 로직*/
 
 /* 로그인 실패 후 '/'로 돌아가기 전까지 5초 간격 설정 */
@@ -189,3 +178,55 @@ function galarySubmit() {
                     console.error('Error during login:', error);
                 });
         }
+
+
+    function getCsrfToken() {
+        return document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    }
+
+    function getCsrfHeader() {
+        return document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    }
+
+    function count(type, index, itemIsbn) {
+        // 결과를 표시할 element
+        const resultElement = document.getElementById(`result-${index}`);
+        // 현재 화면에 표시된 값
+        let number = resultElement.innerText.replace(' 개', '').trim();
+
+        // 더하기/빼기
+        if (type === 'plus') {
+            number = parseInt(number) + 1;
+        } else if (type === 'minus') {
+            number = Math.max(0, parseInt(number) - 1);
+        }
+
+        // 결과 출력
+        resultElement.innerText = number + ' 개';
+
+        // 폼 생성 및 제출
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = type === 'plus' ? '/increaseItem' : '/decreaseItem';
+
+        const amountInput = document.createElement('input');
+        amountInput.type = 'hidden';
+        amountInput.name = 'amount';
+        amountInput.value = number;
+        form.appendChild(amountInput);
+
+        const itemIsbnInput = document.createElement('input');
+        itemIsbnInput.type = 'hidden';
+        itemIsbnInput.name = 'itemIsbn';
+        itemIsbnInput.value = itemIsbn;
+        form.appendChild(itemIsbnInput);
+
+        const csrfTokenInput = document.createElement('input');
+        csrfTokenInput.type = 'hidden';
+        csrfTokenInput.name = getCsrfHeader();
+        csrfTokenInput.value = getCsrfToken();
+        form.appendChild(csrfTokenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }

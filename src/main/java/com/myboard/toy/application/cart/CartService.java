@@ -57,6 +57,7 @@ public class CartService {
         Long cartId = account.getCart().getId();
         return cartRepository.getCartList(cartId);
     };
+
     public CartTotalPriceDto getCartTotalPrice(Account account){
         Long cartId = account.getCart().getId();
         CartTotalPriceDto cartTotalPrice = cartRepository.getCartTotalPrice(cartId);

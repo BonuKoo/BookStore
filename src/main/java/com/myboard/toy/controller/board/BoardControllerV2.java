@@ -68,7 +68,14 @@ public class BoardControllerV2 {
 
         if (principal instanceof UsernamePasswordAuthenticationToken) {
 
-            Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+            AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+            String username1 = accountDto.getUsername();
+            String username = username1;
+
+            // username을 토대로 account 값을 db에서 조회한다.
+            Account account1 = userService.getAccountByUsername(username);
+            Account account = account1;
 
             boardDTO.registerAccount(account);
 
@@ -89,7 +96,14 @@ public class BoardControllerV2 {
                               Principal principal
                               ) {
 
-        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+        String username1 = accountDto.getUsername();
+        String username = username1;
+
+        // username을 토대로 account 값을 db에서 조회한다.
+        Account account1 = userService.getAccountByUsername(username);
+        Account account = account1;
 
 
         ReplyDTO replyDTO = ReplyDTO.builder()

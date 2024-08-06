@@ -37,7 +37,9 @@ public class CartRepository4QueryDslImpl implements CartRepository4QueryDsl {
                         item.title.as("name"),
                         item.price.as("price"),
                         cartItem.count.as("amount"),
-                        cartItem.count.multiply(item.price).as("totPrice")
+                        cartItem.count.multiply(item.price).as("totPrice"),
+                        item.isbn.as("isbn")
+
                 ))
                 .from(cartItem)
                 .join(cartItem.item, item)

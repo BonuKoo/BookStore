@@ -3,31 +3,76 @@
 <div layout:fragment="content" id="contents">
     <h1>Cart List</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>제목</th>
-        <th>개당 가격</th>
-        <th>개수</th>
-        <th>값</th>
-    </tr>
-    </thead>
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>개당 가격</th>
+            <th>개수</th>
+            <th>값</th>
+        </tr>
+        </thead>
 
-    <tbody >
+        <tbody>
+        <tr th:each="item, iterStat : ${cartList}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.price} + ' 원'"></td>
 
-    <tr th:each="item : ${cartList}">
-        <td th:text="'제목 : ' + ${item.name}"></td>
-        <td th:text="${item.price}+' 원'"></td>
-        <td th:text="${item.amount}+' 개'"></td>
-        <td th:text="${item.totPrice}+' 원'"></td>
-    </tr>
-    <tr>
-        <td colspan="3">총 가격</td>
-        <td th:text="${cartTotalPrice.cartTotPrice}+' 원'"></td>
-    </tr>
-    </tbody>
+            <td>
+                <input type="button" onclick="count('minus', '[[${iterStat.index}]]', '[[${item.isbn}]]')" value="-" />
+                <span id="result-[[${iterStat.index}]]" th:text="${item.amount} + ' 개'"></span>
+                <input type="button" onclick="count('plus', '[[${iterStat.index}]]', '[[${item.isbn}]]')" value="+" />
+                <input type="hidden" id="isbn-[[${iterStat.index}]]" th:value="${item.isbn}" />
+            </td>
 
-</table>
-
+            <td th:text="${item.totPrice} + ' 원'"></td>
+        </tr>
+        <tr>
+            <td colspan="3">총 가격</td>
+            <td th:text="${cartTotalPrice.cartTotPrice} + ' 원'"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
+<script>
+    function count(type, index, itemIsbn) {
+        // 결과를 표시할 요소
+        const resultElement = document.getElementById(`result-${index}`);
+
+        // 현재 화면에 표시된 값
+        let number = resultElement.innerText.replace(' 개', '').trim();
+
+        // 더하기/빼기
+        if (type === 'plus') {
+            number = parseInt(number) + 1;
+        } else if (type === 'minus') {
+            number = Math.max(0, parseInt(number) - 1);
+        }
+
+        // 결과 출력
+        resultElement.innerText = number + ' 개';
+
+        // 폼 생성 및 제출
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = type === 'plus' ? '/increaseItem' : '/decreaseItem';
+
+        const amountInput = document.createElement('input');
+        amountInput.type = 'hidden';
+        amountInput.name = 'amount';
+        amountInput.value = number;
+        form.appendChild(amountInput);
+
+        const itemIsbnInput = document.createElement('input');
+        itemIsbnInput.type = 'hidden';
+        itemIsbnInput.name = 'itemIsbn';
+        itemIsbnInput.value = itemIsbn;
+        form.appendChild(itemIsbnInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
 </html>

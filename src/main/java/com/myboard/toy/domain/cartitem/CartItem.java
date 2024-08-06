@@ -25,10 +25,12 @@ public class CartItem {
 
     private int count; //상품 개수
 
-
-
     public void addCount(int count){
         this.count += count;
+    }
+
+    public void updateCount(int count) {
+        this.count = count;
     }
 
     //== private setter ==//
@@ -40,7 +42,4 @@ public class CartItem {
         this.item = item;
     }
 
-    private void setCount(int count) {
-        this.count = count;
-    }
 }

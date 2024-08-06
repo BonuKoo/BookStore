@@ -7,6 +7,7 @@ import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cart.dto.CartListDto;
 import com.myboard.toy.domain.cart.dto.CartTotalPriceDto;
 import com.myboard.toy.domain.cartitem.CartItem;
+import com.myboard.toy.domain.cartitem.dto.CartItemUpdateRequestForm;
 import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.securityproject.domain.dto.AccountDto;
 import com.myboard.toy.securityproject.domain.entity.Account;
@@ -44,17 +45,26 @@ public class CartController {
             Principal principal,
             RedirectAttributes redirectAttributes){
 
+
         // 로그인 사용자 정보
+        //TODO Account
         Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
 
         // 상품 정보 찾기
         Item item = itemService.findByIsbn(isbn);
 
         // 카트 가져오거나 생성
+        //TODO Account
         Cart cart = cartService.getOrCreateCart(account);
 
+        CartItemUpdateRequestForm form = CartItemUpdateRequestForm.builder()
+                .cart(cart)
+                .item(item)
+                .amount(amount)
+                .build();
+
         // 카트 아이템 생성 및 저장
-        CartItem cartItem = cartItemService.createCartItemOrIncreaseAmount(cart, item, amount);
+        CartItem cartItem = cartItemService.createCartItemOrIncreaseAmount(form);
 
         cartItemService.saveCartItem(cartItem);
 
@@ -66,19 +76,16 @@ public class CartController {
     }
 
     /*
-
          Read
-
       */
 
-    //TODO : Cart의 tot Price를 따로 빼서 변수에 model에 담고
-    // 한번만 출력하도록 바꿔야 함
     @GetMapping("/cart/list")
     private String getCartList(
             Principal principal,
             Model model){
 
         Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+
         List<CartListDto> cartList = cartService.getCartList(account);
         CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(account);
 
@@ -86,6 +93,14 @@ public class CartController {
         model.addAttribute("cartTotalPrice",cartTotalPrice);
         return "cart/list";
     }
+
+    /*
+
+
+        Delete
+
+
+     */
 
     private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
         UsernamePasswordAuthenticationToken authenticationToken = principal;

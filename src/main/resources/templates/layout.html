@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-    <meta charset="UTF-8">
+    <meta name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}">
     <title>404 Brain NOT FOUND</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <!--css-->

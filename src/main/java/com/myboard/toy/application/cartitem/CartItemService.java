@@ -1,13 +1,18 @@
 package com.myboard.toy.application.cartitem;
 
 import com.myboard.toy.application.cart.CartService;
+import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cartitem.CartItem;
+import com.myboard.toy.domain.cartitem.dto.CartItemUpdateAmountRequestForm;
+import com.myboard.toy.domain.cartitem.dto.CartItemUpdateRequestForm;
 import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.infrastructure.cart.CartRepository;
 import com.myboard.toy.infrastructure.cartitem.CartItemRepository;
+import com.myboard.toy.securityproject.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -17,30 +22,37 @@ public class CartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
-
+    private final ItemService itemService;
     private final CartService cartService;
 
-    public CartItem createCartItemOrIncreaseAmount(Cart cart, Item item, int amount){
+    public CartItem createCartItemOrIncreaseAmount(CartItemUpdateRequestForm form){
 
-        Optional<CartItem> existingCartItemOpt = cartItemRepository.findByCartAndItem(cart, item);
+        Optional<CartItem> existingCartItemOpt = cartItemRepository.findByCartAndItem(form.getCart(), form.getItem());
 
         if (existingCartItemOpt.isPresent()){
             CartItem cartItem = existingCartItemOpt.get();
-            cartItem.addCount(amount);
-            cart.updateTotPrice(amount * item.getPrice());
+            cartItem.addCount(form.getAmount());
+            form.getCart().updateTotPrice(form.getAmount() * form.getItem().getPrice());
 
             return cartItemRepository.save(cartItem);
+
         }else {
+
             CartItem cartItem = CartItem.builder()
-                    .cart(cart)
-                    .item(item)
-                    .count(amount)
+                    .cart(form.getCart())
+                    .item(form.getItem())
+                    .count(form.getAmount())
                     .build();
+
+            Cart cart = form.getCart();
+            int amount = form.getAmount();
+            Item item = form.getItem();
+
             cart.updateTotPrice(amount * item.getPrice());
+
             return cartItemRepository.save(cartItem);
 
         }
-
     }
 
     public void saveCartItem(CartItem cartItem) {
@@ -56,4 +68,19 @@ public class CartItemService {
         }
 
     }
+
+    @Transactional
+    public void updateCartItemAmount(Cart cart,CartItemUpdateAmountRequestForm form) {
+
+        Item item = itemService.findByIsbn(form.getItemIsbn());
+
+        CartItem cartItem = cartItemRepository.findByCartAndItem(cart, item)
+                .orElseThrow(() -> new IllegalArgumentException("해당 CartItem이 존재하지 않습니다."));
+
+        cartItem.updateCount(form.getAmount());
+
+        cartItemRepository.save(cartItem);
+    }
+
 }
+
