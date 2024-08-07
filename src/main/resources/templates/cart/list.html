@@ -19,9 +19,10 @@
             <td th:text="${item.price} + ' 원'"></td>
 
             <td>
-                <input type="button" onclick="count('minus', '[[${iterStat.index}]]', '[[${item.isbn}]]')" value="-" />
+                <input type-="hidden" th:value="${item.isbn}">
+                <input type="button" th:data-minus="setup" th:onclick="'count(this, ' + ${iterStat.index} + ', \'' + ${item.isbn} + '\')'" value="-" />
                 <span id="result-[[${iterStat.index}]]" th:text="${item.amount} + ' 개'"></span>
-                <input type="button" onclick="count('plus', '[[${iterStat.index}]]', '[[${item.isbn}]]')" value="+" />
+                <input type="button" th:data-minus="setup" th:onclick="'count('this', ' + ${iterStat.index} + ', \'' + ${item.isbn} + '\')'" value="+" />
                 <input type="hidden" id="isbn-[[${iterStat.index}]]" th:value="${item.isbn}" />
             </td>
 
@@ -34,45 +35,5 @@
         </tbody>
     </table>
 </div>
-
-<script>
-    function count(type, index, itemIsbn) {
-        // 결과를 표시할 요소
-        const resultElement = document.getElementById(`result-${index}`);
-
-        // 현재 화면에 표시된 값
-        let number = resultElement.innerText.replace(' 개', '').trim();
-
-        // 더하기/빼기
-        if (type === 'plus') {
-            number = parseInt(number) + 1;
-        } else if (type === 'minus') {
-            number = Math.max(0, parseInt(number) - 1);
-        }
-
-        // 결과 출력
-        resultElement.innerText = number + ' 개';
-
-        // 폼 생성 및 제출
-        const form = document.createElement('form');
-        form.method = 'post';
-        form.action = type === 'plus' ? '/increaseItem' : '/decreaseItem';
-
-        const amountInput = document.createElement('input');
-        amountInput.type = 'hidden';
-        amountInput.name = 'amount';
-        amountInput.value = number;
-        form.appendChild(amountInput);
-
-        const itemIsbnInput = document.createElement('input');
-        itemIsbnInput.type = 'hidden';
-        itemIsbnInput.name = 'itemIsbn';
-        itemIsbnInput.value = itemIsbn;
-        form.appendChild(itemIsbnInput);
-
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>
 
 </html>

@@ -24,10 +24,10 @@ import java.util.Set;
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "username",unique = true)
     private String username;
 
     @Column
@@ -51,7 +51,7 @@ public class Account implements Serializable {
 
     //권한
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
     @JoinTable(name = "account_roles", joinColumns = {
             @JoinColumn(name = "account_id") },
             inverseJoinColumns = {
@@ -59,6 +59,7 @@ public class Account implements Serializable {
     @ToString.Exclude
     private Set<Role> userRoles = new HashSet<>();
 
+    //연관관계의 주인 - cart
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 

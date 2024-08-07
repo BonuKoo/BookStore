@@ -30,13 +30,16 @@ public class UserService {
 
         account.setUserRoles(roles);
 
+        Account savedAccount = userRepository.save(account);
+
+
         Cart cart = Cart.builder()
-                .account(account)
+                .account(savedAccount)
                 .totPrice(0)
                 .build();
         account.setCart(cart);
 
-        userRepository.save(account);
+        userRepository.save(savedAccount);
 
     }
 

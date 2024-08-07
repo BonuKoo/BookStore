@@ -22,7 +22,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -35,7 +35,6 @@ public class Cart {
     private void setAccount(Account account) {
         this.account = account;
     }
-
 
     public Cart createCart(Account account){
         Cart cart = new Cart();
@@ -57,5 +56,4 @@ public class Cart {
         this.cartItems.add(cartItem);
         updateTotPrice(cartItem.getCount() * cartItem.getItem().getPrice());
     }
-
 }

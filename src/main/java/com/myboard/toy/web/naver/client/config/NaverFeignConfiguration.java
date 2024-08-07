@@ -30,6 +30,7 @@ public class NaverFeignConfiguration {
     }
 
     //재시도
+    @Bean
     public Retryer retryer(){
         return new Retryer.Default(1000,2000,3);
     }

@@ -14,24 +14,26 @@ import java.util.List;
 @Data
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name ="dtype")
-
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
 
-    @Id @Column(name = "item_id")
+    @Id
+    @Column(name = "isbn",unique = true)
     private String isbn;        //ISBN 번호
     private String title;
 
     private int price;          //가격
     private int stockQuantity;  //재고
 
+    /*
     //TODO : Category 나중에 다 대 다 중간 테이블로 풀어야 함
     @Builder.Default
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+    */
 
     //재고 추가
     public void addStock(int quantity){

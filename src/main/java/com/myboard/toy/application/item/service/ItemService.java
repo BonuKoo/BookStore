@@ -17,7 +17,6 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-
     //Save를 저장, Optional로 isbn 해당하는 값이 있는 지 없는 지
 
     @Transactional
@@ -46,10 +45,10 @@ public class ItemService {
 
     }
 
-
     public Item findByIsbn(String isbn) {
-        return itemRepository.findById(isbn)
+        return itemRepository.findByIsbn(isbn)
                 .orElseThrow(()->new ItemNotFoundException("해당하는 상품은 존재하지 않습니다."));
     }
 
 }
+

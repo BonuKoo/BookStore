@@ -31,7 +31,7 @@ public class CartItemController {
      */
 
     // 수량 업데이트
-    @PostMapping("/updateCartItem")
+    //@PostMapping("/updateCartItem")
     public String updateCartItemAmount(
             Principal principal,
             @RequestParam("isbn") String isbn,
@@ -51,7 +51,7 @@ public class CartItemController {
     }
 
     /* 업데이트 */
-    @PostMapping("/increaseItem")
+    //@PostMapping("/increaseItem")
     public String increaseAmountWhenPushTheButton(
             Principal principal,
             @RequestParam("amount") int amount,
