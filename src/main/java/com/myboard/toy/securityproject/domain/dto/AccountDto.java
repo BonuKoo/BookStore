@@ -1,9 +1,7 @@
 package com.myboard.toy.securityproject.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.myboard.toy.domain.address.Address;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,8 +12,17 @@ import java.util.List;
 public class AccountDto {
     private String id;
     private String username;
-
+    private String nickname;
     private int age;
     private String password;
+    private String passwordConfirm; // 비밀번호 확인
+
+    //주소
+    private String postcode;
+    private String roadAddress;
+    private String jibunAddress;
+    private String detailAddress;
+    private String extraAddress;
+
     private List<String> roles;
 }

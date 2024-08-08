@@ -1,20 +1,17 @@
 package com.myboard.toy.domain.address;
 
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Builder
 public class Address {
-
-    private String city;
-    private String street;
-    private String zipcode;
-
+    private String postcode;
+    private String roadAddress;   // 도로명 주소
+    private String jibunAddress;  // 지번 주소
+    private String detailAddress; // 상세 주소
+    private String extraAddress;  // 참고 항목
 }
-

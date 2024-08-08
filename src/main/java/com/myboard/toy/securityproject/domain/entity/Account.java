@@ -31,6 +31,9 @@ public class Account implements Serializable {
     private String username;
 
     @Column
+    private String nickname;
+
+    @Column
     private int age;
 
     @Column
@@ -38,8 +41,8 @@ public class Account implements Serializable {
 
     @Embedded
     private Address address;
-    //게시판
 
+    //게시판
     @Builder.Default
     @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
     List<Board> boards = new ArrayList<>();
@@ -76,3 +79,4 @@ public class Account implements Serializable {
     }
 
 }
+

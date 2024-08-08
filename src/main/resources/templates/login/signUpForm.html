@@ -1,0 +1,79 @@
+<html layout:decorate="~{layout}">
+<head>
+    <th:block layout:fragment="head">
+        <!-- Daum Postcode API 스크립트 추가 -->
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content" id="contents">
+    <h2>회원가입</h2>
+    <!-- 회원가입 폼 -->
+    <form th:action="@{/signup}" method="post">
+
+        <div class="signup-form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="nickname">nickname</label>
+            <input type="text" id="nickname" name="nickname" required>
+        </div>
+
+
+        <div class="signup-form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="passwordConfirm">Confirm Password</label>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required>
+        </div>
+
+        <!-- 주소 입력 필드 및 우편번호 찾기 버튼 추가 -->
+        <div class="signup-form-group">
+            <label for="postcode">우편번호</label>
+            <input type="text" id="postcode" name="postcode" placeholder="우편번호" readonly>
+            <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기">
+        </div>
+
+        <div class="signup-form-group">
+            <label for="roadAddress">도로명주소</label>
+            <input type="text" id="roadAddress" name="roadAddress" placeholder="도로명주소" readonly>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="jibunAddress">지번주소</label>
+            <input type="text" id="jibunAddress" name="jibunAddress" placeholder="지번주소" readonly>
+        </div>
+
+        <div class="signup-form-group">
+            <label for="detailAddress">상세주소</label>
+            <input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소">
+        </div>
+
+        <div class="signup-form-group">
+            <label for="extraAddress">참고항목</label>
+            <input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" readonly>
+        </div>
+
+        <div id="guide" style="color:#999;display:none"></div>
+
+        <!-- Submit 버튼 -->
+        <div class="signup-form-group">
+            <button type="submit" class="btn">회원가입</button>
+        </div>
+
+
+    </form>
+</div>
+
+</body>
+</html>

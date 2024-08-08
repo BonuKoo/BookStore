@@ -24,14 +24,13 @@ public class UserService {
     @Transactional
     public void createUser(Account account){
 
+        //회원가입 -> 일반 유저
         Role role = roleRepository.findByRoleName("ROLE_USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-
         account.setUserRoles(roles);
 
         Account savedAccount = userRepository.save(account);
-
 
         Cart cart = Cart.builder()
                 .account(savedAccount)

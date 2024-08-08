@@ -94,6 +94,7 @@
         <div class="col-md-10 content">
             <div class="signup-form">
                 <h2>Sign Up</h2>
+
                 <form th:action="@{/signup}" method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -125,6 +126,7 @@
 
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -132,4 +134,3 @@
 <div class="footer" th:replace="~{layout/footer::footer}"></div>
 </body>
 </html>
-
