@@ -12,6 +12,7 @@ import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.securityproject.domain.dto.AccountDto;
 import com.myboard.toy.securityproject.domain.entity.Account;
 import com.myboard.toy.securityproject.users.service.UserService;
+import com.myboard.toy.securityproject.utils.AccountUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -29,10 +30,9 @@ import java.util.List;
 public class CartController {
 
     private final ItemService itemService;
-    private final UserService userService;
     private final CartService cartService;
     private final CartItemService cartItemService;
-
+    private final AccountUtils accountUtils;
 
     /*
        SAVE
@@ -48,7 +48,7 @@ public class CartController {
 
         // 로그인 사용자 정보
         //TODO Account
-        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
 
         // 상품 정보 찾기
         Item item = itemService.findByIsbn(isbn);
@@ -84,7 +84,7 @@ public class CartController {
             Principal principal,
             Model model){
 
-        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
 
         List<CartListDto> cartList = cartService.getCartList(account);
 
@@ -96,23 +96,8 @@ public class CartController {
         return "cart/list";
     }
 
-    /*
 
 
-        Delete
-
-
-     */
-
-    private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
-        UsernamePasswordAuthenticationToken authenticationToken = principal;
-        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
-        String username = accountDto.getUsername();
-
-        // username을 토대로 account 값을 db에서 조회한다.
-        Account account = userService.getAccountByUsername(username);
-        return account;
-    }
 
 }
 

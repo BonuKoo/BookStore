@@ -136,7 +136,7 @@
         }
 
 
-
+// == 장바구니 아이템 관련 로직 == //
 
 function count(type, itemIsbn) {
     // CSRF 토큰과 헤더 이름 가져오기
@@ -198,3 +198,34 @@ function count(type, itemIsbn) {
         console.error('Error during request:', error);
     });
 }
+
+//== 제거 ==//
+/*
+function removeItem(itemIsbn) {
+
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+
+    fetch('/api/cart/removeItem', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify({ itemIsbn: itemIsbn, amount: 0 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response Data:", data);
+        if (data.message === "Item removed successfully.") {
+            // 성공적으로 제거되면 페이지를 새로 고침하거나 장바구니 목록을 다시 불러옵니다
+            window.location.href = '/cart/list';  // 또는 장바구니 목록을 갱신하는 코드
+        } else {
+            alert('Failed to remove item.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during request:', error);
+    });
+*/

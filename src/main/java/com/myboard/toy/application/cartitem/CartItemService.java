@@ -4,16 +4,17 @@ import com.myboard.toy.application.cart.CartService;
 import com.myboard.toy.application.item.service.ItemService;
 import com.myboard.toy.domain.cart.Cart;
 import com.myboard.toy.domain.cartitem.CartItem;
+import com.myboard.toy.domain.cartitem.dto.CartItemRemoveRequestForm;
 import com.myboard.toy.domain.cartitem.dto.CartItemUpdateAmountRequestForm;
 import com.myboard.toy.domain.cartitem.dto.CartItemUpdateRequestForm;
 import com.myboard.toy.domain.item.Item;
 import com.myboard.toy.infrastructure.cart.CartRepository;
 import com.myboard.toy.infrastructure.cartitem.CartItemRepository;
-import com.myboard.toy.securityproject.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -82,5 +83,20 @@ public class CartItemService {
         cartItemRepository.save(cartItem);
     }
 
+    /* Delete*/
+
+    @Transactional
+    public void removeCartItem(CartItemRemoveRequestForm form){
+        form.getCartId();
+        form.getItemIsbn();
+
+        Optional<CartItem> cartItem = cartItemRepository.findByCartIdAndItemIsbn(form.getCartId(), form.getItemIsbn());
+
+        if (cartItem.isPresent()){
+            cartItemRepository.delete(cartItem.get());
+        }else {
+            throw new NoSuchElementException("Item with ISBN " + form.getItemIsbn() + " not found in cart with ID " + form.getCartId());
+        }
+    }
 }
 
