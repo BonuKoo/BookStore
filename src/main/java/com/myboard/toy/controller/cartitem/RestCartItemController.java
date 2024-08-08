@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -27,10 +29,11 @@ public class RestCartItemController {
     private final AccountUtils accountUtils;
 
     @PostMapping("/increaseItem")
-    public ResponseEntity<String> increaseAmountWhenPushTheButton(
+    public ResponseEntity<Map<String, String>> increaseAmountWhenPushTheButton(
             Principal principal,
             @RequestBody CartItemUpdateAmountRequestForm form
     ) {
+        Map<String, String> response = new HashMap<>();
         try {
             Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
             Cart cart = cartService.findCartByAccount(account);
@@ -39,18 +42,22 @@ public class RestCartItemController {
 
             cartItemService.updateCartItemAmount(cart, form);
 
-            return ResponseEntity.ok("Item quantity increased successfully.");
+            response.put("message", "Item quantity increased successfully.");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update item quantity.");
+            response.put("message", "Failed to update item quantity.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
+
     @PostMapping("/decreaseItem")
-    public ResponseEntity<String> decreaseAmountWhenPushTheButton(
+    public ResponseEntity<Map<String, String>> decreaseAmountWhenPushTheButton(
             Principal principal,
             @RequestBody CartItemUpdateAmountRequestForm form
     ) {
+        Map<String, String> response = new HashMap<>();
         try {
             Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
             Cart cart = cartService.findCartByAccount(account);
@@ -59,10 +66,12 @@ public class RestCartItemController {
 
             cartItemService.updateCartItemAmount(cart, form);
 
-            return ResponseEntity.ok("Item quantity decreased successfully.");
+            response.put("message", "Item quantity decreased successfully.");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update item quantity.");
+            response.put("message", "Failed to update item quantity.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

@@ -14,20 +14,19 @@
         </thead>
 
         <tbody>
-        <tr th:each="item, iterStat : ${cartList}">
+        <tr th:each="item : ${cartList}">
             <td th:text="${item.name}"></td>
             <td th:text="${item.price} + ' 원'"></td>
 
             <td>
-                <input type-="hidden" th:value="${item.isbn}">
-                <input type="button" th:data-minus="setup" th:onclick="'count(this, ' + ${iterStat.index} + ', \'' + ${item.isbn} + '\')'" value="-" />
-                <span id="result-[[${iterStat.index}]]" th:text="${item.amount} + ' 개'"></span>
-                <input type="button" th:data-minus="setup" th:onclick="'count('this', ' + ${iterStat.index} + ', \'' + ${item.isbn} + '\')'" value="+" />
-                <input type="hidden" id="isbn-[[${iterStat.index}]]" th:value="${item.isbn}" />
+                <input type="button" th:attr="onclick='count(\'minus\', \'' + ${item.isbn} + '\')'" value="-" />
+                <span th:id="${item.isbn}" th:text="${item.amount} + ' 개'"></span>
+                <input type="button" th:attr="onclick='count(\'plus\', \'' + ${item.isbn} + '\')'" value="+" />
             </td>
 
             <td th:text="${item.totPrice} + ' 원'"></td>
         </tr>
+
         <tr>
             <td colspan="3">총 가격</td>
             <td th:text="${cartTotalPrice.cartTotPrice} + ' 원'"></td>

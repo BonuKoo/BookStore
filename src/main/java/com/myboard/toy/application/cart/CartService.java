@@ -60,8 +60,14 @@ public class CartService {
 
     public CartTotalPriceDto getCartTotalPrice(Account account){
         Long cartId = account.getCart().getId();
-        CartTotalPriceDto cartTotalPrice = cartRepository.getCartTotalPrice(cartId);
-        return cartTotalPrice;
+
+        List<CartListDto> cartList = cartRepository.getCartList(cartId);
+
+        int extractdTotalPrice = cartList.stream()
+                .mapToInt(CartListDto::getTotPrice)
+                .sum();
+        CartTotalPriceDto totalPrice = new CartTotalPriceDto(extractdTotalPrice);
+        return totalPrice;
     };
 
 }

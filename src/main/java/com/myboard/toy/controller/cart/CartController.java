@@ -87,9 +87,11 @@ public class CartController {
         Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
 
         List<CartListDto> cartList = cartService.getCartList(account);
+
         CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(account);
 
         model.addAttribute("cartList",cartList);
+
         model.addAttribute("cartTotalPrice",cartTotalPrice);
         return "cart/list";
     }
