@@ -10,7 +10,7 @@ body {
 /* header 부분 */
 header {
     position: relative;
-    background-color: #007BFF;
+    background-color: #6c757d; /* 더 부드러운 색상 */
     color: white;
     padding: 10px 0;
     text-align: center;
@@ -22,25 +22,33 @@ header {
     border-bottom: 1px solid #ddd;
     color: #333;
 }
-    /* 로고 부분 */
+
+/* 로고 부분 */
 .logo {
-    width: 150px; /* 원하는 너비로 설정 */
-    height: auto; /* 비율에 맞게 높이 자동 조정 */
+    width: 150px;
+    height: auto;
     display: block;
-    margin: 0 auto; /* 가운데 정렬 */
+    margin: 0 auto;
 }
 
 .header-title {
     text-align: center;
 }
 
-/* user-nav 부분 */
+/* user-nav section */
 .user-nav {
     position: absolute;
     bottom: 10px;
     right: 30px;
+    padding: 10px;
+    background-color: #343a40;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+/* List styles */
 .user-nav ul {
     list-style: none;
     padding: 0;
@@ -49,19 +57,48 @@ header {
     gap: 10px;
 }
 
+/* List item styles */
 .user-nav ul li {
-    display: inline;
+    display: flex;
+    align-items: center;
 }
 
+/* Link styles */
 .user-nav ul li a {
     color: white;
     text-decoration: none;
     padding: 5px 10px;
+    display: flex;
+    align-items: center;
 }
 
+/* Hover effect */
 .user-nav ul li a:hover {
-    background-color: #0056b3;
+    background-color: #495057;
     border-radius: 5px;
+}
+
+/* Cart link styling */
+.cart-link {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+/* Cart image styling */
+.cart-img {
+    width: 30px;
+    height: auto;
+}
+
+/* 카트 호버 효과 */
+.cart-link:hover {
+    transform: scale(1.1);
+}
+
+.cart-link:active {
+    transform: scale(0.9);
 }
 
 /* nav 부분 */
@@ -71,6 +108,8 @@ header {
     margin: 0;
     display: flex;
     justify-content: center;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
 }
 
 #menu li {
@@ -81,13 +120,13 @@ header {
 #menu li a {
     display: block;
     padding: 14px 20px;
-    color: blue;
+    color: #6c757d;
     text-decoration: none;
     text-align: center;
 }
 
 #menu li a:hover {
-    background-color: #575757;
+    background-color: #e9ecef;
 }
 
 /* 주 내용 */
@@ -109,7 +148,7 @@ header {
 /* h1 스타일 */
 h1 {
     text-align: center;
-    color: #333;
+    color: #343a40;
     margin-bottom: 20px;
 }
 
@@ -136,7 +175,7 @@ h1 {
 }
 
 .board-table a {
-    color: #007BFF;
+    color: #6c757d;
     text-decoration: none;
 }
 
@@ -159,7 +198,7 @@ h1 {
 }
 
 .create-button {
-    background-color: #00FA9A;
+    background-color: #28a745;
     margin-bottom: 20px;
 }
 
@@ -168,11 +207,11 @@ h1 {
 }
 
 .submit-button {
-    background-color: #28a745;
+    background-color: #007bff;
 }
 
 .submit-button:hover {
-    background-color: #218838;
+    background-color: #0056b3;
 }
 
 /* 검색창 스타일 */
@@ -184,7 +223,7 @@ h1 {
 
 .search-form input[type="text"] {
     padding: 10px;
-    width: 200px;
+    width: 300px; /* 더 넓게 */
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-right: 10px;
@@ -192,7 +231,7 @@ h1 {
 
 .search-form button {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #6c757d;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -201,7 +240,7 @@ h1 {
 }
 
 .search-form button:hover {
-    background-color: #0056b3;
+    background-color: #5a6268;
 }
 
 /* 페이지네이션 스타일 */
@@ -213,7 +252,7 @@ h1 {
 
 .pagination a {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #6c757d;
     color: #fff;
     text-decoration: none;
     border-radius: 4px;
@@ -221,7 +260,7 @@ h1 {
 }
 
 .pagination a:hover {
-    background-color: #0056b3;
+    background-color: #5a6268;
 }
 
 /* 항상 보이게 설정 */
@@ -231,11 +270,11 @@ h1 {
 
 /* footer 부분 */
 footer {
-    background-color: #007BFF;
+    background-color: #6c757d;
     color: white;
     text-align: center;
-    padding: 5px 0;
-    position: flex;
+    padding: 10px 0;
+    position: relative; /* 'relative'로 변경 */
     width: 100%;
     bottom: 0;
 }
@@ -287,7 +326,7 @@ input[type="file"] {
 }
 
 input[type="file"]::-webkit-file-upload-button {
-    background: #007bff;
+    background: #6c757d;
     color: white;
     border: none;
     border-radius: 4px;
@@ -297,7 +336,7 @@ input[type="file"]::-webkit-file-upload-button {
 }
 
 input[type="file"]::-webkit-file-upload-button:hover {
-    background: #0056b3;
+    background: #5a6268;
 }
 
 /* 댓글 목록 스타일 */
@@ -350,11 +389,11 @@ input[type="file"]::-webkit-file-upload-button:hover {
 
 /* 수정 및 삭제 버튼 스타일 */
 .edit-button {
-    background-color: #007bff;
+    background-color: #6c757d;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: #5a6268;
 }
 
 .delete-button {
@@ -366,9 +405,9 @@ input[type="file"]::-webkit-file-upload-button:hover {
 }
 
 .update-button {
-    background-color: #007bff;
+    background-color: #6c757d;
 }
 
 .update-button:hover {
-    background-color: #e0a800;
+    background-color: #5a6268;
 }

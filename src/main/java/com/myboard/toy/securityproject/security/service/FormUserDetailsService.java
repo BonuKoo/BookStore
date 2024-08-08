@@ -38,7 +38,9 @@ public class FormUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toSet())
                 .stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         ModelMapper mapper = new ModelMapper();
+
         AccountDto accountDto = mapper.map(account, AccountDto.class);
+
 
         return new AccountContext(accountDto, authorities);
     }

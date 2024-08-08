@@ -107,12 +107,22 @@
                         <label for="age">Age</label>
                         <input type="number" class="form-control" id="age" name="age" required>
                     </div>
+
+                    <!-- 회원가입 시 일반 유저로 자동 권한 등록-->
+                    <!--
                     <div class="form-group">
                         <label for="roles">Authority</label>
                         <select class="form-control" id="roles" name="roles">
                             <option>ROLE_USER</option>
                         </select>
                     </div>
+                    -->
+
+                    <!--주소 입력 폼-->
+                    <div class="form-group">
+                        <label for="address">주소</label>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                 </form>
             </div>
@@ -122,3 +132,4 @@
 <div class="footer" th:replace="~{layout/footer::footer}"></div>
 </body>
 </html>
+

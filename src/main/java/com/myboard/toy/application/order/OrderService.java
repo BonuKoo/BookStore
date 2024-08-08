@@ -1,5 +1,6 @@
 package com.myboard.toy.application.order;
 
+import com.myboard.toy.common.exception.ItemNotFoundException;
 import com.myboard.toy.common.exception.OrderNotFoundException;
 import com.myboard.toy.common.exception.UserNotFoundException;
 import com.myboard.toy.domain.delivery.Delivery;
@@ -32,8 +33,8 @@ public class OrderService {
         Account account = userRepository.findById(accountId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Item item = itemRepository.findByIsbn(isbn);
-                //.orElseThrow(ItemNotFoundException::new);
+        Item item = itemRepository.findByIsbn(isbn)
+                .orElseThrow(ItemNotFoundException::new);
 
         //배송정보 생성
         Delivery delivery = new Delivery(account.getAddress(), DeliveryStatus.READY);

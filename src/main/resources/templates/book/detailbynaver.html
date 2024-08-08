@@ -117,13 +117,17 @@
     <!-- TODO : 장바구니 기능 구현-->
 
     <div class="right-section">
+
+        <section th:each="item : ${bookDetail.channel.items}" class="book-detail">
         <!-- 주문 폼으로 이동 -->
-        <button type="button" class="btn-buy-now" onclick="orderNow()">주문</button>
 
-        <!-- 장바구니에 담기 버튼 : 버튼을 누르면 Cart에 담김 -->
+            <a th:href="@{/cart/list}" class="btn btn-primary" sec:authorize="isAuthenticated()">주문</a>
 
-        <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/cart/add}" method="post">
+            <!-- 장바구니에 추가 -->
+        <form class="d-flex" th:action="@{/cart/add}" method="post" sec:authorize="isAuthenticated()">
+            <!-- hidden input field to pass the ISBN of the item -->
             <input type="hidden" name="isbn" th:value="${item.isbn}"/>
+            <!-- input field for the amount of the item -->
             <div class="d-flex">
                 <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
                        style="max-width: 3rem"/>
@@ -134,21 +138,10 @@
             </div>
         </form>
         <!-- 장바구니 버튼 끝-->
+        </section>
     </div>
+    <!-- right-section   -->
 
 </div>
-
-<script>
-    function orderNow() {
-        const title = document.querySelector('.book-title').innerText;
-        const isbn = document.querySelector('tr:nth-child(6) span').innerText; // ISBN 값 추출
-        const discount = document.querySelector('tr:nth-child(4) span').innerText.split(' ')[0]; // 가격 값 추출
-
-        const url = `/orderForm?title=${encodeURIComponent(title)}&isbn=${encodeURIComponent(isbn)}&discount=${encodeURIComponent(discount)}`;
-        window.location.href = url;
-    }
-</script>
-
-<script src="/path/to/your/js/scripts.js"></script>
 </body>
 </html>

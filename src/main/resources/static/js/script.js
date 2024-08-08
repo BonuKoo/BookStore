@@ -57,61 +57,6 @@
     function delFile(button) {
     	button.parentElement.remove();
     }
-
-function galarySubmit() {
-	var chkbxs = document.querySelectorAll('input[type="checkbox"]');
-	for(var i=0;i<chkbxs.length;i++) {
-		var thumbnailEl = document.createElement('input');
-		thumbnailEl.type = 'hidden';
-		thumbnailEl.name = 'thumbnail';
-		thumbnailEl.value = chkbxs[i].checked ? '1' : '0';
-		chkbxs[i].parentElement.appendChild(thumbnailEl);
-	}
-	document.galaryForm.submit();
-}
-
-//      버튼 추가 기능
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const fileInputsContainer = document.getElementById('fileInputsContainer');
-
-            fileInputsContainer.addEventListener('change', function(event) {
-                if (event.target && event.target.classList.contains('file-input')) {
-                    addFileInput();
-                }
-            });
-//
-            function addFileInput() {
-                // Check if the last file input is empty, don't add new input if it is
-                const fileInputs = document.querySelectorAll('.file-input');
-                if (fileInputs[fileInputs.length - 1].files.length === 0) {
-                    return;
-                }
-
-                // Create a new file input element
-                const newFileInput = document.createElement('input');
-                const newId = `imageFiles${fileInputs.length}`;
-                newFileInput.type = 'file';
-                newFileInput.name = 'imageFiles';
-                newFileInput.className = 'file-input';
-                newFileInput.id = newId;
-                newFileInput.multiple = true;
-
-                // Create a new label for the file input
-                const newLabel = document.createElement('label');
-                newLabel.htmlFor = newId;
-                newLabel.textContent = '파일 업로드:';
-
-                // Append the new label and file input to the container
-                fileInputsContainer.appendChild(newLabel);
-                fileInputsContainer.appendChild(newFileInput);
-            }
-
-            // Initially add one file input if there is only one present and empty
-            if (document.querySelectorAll('.file-input').length === 1) {
-                addFileInput();
-            }
-        });
-
      /* 시큐리티 관련 로직*/
 
 /* 로그인 실패 후 '/'로 돌아가기 전까지 5초 간격 설정 */
@@ -189,3 +134,67 @@ function galarySubmit() {
                     console.error('Error during login:', error);
                 });
         }
+
+
+
+
+function count(type, itemIsbn) {
+    // CSRF 토큰과 헤더 이름 가져오기
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+    // 디버깅을 위해 변수 값 출력
+    console.log("Type:", type);
+    console.log("Item ISBN:", itemIsbn);
+
+    // 결과를 표시할 요소
+    const resultElement = document.getElementById(itemIsbn);
+
+    // 디버깅: resultElement가 null인지 확인
+    if (!resultElement) {
+        console.error(`Element with id "${itemIsbn}" not found.`);
+        return;
+    }
+
+    // 현재 화면에 표시된 값
+    let number = resultElement.innerText.replace(' 개', '').trim();
+    console.log("Current Number:", number);
+
+    // 더하기/빼기
+    if (type === 'plus') {
+        number = parseInt(number) + 1;
+    } else if (type === 'minus') {
+        number = Math.max(0, parseInt(number) - 1);
+    }
+
+    // 결과 출력
+    resultElement.innerText = number + ' 개';
+    console.log("Updated Number:", number);
+
+    // fetch API를 사용하여 POST 요청 보내기
+    fetch(`/api/cart/${type === 'plus' ? 'increaseItem' : 'decreaseItem'}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify({
+            amount: number,
+            itemIsbn: itemIsbn
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        console.log("Response Data:", data);
+        // 성공적인 응답 처리
+    window.location.href = '/cart/list';
+    }    )
+    .catch(error => {
+        console.error('Error during request:', error);
+    });
+}

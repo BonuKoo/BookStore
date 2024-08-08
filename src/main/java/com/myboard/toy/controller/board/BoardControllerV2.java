@@ -39,6 +39,7 @@ public class BoardControllerV2 {
     private final FileService fileService;
     private final FileStore fileStore;
     private final UserService userService;
+
     public BoardControllerV2(BoardService boardService, ReplyService replyService, FileService fileService, FileStore fileStore, UserService userService) {
         this.boardService = boardService;
         this.replyService = replyService;
@@ -47,9 +48,6 @@ public class BoardControllerV2 {
         this.userService = userService;
     }
 
-    /*
-        Version2에는 파일 업로드 로직을 추가한다 !
-     */
 
     /*
         ----------------Create----------------
@@ -70,7 +68,14 @@ public class BoardControllerV2 {
 
         if (principal instanceof UsernamePasswordAuthenticationToken) {
 
-            Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+            AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+            String username1 = accountDto.getUsername();
+            String username = username1;
+
+            // username을 토대로 account 값을 db에서 조회한다.
+            Account account1 = userService.getAccountByUsername(username);
+            Account account = account1;
 
             boardDTO.registerAccount(account);
 
@@ -91,7 +96,14 @@ public class BoardControllerV2 {
                               Principal principal
                               ) {
 
-        Account account = getAccountByPrinciple((UsernamePasswordAuthenticationToken) principal);
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+        String username1 = accountDto.getUsername();
+        String username = username1;
+
+        // username을 토대로 account 값을 db에서 조회한다.
+        Account account1 = userService.getAccountByUsername(username);
+        Account account = account1;
 
 
         ReplyDTO replyDTO = ReplyDTO.builder()
@@ -120,6 +132,7 @@ public class BoardControllerV2 {
     }
 
     //전체조회
+
     @GetMapping("")
     public String searchWithPage(@RequestParam(required = false) String title,
                                 @RequestParam(defaultValue = "0") int page,
@@ -175,10 +188,12 @@ public class BoardControllerV2 {
     /*
         DELETE
      */
+
+    // 게시글 삭제 메서드
     @PostMapping("/{id}/delete")
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
-        return "redirect:/boards2"; // 삭제 후 게시판 목록으로 리다이렉트
+        return "redirect:/boards2"; // 삭제 후 전체 게시글 목록으로 리디렉션
     }
 
 

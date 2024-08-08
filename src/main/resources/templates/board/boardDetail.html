@@ -27,11 +27,13 @@
             <li th:each="reply : ${board.replyDTOList}" class="comment-item">
                 <span th:text="${reply.account.username}"></span> <!-- 닫힌 span 태그 -->
                 <span th:text="${reply.content}"></span>
+
                 <!-- 삭제 -->
                 <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
                     <button type="submit" class="button delete-button">삭제</button>
                 </form>
+
                 <!-- 수정 -->
                 <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" class="inline-form">
                     <input type="hidden" name="boardId" th:value="${board.id}" />
@@ -53,7 +55,6 @@
             <button type="submit" class="button delete-button" sec:authorize="isAuthenticated()">게시글 삭제</button>
         </form>
     </div>
-
     <!-- 댓글 작성 폼 -->
     <div class="comment-form">
         <h3>댓글 작성</h3>

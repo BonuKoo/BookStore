@@ -22,31 +22,38 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //어차피 1:1이니까
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private Account account;
 
     @Builder.Default
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
-    //날짜도 포함하자 나중에
-    private int count; //카트에 담긴 상품 개수
+    private int totPrice; //카트에 담긴 상품의 가격 총합
 
     private void setAccount(Account account) {
         this.account = account;
     }
 
-    private void setCount(int count) {
-        this.count = count;
-    }
-
-    public static Cart createCart(Account account){
+    public Cart createCart(Account account){
         Cart cart = new Cart();
-        cart.setCount(0);
+        cart.setTotPrice(0);
         cart.setAccount(account);
         return cart;
     }
 
+    // == TotPrice == //
+    private void setTotPrice(int totPrice) {
+        this.totPrice = totPrice;
+    }
+
+    public void updateTotPrice(int amount){
+        this.totPrice += amount;
+    }
+
+    public void addCartItem(CartItem cartItem){
+        this.cartItems.add(cartItem);
+        updateTotPrice(cartItem.getCount() * cartItem.getItem().getPrice());
+    }
 }

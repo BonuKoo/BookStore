@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(url = "https://openapi.naver.com/v1/search",
-        name = "bookClient",configuration = NaverFeignConfiguration.class)
+        name = "bookClient",
+        configuration = NaverFeignConfiguration.class)
 public interface NaverApiClient {
 
+    /*
     //== V1 - String 반환 == //
     //전체 리스트
     @GetMapping("/book.json")
@@ -34,6 +36,7 @@ public interface NaverApiClient {
             @RequestParam(value = "start", required = false, defaultValue = "1") Integer start,
             @RequestParam(value = "sort", required = false, defaultValue = "sim") String sort
     );
+    */
 
     //== V2 DTO 반환 == //
     @GetMapping("/book.json")
@@ -44,6 +47,7 @@ public interface NaverApiClient {
             @RequestParam(value = "sort", required = false) String sort
     );
 
+    //--V2 DTO 상세정보 ==//
     @GetMapping("/book_adv.xml")
     @Headers("Content-Type: application/xml")
     ResponseEntity<NaverBookDetailViewResponseDto> getBookDetailV2(
@@ -72,3 +76,4 @@ public interface NaverApiClient {
     상세 요청 URL 예시
     https://openapi.naver.com/v1/search/book_adv.xml?d_titl=aws
  */
+
