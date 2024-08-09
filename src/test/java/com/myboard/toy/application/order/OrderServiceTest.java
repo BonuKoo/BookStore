@@ -1,27 +1,8 @@
 package com.myboard.toy.application.order;
 
-import com.myboard.toy.common.exception.ItemNotFoundException;
-import com.myboard.toy.common.exception.UserNotFoundException;
-import com.myboard.toy.domain.address.Address;
-import com.myboard.toy.domain.delivery.Delivery;
-import com.myboard.toy.domain.delivery.DeliveryStatus;
-import com.myboard.toy.domain.item.Item;
-import com.myboard.toy.domain.order.Order;
-import com.myboard.toy.domain.orderitem.OrderItem;
-import com.myboard.toy.infrastructure.item.ItemRepository;
-import com.myboard.toy.infrastructure.order.OrderRepository;
-import com.myboard.toy.securityproject.domain.entity.Account;
-import com.myboard.toy.securityproject.users.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class OrderServiceTest {
     /*

@@ -1,0 +1,108 @@
+package com.myboard.toy.board.reply.service;
+
+import com.myboard.toy.board.board.repository.BoardRepository;
+import com.myboard.toy.board.domain.Board;
+import com.myboard.toy.board.domain.Reply;
+import com.myboard.toy.board.domain.dto.ReplyDTO;
+import com.myboard.toy.board.reply.repository.ReplyRepository;
+import com.myboard.toy.security.domain.entity.Account;
+import com.myboard.toy.security.users.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+@Service
+public class ReplyService {
+
+    private final ReplyRepository replyRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+
+    public ReplyService(ReplyRepository replyRepository, BoardRepository boardRepository, UserRepository userRepository) {
+        this.replyRepository = replyRepository;
+        this.boardRepository = boardRepository;
+        this.userRepository = userRepository;
+    }
+
+    /*
+        Create
+     */
+    public ReplyDTO createReply(ReplyDTO replyDTO) {
+
+        // 게시글 ID로 해당하는 Board 엔티티 조회
+
+        Board board = boardRepository.findById(replyDTO.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + replyDTO.getBoardId()));
+
+        Account account = userRepository.findById(replyDTO.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        // Reply 엔티티 생성 및 저장
+
+        Reply reply =
+        Reply.builder()
+                .content(replyDTO.getContent())
+                .board(board)
+                .account(account)
+                .build();
+
+        Reply savedReply = replyRepository.save(reply);
+
+        // ReplyDTO로 변환하여 반환
+        return ReplyDTO.builder()
+                .id(savedReply.getId())
+                .content(savedReply.getContent())
+                .boardId(savedReply.getBoard().getId())
+                .accountId(savedReply.getAccount().getId())
+                .build();
+    }
+
+    /*
+        Read
+     */
+    public ReplyDTO getReplyById(Long replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다. ID: " + replyId));
+
+        return ReplyDTO.builder()
+                .id(reply.getId())
+                .content(reply.getContent())
+                .boardId(reply.getBoard().getId())
+                .build();
+    }
+    /*
+        Update
+     */
+
+    // 댓글 수정
+
+
+    public ReplyDTO updateReply(Long replyId, ReplyDTO replyDTO) {
+        // 기존의 Reply 엔티티 조회
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다. ID: " + replyId));
+
+        // 수정할 내용 업데이트
+        reply.updateContent(replyDTO.getContent());
+        Reply updatedReply = replyRepository.save(reply);
+
+        // 수정된 ReplyDTO로 변환하여 반환
+        return ReplyDTO.builder()
+                .id(updatedReply.getId())
+                .content(updatedReply.getContent())
+                .boardId(updatedReply.getBoard().getId())
+                .build();
+    }
+
+    /*
+        Delete
+     */
+    // 댓글 삭제
+    @Transactional
+    public void deleteReply(Long id) {
+        Reply reply = replyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 댓글을 찾을 수 없습니다. ID: " + id));
+
+        replyRepository.delete(reply);
+    }
+}

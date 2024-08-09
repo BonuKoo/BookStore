@@ -1,6 +1,6 @@
 package com.myboard.toy;
 
-import com.myboard.toy.application.hello.HelloUserService;
+import com.myboard.toy.etc.hello.service.HelloUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

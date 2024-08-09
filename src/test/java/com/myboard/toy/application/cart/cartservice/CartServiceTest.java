@@ -1,16 +1,13 @@
 package com.myboard.toy.application.cart.cartservice;
 
-import com.myboard.toy.application.cart.CartService;
-import com.myboard.toy.common.exception.ItemNotFoundException;
-import com.myboard.toy.domain.cart.Cart;
-import com.myboard.toy.domain.cartitem.CartItem;
-import com.myboard.toy.domain.item.Item;
-import com.myboard.toy.infrastructure.cart.CartRepository;
-import com.myboard.toy.infrastructure.item.ItemRepository;
-import com.myboard.toy.securityproject.domain.entity.Account;
-import com.myboard.toy.securityproject.users.repository.UserRepository;
-import com.myboard.toy.securityproject.users.service.UserService;
-import org.assertj.core.api.Assertions;
+import com.myboard.toy.sales.cart.service.CartService;
+import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.CartItem;
+import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.cart.repository.CartRepository;
+import com.myboard.toy.sales.item.repository.ItemRepository;
+import com.myboard.toy.security.domain.entity.Account;
+import com.myboard.toy.security.users.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
