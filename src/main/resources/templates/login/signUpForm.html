@@ -1,24 +1,25 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
     <th:block layout:fragment="head">
-
-        <!-- Daum Postcode API 스크립트 추가 -->
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
         <style>
             /* 기본 스타일 */
-
-            /* 회원가입 폼 스타일 */
             #signupForm {
                 background-color: white;
                 border-radius: 8px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 padding: 20px;
-                max-width: 400px; /* 폼 너비 설정 */
+                max-width: 400px;
                 width: 100%;
+                margin: 0 auto;
             }
 
             .signup-form-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 margin-bottom: 15px;
             }
 
@@ -26,6 +27,8 @@
                 display: block;
                 font-weight: bold;
                 margin-bottom: 5px;
+                width: 100%;
+                text-align: left;
             }
 
             .signup-form-group input[type="text"],
@@ -41,7 +44,6 @@
                 background-color: #f9f9f9;
             }
 
-            /* 버튼 스타일 */
             .btn-check,
             .btn-postcode,
             .btn-submit,
@@ -94,29 +96,87 @@
             .guide {
                 color: #999;
             }
+
+            .input-group {
+                position: relative;
+            }
+
+            .input-group #checkUsernameBtn {
+                margin-top: 10px;
+            }
+
+            .tooltip {
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 5px;
+                background-color: #333;
+                color: #fff;
+                border-radius: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                z-index: 10;
+            }
+
+            #checkUsernameBtn:hover + .tooltip {
+                opacity: 1;
+            }
+
+            /* 중앙 정렬 스타일 */
+            .form-container {
+                text-align: center; /* 중앙 정렬 */
+                padding: 20px;
+            }
+
+            h2 {
+                margin: 0 0 20px 0; /* 상단 마진 없애고, 하단 마진 추가 */
+                text-align: center;
+            }
         </style>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkUsernameBtn = document.getElementById('checkUsernameBtn');
+                const tooltip = document.getElementById('tooltip');
+
+                // 버튼에 마우스를 올렸을 때
+                checkUsernameBtn.addEventListener('mouseenter', function() {
+                    tooltip.style.opacity = '1';
+                    const rect = checkUsernameBtn.getBoundingClientRect();
+                    tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+                    tooltip.style.left = `${rect.left + (checkUsernameBtn.offsetWidth / 2) - (tooltip.offsetWidth / 2)}px`;
+                });
+
+                // 버튼에서 마우스를 뗐을 때
+                checkUsernameBtn.addEventListener('mouseleave', function() {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        </script>
     </th:block>
 </head>
 <body>
 <div layout:fragment="content" id="contents">
-
     <h2>회원가입</h2>
     <!-- 회원가입 폼 -->
     <form id="signupForm" th:action="@{/signup}" method="post">
-
+        <!--아이디 입력창-->
         <div class="signup-form-group">
             <label for="username">Id</label>
             <input type="text" id="username" name="username" minlength="3" maxlength="10" placeholder="아이디를 입력하세요."
                    readonly required>
-            <button type="button" id="checkUsernameBtn">ID 입력창</button>
+            <button type="button" id="checkUsernameBtn" class="btn-check">ID 입력창</button>
+            <div id="tooltip" class="tooltip">ID 입력창으로 입력할 수 있습니다.</div>
         </div>
 
         <!-- 아이디 체크 모달창 -->
-        <div id="usernameCheckModal" style="display:none;">
-            <div>
+        <div id="usernameCheckModal" class="modal">
+            <div class="modal-content">
                 <p id="modalMessage"></p>
-                <button id="modalCloseBtn">Close</button>
+                <button id="modalCloseBtn" class="btn-close">Close</button>
             </div>
         </div>
 
@@ -124,7 +184,6 @@
             <label for="nickname">nickname</label>
             <input type="text" id="nickname" name="nickname" minlength="2" maxlength="8" required>
         </div>
-
 
         <div class="signup-form-group">
             <label for="password">Password</label>
@@ -175,11 +234,9 @@
 
         <!-- Submit 버튼 -->
         <div class="signup-form-group">
-            <button type="submit" class="btn">회원가입</button>
+            <button type="submit" class="btn-submit">회원가입</button>
         </div>
-
     </form>
 </div>
 </body>
 </html>
-

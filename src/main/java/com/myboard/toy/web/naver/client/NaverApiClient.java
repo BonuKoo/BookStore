@@ -1,7 +1,7 @@
 package com.myboard.toy.web.naver.client;
 
-import com.myboard.toy.domain.naver.dto.NaverBookDetailViewResponseDto;
-import com.myboard.toy.domain.naver.dto.NaverBookListResponseDto;
+import com.myboard.toy.web.naver.dto.NaverBookDetailViewResponseDto;
+import com.myboard.toy.web.naver.dto.NaverBookListResponseDto;
 import com.myboard.toy.web.naver.client.config.NaverFeignConfiguration;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;

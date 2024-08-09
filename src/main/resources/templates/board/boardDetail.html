@@ -46,22 +46,25 @@
 
     <!-- 게시글 수정 버튼 -->
     <div class="action-buttons">
-        <a th:href="@{/boards2/{id}/edit(id=${board.id})}" class="button edit-button" sec:authorize="isAuthenticated()">게시글 수정</a>
+        <a th:href="@{/replies/{id}/edit(id=${board.id})}" class="button edit-button" sec:authorize="isAuthenticated()">게시글 수정</a>
     </div>
 
     <!-- 게시글 삭제 버튼-->
     <div class="action-buttons">
-        <form th:action="@{/boards2/{id}/delete(id=${board.id})}" method="post">
+        <form th:action="@{/replies/{id}/delete(id=${board.id})}" method="post">
             <button type="submit" class="button delete-button" sec:authorize="isAuthenticated()">게시글 삭제</button>
         </form>
     </div>
+
     <!-- 댓글 작성 폼 -->
     <div class="comment-form">
         <h3>댓글 작성</h3>
-        <form th:action="@{/boards2/{id}/reply(id=${board.id})}" method="post">
+        <form th:action="@{/replies/{id}/reply(id=${board.id})}" method="post">
             <div class="form-group">
                 <label for="content">댓글 내용:</label>
-                <textarea id="content" name="content" required class="textarea"></textarea>
+                <!-- 사용자 인증 상태에 따라 textarea 렌더링 -->
+                <textarea sec:authorize="isAuthenticated()" id="content" name="content" required class="textarea"></textarea>
+                <p sec:authorize="isAnonymous()">로그인 후 댓글을 작성할 수 있습니다.</p>
             </div>
             <button type="submit" class="button submit-button">댓글 작성</button>
         </form>
