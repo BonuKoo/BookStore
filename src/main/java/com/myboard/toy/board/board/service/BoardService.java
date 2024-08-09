@@ -1,11 +1,11 @@
 package com.myboard.toy.board.board.service;
 
+import com.myboard.toy.board.board.repository.BoardRepository;
 import com.myboard.toy.board.domain.Board;
 import com.myboard.toy.board.domain.dto.BoardSearchCondition;
 import com.myboard.toy.board.domain.dto.BoardDTO;
 import com.myboard.toy.board.domain.dto.BoardPageDTO;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
-import com.myboard.toy.infrastructure.repository.BoardRepository;
 import com.myboard.toy.infra.file.domain.board.UploadFileOfBoard;
 import com.myboard.toy.infra.file.service.FileStore;
 import jakarta.persistence.EntityNotFoundException;

@@ -1,8 +1,8 @@
 package com.myboard.toy.sales.cartitem.repository.impl;
 
 import com.myboard.toy.sales.domain.CartItem;
-import com.myboard.toy.domain.cartitem.QCartItem;
 import com.myboard.toy.sales.cartitem.repository.CartItemRepository4QueryDsl;
+import com.myboard.toy.sales.domain.QCartItem;
 import com.myboard.toy.security.domain.entity.Account;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
