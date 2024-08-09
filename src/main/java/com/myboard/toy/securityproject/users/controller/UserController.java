@@ -9,7 +9,10 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,4 +45,15 @@ public class UserController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/check-username")
+    public String checkUsernamePage(Model model) {
+        return "login/check-username";
+    }
 }
+
+/*
+
+    일단 check-username page를 띄우기까지는 성공
+
+ */

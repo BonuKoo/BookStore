@@ -46,4 +46,16 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public boolean checkExistByUsername(String username) {
+
+        Account account = userRepository.findByUsernameIgnoreCase(username);
+        if (account != null){
+            log.info("이미 사용중인 아이디입니다.");
+            return true;
+        }else {
+            log.info("사용가능한 아이디입니다.");
+            return false;
+        }
+    }
+
 }
