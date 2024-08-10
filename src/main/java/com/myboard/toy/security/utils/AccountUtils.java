@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.security.Principal;
+
 @Component
 @RequiredArgsConstructor
 public class AccountUtils {
@@ -23,12 +25,10 @@ public class AccountUtils {
         return userService.getAccountByUsername(username);
     }
 
-    /*
-    TODO
-    public Long getAccountIdByPrincipal(Principal principal){
-        String name = principal.getName();
-
+    //AccountDto 반환
+    public AccountDto getUserDetailsByPrincipal(Principal principal){
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
+        return accountDto;
     }
-    */
-
 }

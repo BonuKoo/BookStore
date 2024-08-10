@@ -20,7 +20,7 @@ public class LoginController {
                         @RequestParam(value = "exception", required = false) String exception, Model model){
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
-        return "login/login";
+        return "login/loginForm";
     }
 
     @GetMapping(value="/api/login")
@@ -54,12 +54,3 @@ public class LoginController {
         return "login/denied";
     }
 }
-/*
-* AccountDto가 현재 Principal 객체이다.
-* -> FormAuthticationProvider를 확인해보면 나온다.
-*
-*
-*     return new UsernamePasswordAuthenticationToken(accountContext.getAccountDto(),null,accountContext.getAuthorities());
-      인증 객체인 AuthenticationToken에 AccountDto를 받고 있다.
- * */
-

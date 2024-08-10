@@ -70,9 +70,9 @@ public class UserService {
         }
     }
 
+
     public Account getAccountByPrincipal(Principal principal) {
         return userRepository.findByUsername(principal.getName());
-
     }
 
 }

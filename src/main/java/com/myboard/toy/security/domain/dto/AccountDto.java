@@ -9,6 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto {
+
     private Long id;
     private String username;
     private String nickname;

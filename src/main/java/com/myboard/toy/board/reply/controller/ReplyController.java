@@ -4,7 +4,11 @@ import com.myboard.toy.board.board.service.BoardService;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
 import com.myboard.toy.board.reply.service.ReplyService;
 import com.myboard.toy.security.domain.dto.AccountDto;
+import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
+import com.myboard.toy.security.utils.AccountUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,70 +20,59 @@ public class ReplyController {
 
     private final ReplyService replyService;
     private final BoardService boardService;
-    private final UserService userService;
+    private final AccountUtils accountUtils;
 
-    public ReplyController(ReplyService replyService, BoardService boardService, UserService userService) {
+    public ReplyController(ReplyService replyService, BoardService boardService, AccountUtils accountUtils) {
         this.replyService = replyService;
         this.boardService = boardService;
-        this.userService = userService;
+        this.accountUtils = accountUtils;
     }
 
     /*
         Create
      */
 
-    @PostMapping("/{id}/reply")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/create/{id}")
     public String createReply(@PathVariable Long id,
                               @RequestParam String content,
                               Principal principal
                               ) {
+        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
 
-        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
 
-        ReplyDTO replyDto = ReplyDTO.builder()
-                .content(content)
-                .boardId(id)
-                .accountId(accountId.getId())
-                .build();
-        replyService.createReply(replyDto);
-        return "redirect:/boards2/" + id; // 댓글이 생성된 게시글 상세 페이지로 리다이렉트
+        replyService.createReply(id, content, account);
+        return "redirect:/boards/" + id; // 댓글이 생성된 게시글 상세 페이지로 리다이렉트
     }
 
     /*
         Update
      */
 
-    @PostMapping("/{replyId}/update")
-    public String updateReply(@PathVariable Long replyId, @RequestParam("boardId") Long boardId,
-                              @RequestParam("content") String content) {
-
-        ReplyDTO replyDTO = ReplyDTO.builder()
-                .id(replyId)
-                .content(content)
-                .boardId(boardId)
-                .build();
-        replyService.updateReply(replyId, replyDTO);
-        return "redirect:/boards2/" + boardId; // 수정 후 게시글 상세 페이지로 리다이렉트
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update/{boardId}/{replyId}")
+    public String updateReply(
+            @PathVariable Long boardId,
+            @PathVariable Long replyId,
+                              @RequestParam("content") String content,
+                              Principal principal) {
+        accountUtils.getUserDetailsByPrincipal(principal);
+        replyService.updateReply(replyId, content);
+        return "redirect:/boards/" + boardId;
     }
-
-    //REST
 
     /*
         Delete
      */
 
-    @PostMapping("/{replyId}/delete")
-    public String deleteReply(@PathVariable Long replyId, @RequestParam("boardId") Long boardId) {
-        replyService.deleteReply(replyId); // ReplyService를 통해 댓글 삭제 로직 처리
-        return "redirect:/boards2/" + boardId; // 삭제 후 게시글 상세 페이지로 리다이렉트
-    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/delete/{boardId}/{replyId}")
+    public String deleteReply(@PathVariable Long boardId,
+                              @PathVariable Long replyId) {
 
-    //REST
-    /*
-    @DeleteMapping("/{id}")
-    public void deleteReply(@PathVariable Long id) {
-        replyService.deleteReply(id);
+        replyService.deleteReply(replyId);
+
+        return "redirect:/boards/" + boardId;
     }
-     */
 }
 

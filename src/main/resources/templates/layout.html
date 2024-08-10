@@ -44,8 +44,8 @@
 <!-- nav 시작  -->
 <nav>
     <ul id="menu">
-        <li><a th:href="@{/}">Home</a></li>
-        <li><a th:href="@{/boards2}">Boards</a></li>
+        <li><a th:href="@{/}" sec:authorize="hasAuthority('ROLE_ADMIN')">Home</a></li>
+        <li><a th:href="@{/boards}">Boards</a></li>
 <!--        <li><a th:href="@{/about}">About</a></li>-->
         <li><a th:href="@{/search-books}">Book</a></li>
     </ul>

@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +22,10 @@ public class Board {
     private String content;
 
     //계정 추가
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "account_id")
     private Account account;
 
-    //@Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 
@@ -76,6 +75,7 @@ public class Board {
     /*
         Reply 연관
      */
+
     public void addReply(Reply reply){
         replies.add(reply);
         reply.assignBoard(this);

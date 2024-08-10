@@ -38,5 +38,16 @@ public class Role implements Serializable {
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles", cascade = CascadeType.ALL)
     private Set<Account> accounts = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", roleName='" + roleName + '\'' +
+                ", roleDesc='" + roleDesc + '\'' +
+                ", isExpression='" + isExpression + '\'' +
+                '}';
+    }
+
 }
 

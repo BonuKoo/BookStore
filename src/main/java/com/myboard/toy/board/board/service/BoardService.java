@@ -47,6 +47,7 @@ public class BoardService {
     //TODO 수정 필요 - QueryDsl Class도 참고해야함
     public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
 
+
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
         
@@ -55,7 +56,7 @@ public class BoardService {
                         .id(reply.getId())
                         .content(reply.getContent())
                         .boardId(reply.getBoard().getId())
-                        .accountId(reply.getAccount().getId())
+                        .account(reply.getAccount())
                         .build()
                 )
                 .toList();
@@ -64,10 +65,12 @@ public class BoardService {
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
+                .accountId(board.getAccount().getId())
                 .replyDTOList(replyDTOS)
                 .formattedFiles(board.getFiles())
                 .build();
     }
+
 
     //수정
     public BoardDTO modifyBoard(Long id, String title, String content){
@@ -89,16 +92,9 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    //생성
-    public BoardDTO createBoard(BoardDTO boardDTO){
-
-        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent());
-        Board savedBoard = boardRepository.save(board);
-        return new BoardDTO(savedBoard.getId(), savedBoard.getTitle(), savedBoard.getContent());
-    }
 
     //파일 업로드 기능 추가
-    public BoardDTO createBoardV2(BoardDTO boardDTO) throws IOException {
+    public BoardDTO createBoard(BoardDTO boardDTO) throws IOException {
 
         Board board = Board.builder()
                 .title(boardDTO.getTitle())

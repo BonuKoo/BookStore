@@ -1,75 +1,92 @@
-<!--html ~layout~-->
 <html layout:decorate="~{layout}">
 <!-- layout:fragment 시작~ -->
 <div layout:fragment="content" id="contents">
 
-<div class="container">
-    <h1 class="page-title">게시글 상세 정보</h1>
+    <div class="container">
+        <h1 class="page-title">게시글 상세 정보</h1>
 
-    <div class="post-details">
-        <h2>제목: <span th:text="${board.title}"></span></h2>
+        <div class="post-details">
+            <h2>제목: <span th:text="${board.title}"></span></h2>
 
-<!--        첨부파일: <a th:if="${hello.attachFile}" th:href="|/hello/attach/${hello.id}|" th:text="${hello.getAttachFile().getUploadFileName()}" /><br/>-->
+            <div th:if="${board.formattedFiles != null}">
+                <img th:each="imageFile : ${board.formattedFiles}"
+                     th:src="@{/boards/images/{filename}(filename=${imageFile.storeFileName})}" width="300" height="300"/>
+            </div>
 
-        <div th:if="${board.formattedFiles != null}">
-            <img th:each="imageFile : ${board.formattedFiles}"
-                 th:src="@{/boards2/images/{filename}(filename=${imageFile.storeFileName})}" width="300" height="300"/>
+            <p>내용: <span th:text="${board.content}"></span></p>
+            <p>댓글 수: <span th:text="${board.replyDTOList != null ? board.replyDTOList.size() : 0}"></span></p>
         </div>
 
-        <p>내용: <span th:text="${board.content}"></span></p>
-        <p>댓글 수: <span th:text="${board.replyDTOList != null ? board.replyDTOList.size() : 0}"></span></p>
+        <!-- 댓글 목록 -->
+        <div class="comments-section">
+
+            <h3>댓글 목록</h3>
+
+            <ul class="comment-list">
+                <li th:each="reply : ${board.replyDTOList}" class="comment-item">
+                    <span th:text="${reply.account.username}"></span>
+                    <span th:text="${reply.content}"></span>
+
+                    <!-- 삭제 -->
+                    <form th:action="@{/replies/delete/{boardId}/{replyId}(boardId=${board.id}, replyId=${reply.id})}"
+                          method="post" class="inline-form">
+                        <button type="submit" class="button delete-button"
+                                sec:authorize="isAuthenticated()"
+                                th:if="${principal != null and principal.id == reply.account.id}"
+                        >삭제</button>
+                    </form>
+
+                    <!-- 수정 -->
+                    <form th:action="@{/replies/update/{boardId}/{replyId}(boardId=${board.id}, replyId=${reply.id})}"
+                          method="post" class="inline-form">
+                        <input type="text" name="content" th:value="${reply.content}" class="input-text"
+                               sec:authorize="isAuthenticated()"
+                               th:if="${principal != null and principal.id == reply.account.id}"
+                        />
+                        <button type="submit" class="button update-button"
+                                sec:authorize="isAuthenticated()"
+                                th:if="${principal != null and principal.id == reply.account.id}"
+                        >수정</button>
+                    </form>
+
+                </li>
+            </ul>
+        </div>
+
+        <!-- 게시글 수정 버튼 -->
+        <div class="action-buttons">
+            <a th:href="@{/boards/update/{id}(id=${board.id})}" class="button edit-button"
+               sec:authorize="isAuthenticated()"
+               th:if="${principal != null and principal.id == board.accountId}"
+            >게시글 수정</a>
+        </div>
+
+        <!-- 게시글 삭제 버튼-->
+        <div class="action-buttons">
+            <form th:action="@{/boards/delete/{id}(id=${board.id})}" method="post">
+                <button type="submit" class="button delete-button"
+                        sec:authorize="isAuthenticated()"
+                        th:if="${principal != null and principal.id == board.accountId}"
+                >게시글 삭제</button>
+            </form>
+        </div>
+
+        <!-- 댓글 작성 폼 -->
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form th:action="@{/replies/create/{id}(id=${board.id})}" method="post">
+                <div class="form-group">
+                    <label for="content">댓글 내용:</label>
+                    <!-- 사용자 인증 상태에 따라 textarea 렌더링 -->
+                    <textarea sec:authorize="isAuthenticated()" id="content" name="content" required class="textarea"></textarea>
+                    <p sec:authorize="isAnonymous()">로그인 후 댓글을 작성할 수 있습니다.</p>
+                </div>
+                <button type="submit" class="button submit-button"
+                        sec:authorize="isAuthenticated()"
+                >댓글 작성</button>
+            </form>
+        </div>
     </div>
-
-    <!-- 댓글 목록 -->
-    <div class="comments-section">
-        <h3>댓글 목록</h3>
-        <ul class="comment-list">
-            <li th:each="reply : ${board.replyDTOList}" class="comment-item">
-                <span th:text="${reply.account.username}"></span> <!-- 닫힌 span 태그 -->
-                <span th:text="${reply.content}"></span>
-
-                <!-- 삭제 -->
-                <form th:action="@{/replies/{replyId}/delete(replyId=${reply.id})}" method="post" class="inline-form">
-                    <input type="hidden" name="boardId" th:value="${board.id}" />
-                    <button type="submit" class="button delete-button">삭제</button>
-                </form>
-
-                <!-- 수정 -->
-                <form th:action="@{/replies/{replyId}/update(replyId=${reply.id})}" method="post" class="inline-form">
-                    <input type="hidden" name="boardId" th:value="${board.id}" />
-                    <input type="text" name="content" th:value="${reply.content}" class="input-text" />
-                    <button type="submit" class="button update-button">수정</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-
-    <!-- 게시글 수정 버튼 -->
-    <div class="action-buttons">
-        <a th:href="@{/replies/{id}/edit(id=${board.id})}" class="button edit-button" sec:authorize="isAuthenticated()">게시글 수정</a>
-    </div>
-
-    <!-- 게시글 삭제 버튼-->
-    <div class="action-buttons">
-        <form th:action="@{/replies/{id}/delete(id=${board.id})}" method="post">
-            <button type="submit" class="button delete-button" sec:authorize="isAuthenticated()">게시글 삭제</button>
-        </form>
-    </div>
-
-    <!-- 댓글 작성 폼 -->
-    <div class="comment-form">
-        <h3>댓글 작성</h3>
-        <form th:action="@{/replies/{id}/reply(id=${board.id})}" method="post">
-            <div class="form-group">
-                <label for="content">댓글 내용:</label>
-                <!-- 사용자 인증 상태에 따라 textarea 렌더링 -->
-                <textarea sec:authorize="isAuthenticated()" id="content" name="content" required class="textarea"></textarea>
-                <p sec:authorize="isAnonymous()">로그인 후 댓글을 작성할 수 있습니다.</p>
-            </div>
-            <button type="submit" class="button submit-button">댓글 작성</button>
-        </form>
-    </div>
-</div>
 
 </div>
 </html>

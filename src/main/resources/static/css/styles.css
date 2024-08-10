@@ -214,7 +214,7 @@ h1 {
     background-color: #0056b3;
 }
 
-/* 검색창 스타일 */
+/* ===============================검색창 스타일========================== */
 .search-form {
     display: flex;
     justify-content: center;
@@ -243,7 +243,7 @@ h1 {
     background-color: #5a6268;
 }
 
-/* 페이지네이션 스타일 */
+/* ===============================페이지 네이션 스타일========================== */
 .pagination {
     display: flex;
     justify-content: center;
@@ -268,7 +268,7 @@ h1 {
     display: block;
 }
 
-/* footer 부분 */
+/* ===============================Footer 영역========================== */
 footer {
     background-color: #6c757d;
     color: white;
@@ -279,14 +279,14 @@ footer {
     bottom: 0;
 }
 
-/* 폼 스타일 */
+/* ===============================폼 스타일========================== */
 .post-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* 폼 그룹 */
+/* ===============================폼 그룹========================== */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -314,7 +314,7 @@ footer {
     min-height: 150px;
 }
 
-/* 파일 업로드 입력 필드 */
+/* ===============================파일 업로드 입력 필드========================== */
 input[type="file"] {
     display: block;
     margin-top: 10px;
@@ -339,7 +339,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
     background: #5a6268;
 }
 
-/* 댓글 목록 스타일 */
+/* ===============================댓글 목록 스타일========================== */
 .comments-section {
     margin: 20px auto;
     padding: 20px;
@@ -387,7 +387,8 @@ input[type="file"]::-webkit-file-upload-button:hover {
     margin-right: 10px;
 }
 
-/* 수정 및 삭제 버튼 스타일 */
+/* =============================== 수정 및 삭제 버튼 스타일========================== */
+
 .edit-button {
     background-color: #6c757d;
 }
@@ -413,27 +414,28 @@ input[type="file"]::-webkit-file-upload-button:hover {
 }
 
 
-/* 회원가입 폼 */
-        .signup-form-group {
-            margin-bottom: 15px;
-        }
-        .row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        .row label {
-            width: 120px;
-            padding-top: 5px;
-        }
-        .row input[type="text"],
-        .row input[type="password"],
-        .row input[type="number"] {
-            flex-grow: 1;
-            padding: 5px;
-            margin-right: 10px;
-            box-sizing: border-box;
-        }
-        .btn {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
+/* =============================== 회원가입 폼========================== */
+
+.signup-form-group {
+    margin-bottom: 15px;
+}
+.row {
+    display: flex;
+    margin-bottom: 10px;
+}
+.row label {
+    width: 120px;
+    padding-top: 5px;
+}
+.row input[type="text"],
+.row input[type="password"],
+.row input[type="number"] {
+    flex-grow: 1;
+    padding: 5px;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+.btn {
+    padding: 5px 10px;
+    cursor: pointer;
+}

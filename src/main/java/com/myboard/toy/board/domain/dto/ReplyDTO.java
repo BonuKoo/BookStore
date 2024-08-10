@@ -1,5 +1,6 @@
 package com.myboard.toy.board.domain.dto;
 
+import com.myboard.toy.security.domain.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,18 +12,7 @@ public class ReplyDTO {
     private Long id;
     private String content;
     private Long boardId;
-    private Long accountId;
+    private Account account;
 
-    public ReplyDTO() {
-    }
 
-    public ReplyDTO(String content, Long boardId, Long accountId) {
-        this.content = content;
-        this.boardId = boardId;
-        this.accountId = accountId;
-    }
-
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
-    }
 }

@@ -16,8 +16,11 @@ public class BoardDTO {
     private Long id;
     private String title;
     private String content;
+    private Long accountId;
     private Account account;
     private List<Reply> replies;
+
+
 
     //임시로
     private List<ReplyDTO> replyDTOList;
@@ -32,20 +35,6 @@ public class BoardDTO {
         this.content = content;
     }
 
-    //게시글 생성용
-    public BoardDTO (String title,String content){
-        this.title=title;
-        this.content=content;
-    }
-
-    //게시글 생성 V2 용
-    public BoardDTO(String title,String content,
-                    Account account, List<UploadFileOfBoard> formattedFiles){
-        this.title=title;
-        this.content=content;
-        this.account=account;
-        this.formattedFiles=formattedFiles;
-    }
 
     //Service의 createBoardV2용
     public BoardDTO(Long id, String title, String content,

@@ -6,7 +6,7 @@
     <div class="container">
 
         <h1>게시글 수정</h1>
-        <form class="post-form" th:action="@{/boards2/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
+        <form class="post-form" th:action="@{/boards/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="_method" value="put">
             <div class="form-group">
                 <label for="title">제목:</label>
@@ -22,7 +22,7 @@
             </div>
             <div class="buttons-container">
                 <button type="submit" class="button edit-button">수정 완료</button>
-                <form th:action="@{/boards2/{id}/delete(id=${board.id})}" method="post" class="delete-form">
+                <form th:action="@{/boards/{id}/delete(id=${board.id})}" method="post" class="delete-form">
                     <button type="submit" class="button delete-button">삭제</button>
                 </form>
             </div>
