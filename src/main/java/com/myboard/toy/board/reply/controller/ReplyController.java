@@ -1,12 +1,10 @@
 package com.myboard.toy.board.reply.controller;
 
 import com.myboard.toy.board.board.service.BoardService;
-import com.myboard.toy.board.domain.dto.ReplyDTO;
 import com.myboard.toy.board.reply.service.ReplyService;
-import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
-import com.myboard.toy.security.utils.AccountUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -15,18 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/replies")
 public class ReplyController {
 
     private final ReplyService replyService;
     private final BoardService boardService;
-    private final AccountUtils accountUtils;
-
-    public ReplyController(ReplyService replyService, BoardService boardService, AccountUtils accountUtils) {
-        this.replyService = replyService;
-        this.boardService = boardService;
-        this.accountUtils = accountUtils;
-    }
+    private final UserService userService;
 
     /*
         Create
@@ -38,8 +31,8 @@ public class ReplyController {
                               @RequestParam String content,
                               Principal principal
                               ) {
-        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
 
+        Account account = userService.getAccountByPrincipal(principal);
 
         replyService.createReply(id, content, account);
         return "redirect:/boards/" + id; // 댓글이 생성된 게시글 상세 페이지로 리다이렉트
@@ -56,7 +49,7 @@ public class ReplyController {
             @PathVariable Long replyId,
                               @RequestParam("content") String content,
                               Principal principal) {
-        accountUtils.getUserDetailsByPrincipal(principal);
+
         replyService.updateReply(replyId, content);
         return "redirect:/boards/" + boardId;
     }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <th:block layout:fragment="head">
+        <style>
+            /* 기본 스타일 */
+            #profile {
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                max-width: 400px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .profile-info {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 15px;
+            }
+
+            .profile-info label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+                width: 100%;
+                text-align: left;
+            }
+
+            .profile-info span {
+                display: block;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                width: 100%;
+            }
+
+            .profile-info p {
+                margin-bottom: 10px;
+            }
+
+            .btn-edit {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 8px 12px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+
+            .btn-edit:hover {
+                background-color: #0056b3;
+            }
+
+            /* 중앙 정렬 스타일 */
+            .form-container {
+                text-align: center; /* 중앙 정렬 */
+                padding: 20px;
+            }
+
+            h2 {
+                margin: 0 0 20px 0; /* 상단 마진 없애고, 하단 마진 추가 */
+                text-align: center;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content" id="contents">
+    <div id="profile">
+        <h1>프로필</h1>
+        <div class="profile-info">
+            <p><strong>ID:</strong> <span th:text="${account.username}"></span></p>
+            <p><strong>닉네임:</strong> <span th:text="${account.nickname}"></span></p>
+            <p><strong>나이:</strong> <span th:text="${account.age}"></span></p>
+
+            <h2>주소</h2>
+            <p><strong>Postcode:</strong>
+                <span th:text="${account.postcode}"></span></p>
+            <p><strong>Road Address:</strong>
+                <span th:text="${account.roadAddress}"></span></p>
+            <p><strong>Jibun Address:</strong>
+                <span th:text="${account.jibunAddress}"></span></p>
+            <p><strong>Detail Address:</strong>
+                <span th:text="${account.detailAddress}"></span></p>
+            <p><strong>Extra Address:</strong>
+                <span th:text="${account.extraAddress}"></span></p>
+        </div>
+
+        <!-- Edit 버튼 -->
+        <div class="form-container">
+            <a th:href="@{/edit-profile}" class="btn-edit">정보수정</a>
+        </div>
+        <!-- 회원탈퇴 버튼 -->
+
+    </div>
+</div>
+</body>
+</html>

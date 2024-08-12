@@ -22,11 +22,12 @@ public class LoginController {
         model.addAttribute("exception",exception);
         return "login/loginForm";
     }
-
+    /*
     @GetMapping(value="/api/login")
     public String restLogin(){
         return "rest/login";
     }
+    */
 
 
     @GetMapping("/signup")

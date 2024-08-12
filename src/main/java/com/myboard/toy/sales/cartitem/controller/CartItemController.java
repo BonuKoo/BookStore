@@ -4,7 +4,7 @@ import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.cartitem.service.CartItemService;
 import com.myboard.toy.sales.domain.dto.CartItemRemoveRequestForm;
 import com.myboard.toy.security.domain.entity.Account;
-import com.myboard.toy.security.utils.AccountUtils;
+import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,7 @@ public class CartItemController {
 
     private final CartItemService cartItemService;
     private final CartService cartService;
-    private final AccountUtils accountUtils;
-
+    private final UserService userService;
     /* DELETE */
 
     @PostMapping("removeItem")
@@ -32,7 +31,7 @@ public class CartItemController {
             RedirectAttributes redirectAttributes){
 
         try {
-            Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
             Long cartId = account.getCart().getId();
 
             CartItemRemoveRequestForm form = CartItemRemoveRequestForm.builder()

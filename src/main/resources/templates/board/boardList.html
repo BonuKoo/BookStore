@@ -17,18 +17,18 @@
     <table class="board-table">
         <thead>
         <tr>
-            <th>ID</th>
+            <th hidden="hidden">ID</th>
             <th>Title</th>
             <th>글쓴이</th>
-            <th>Reply Count</th>
+            <th hidden="hidden">Reply Count</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="board : ${boards.content}">
-            <td th:text="${board.id}"></td>
+            <td th:text="${board.id}" hidden></td>
             <td><a th:href="@{/boards/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
             <td><span th:if="${board.username != null}" th:text="${board.username}"></span></td>
-            <td th:text="${board.replyCount}"></td>
+            <td th:text="${board.replyCount}" hidden="hidden"></td>
         </tr>
         </tbody>
     <!--table = board-table -->

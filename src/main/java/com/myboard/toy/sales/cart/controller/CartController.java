@@ -10,7 +10,7 @@ import com.myboard.toy.sales.domain.CartItem;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateRequestForm;
 import com.myboard.toy.sales.domain.Item;
 import com.myboard.toy.security.domain.entity.Account;
-import com.myboard.toy.security.utils.AccountUtils;
+import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -30,8 +30,7 @@ public class CartController {
     private final ItemService itemService;
     private final CartService cartService;
     private final CartItemService cartItemService;
-    private final AccountUtils accountUtils;
-
+    private final UserService userService;
     /*
        SAVE
      */
@@ -45,14 +44,12 @@ public class CartController {
 
 
         // 로그인 사용자 정보
-        //TODO Account
-        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+        Account account = userService.getAccountByPrincipal(principal);
 
         // 상품 정보 찾기
         Item item = itemService.findByIsbn(isbn);
 
         // 카트 가져오거나 생성
-        //TODO Account
         Cart cart = cartService.getOrCreateCart(account);
 
         CartItemUpdateRequestForm form = CartItemUpdateRequestForm.builder()
@@ -82,7 +79,7 @@ public class CartController {
             Principal principal,
             Model model){
 
-        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+        Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
 
         List<CartListDto> cartList = cartService.getCartList(account);
 

@@ -1,3 +1,5 @@
+/* =============================== LayOut========================== */
+
 /* body 부분 */
 body {
     font-family: 'Arial', sans-serif;
@@ -7,69 +9,140 @@ body {
     padding-bottom: 60px;
 }
 
-/* header 부분 */
+/* =============================== Header ========================== */
 header {
-    position: relative;
-    background-color: #6c757d; /* 더 부드러운 색상 */
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+    background-color: white; /* 배경색을 흰색으로 설정 */
+    color: black;
+    padding: 10px 20px;
 }
 
-.header-title {
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-bottom: 1px solid #ddd;
-    color: #333;
+/* 구분선 스타일 */
+header hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin: 10px 0;
 }
 
-/* 로고 부분 */
-.logo {
-    width: 150px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.header-title {
-    text-align: center;
-}
-
-/* user-nav section */
-.user-nav {
-    position: absolute;
-    bottom: 10px;
-    right: 30px;
-    padding: 10px;
-    background-color: #343a40;
-    border-radius: 5px;
+/* header-content 스타일 */
+.header-content {
     display: flex;
+    justify-content: center; /* 중앙 정렬 */
     align-items: center;
-    gap: 10px;
+    position: relative; /* 절대 위치 요소를 사용하기 위해 */
+    width: 100%;
 }
 
-/* List styles */
+/* 로고 컨테이너 */
+.logo-container {
+    flex: 1; /* 중앙 정렬을 위해 flex: 1 추가 */
+    display: flex;
+    justify-content: center; /* 로고를 중앙에 배치 */
+}
+
+/* 사이트 이름 스타일 */
+.site-name {
+    flex: 2; /* 사이트 이름의 크기를 조정 */
+    text-align: center; /* 사이트 이름 중앙 정렬 */
+    display: flex;
+    /*justify-content: center; /* 텍스트를 중앙에 배치 */
+    position: relative; /* 절대 위치 요소의 기준 */
+}
+/* 텍스트를 오른쪽으로 이동시키기 위한 스타일 추가 */
+
+/*오른쪽으로 이동 */
+
+.site-name h1 {
+    margin-left: 120px;
+}
+
+
+/* 사용자 액션 스타일 */
+.user-actions {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 20px; /* 아이템 간 간격 */
+    position: relative; /* 절대 위치 조정을 위해 relative 설정 */
+    top: 10px; /* <hr> 바로 아래로 이동시킬 수 있는 위치 조정 */
+}
+
+/* 사용자 액션의 ul 스타일 */
+.user-actions ul {
+    display: flex;
+    gap: 10px; /* 항목 간 간격 */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 장바구니 링크 스타일 */
+.cart-link {
+    display: inline-block;
+}
+
+/* 장바구니 이미지 스타일 */
+.cart-img {
+    width: 30px;
+    height: auto;
+    /* vertical-align: middle; /* 상단 여백 제거 */
+}
+
+/* 프로필 링크 스타일 */
+.profile-link {
+    display: inline-block;
+}
+
+/* 프로필 이미지 스타일 */
+.profile-img {
+    width: 30px; /* 장바구니 이미지와 동일한 크기 */
+    height: auto;
+    /* vertical-align: middle; /* 상단 여백 제거 */
+}
+
+/* header-content 내의 user-actions을 오른쪽 구석으로 이동 */
+.header-content > .user-actions {
+    margin-left: auto; /* 오른쪽으로 밀어 붙이기 */
+}
+
+/* =============================== Layout 메뉴 ========================== */
+/* user-nav 부분 */
+.user-nav {
+    display: flex;
+    justify-content: flex-end; /* 사용자 내비게이션을 오른쪽 정렬 */
+    margin-bottom: 10px; /* 로고와 user-nav 사이에 간격 추가 */
+}
+
+/* user-nav 리스트 */
 .user-nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    gap: 10px;
+    gap: 10px; /* 항목들 사이에 간격 추가 */
 }
 
-/* List item styles */
+/* user-nav 항목 */
 .user-nav ul li {
     display: flex;
     align-items: center;
 }
 
-/* Link styles */
+/* user-nav 링크 스타일 */
 .user-nav ul li a {
-    color: white;
+    color: black; /* 링크 색상을 검정으로 변경 */
     text-decoration: none;
     padding: 5px 10px;
     display: flex;
     align-items: center;
+}
+
+/* 로고 부분 */
+.logo {
+    height: 100px; /* 높이를 조정 */
+    width: auto; /* 비율에 맞게 너비 자동 조정 */
+    display: block;
+    margin: 0 auto; /* 로고를 중앙에 배치 */
+    padding: 10px 0; /* 로고와 hr 사이의 간격 조정 */
 }
 
 /* Hover effect */
@@ -78,28 +151,6 @@ header {
     border-radius: 5px;
 }
 
-/* Cart link styling */
-.cart-link {
-    display: inline-block;
-    padding: 5px;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
-}
-
-/* Cart image styling */
-.cart-img {
-    width: 30px;
-    height: auto;
-}
-
-/* 카트 호버 효과 */
-.cart-link:hover {
-    transform: scale(1.1);
-}
-
-.cart-link:active {
-    transform: scale(0.9);
-}
 
 /* nav 부분 */
 #menu {
@@ -197,9 +248,21 @@ h1 {
     text-align: center;
 }
 
+/* create-button을 버튼 스타일과 일치시킴 */
 .create-button {
-    background-color: #28a745;
+    background-color: #28a745; /* 기본 색상 */
     margin-bottom: 20px;
+    /* 기존 button 스타일 적용 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
 }
 
 .create-button:hover {
@@ -438,4 +501,38 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .btn {
     padding: 5px 10px;
     cursor: pointer;
+}
+
+
+/* =============================== MyProfile========================== */
+
+/* 프로필 섹션 스타일 */
+.profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 제목 스타일 */
+.profile h1 {
+    font-size: 24px;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+/* 프로필 정보 스타일 */
+.profile-info {
+    font-size: 16px;
+    color: #333;
+}
+
+.profile-info p {
+    margin-bottom: 10px;
+}
+
+.profile-info strong {
+    color: #495057;
 }

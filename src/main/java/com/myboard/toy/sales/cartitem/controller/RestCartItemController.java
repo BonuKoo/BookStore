@@ -5,7 +5,7 @@ import com.myboard.toy.sales.cartitem.service.CartItemService;
 import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateAmountRequestForm;
 import com.myboard.toy.security.domain.entity.Account;
-import com.myboard.toy.security.utils.AccountUtils;
+import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +26,10 @@ public class RestCartItemController {
 
     private final CartItemService cartItemService;
     private final CartService cartService;
-    private final AccountUtils accountUtils;
+    private final UserService userService;
 
     /*
-
      UPDATE
-
      */
 
     /* 증가 */
@@ -42,7 +40,7 @@ public class RestCartItemController {
     ) {
         Map<String, String> response = new HashMap<>();
         try {
-            Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
             Cart cart = cartService.findCartByAccount(account);
 
             form.setAmount(form.getAmount()); // 수량 증가
@@ -65,7 +63,7 @@ public class RestCartItemController {
     ) {
         Map<String, String> response = new HashMap<>();
         try {
-            Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
             Cart cart = cartService.findCartByAccount(account);
 
             form.setAmount(Math.max(0, form.getAmount())); // 수량 감소

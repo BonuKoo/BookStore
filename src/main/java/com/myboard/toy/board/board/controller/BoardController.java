@@ -10,7 +10,6 @@ import com.myboard.toy.board.reply.service.ReplyService;
 import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
-import com.myboard.toy.security.utils.AccountUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -37,11 +36,9 @@ import java.security.Principal;
 public class BoardController {
 
     private final BoardService boardService;
-    private final ReplyService replyService;
     private final FileService fileService;
     private final FileStore fileStore;
     private final UserService userService;
-    private final AccountUtils accountUtils;
 
     /*
         ----------------Create----------------
@@ -60,9 +57,8 @@ public class BoardController {
                                 Principal principal,
                                 RedirectAttributes redirectAttributes) throws IOException {
 
-        if (principal instanceof UsernamePasswordAuthenticationToken) {
 
-            Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+            Account account = userService.getAccountByPrincipal(principal);
 
             boardDTO.registerAccount(account);
 
@@ -70,8 +66,7 @@ public class BoardController {
             BoardDTO createdBoard = boardService.createBoard(boardDTO);
             redirectAttributes.addAttribute("id", createdBoard.getId());
             return "redirect:/boards/{id}";
-        }
-        throw new IllegalArgumentException("Principal is not of type UsernamePasswordAuthenticationToken");
+
     }
 
 
@@ -85,10 +80,11 @@ public class BoardController {
                                                Principal principal) {
 
         BoardDTO boardDTO = boardService.getDetailBoardByIdWithReplyV2(id);
+
         AccountDto loginUser = null;
 
         if (principal != null) {
-          loginUser = accountUtils.getUserDetailsByPrincipal(principal);
+          loginUser = userService.getUserDetailsByPrincipal(principal);
 
         }
 
@@ -157,16 +153,5 @@ public class BoardController {
     public String deleteBoard(@PathVariable Long id) {
         boardService.removeBoard(id);
         return "redirect:/boards"; // 삭제 후 전체 게시글 목록으로 리디렉션
-    }
-    
-    private Account getAccountByPrinciple(UsernamePasswordAuthenticationToken principal) {
-        UsernamePasswordAuthenticationToken authenticationToken = principal;
-        AccountDto accountDto = (AccountDto) authenticationToken.getPrincipal();
-        String username1 = accountDto.getUsername();
-        String username = username1;
-
-        // username을 토대로 account 값을 db에서 조회한다.
-        Account account = userService.getAccountByUsername(username);
-        return account;
     }
 }

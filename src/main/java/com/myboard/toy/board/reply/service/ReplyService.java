@@ -28,7 +28,6 @@ public class ReplyService {
 
     public ReplyDTO createReply(Long boardId, String content, Account account) {
 
-
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + boardId));
 

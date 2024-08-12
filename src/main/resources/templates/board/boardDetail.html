@@ -6,14 +6,14 @@
         <h1 class="page-title">게시글 상세 정보</h1>
 
         <div class="post-details">
-            <h2>제목: <span th:text="${board.title}"></span></h2>
+            <h2><span th:text="${board.title}"></span></h2>
 
             <div th:if="${board.formattedFiles != null}">
                 <img th:each="imageFile : ${board.formattedFiles}"
                      th:src="@{/boards/images/{filename}(filename=${imageFile.storeFileName})}" width="300" height="300"/>
             </div>
 
-            <p>내용: <span th:text="${board.content}"></span></p>
+            <p><span th:text="${board.content}"></span></p>
             <p>댓글 수: <span th:text="${board.replyDTOList != null ? board.replyDTOList.size() : 0}"></span></p>
         </div>
 

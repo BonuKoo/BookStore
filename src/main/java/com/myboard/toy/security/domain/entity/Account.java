@@ -5,8 +5,10 @@ import com.myboard.toy.board.domain.Board;
 import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.order.domain.Order;
 import com.myboard.toy.board.domain.Reply;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,5 +80,17 @@ public class Account implements Serializable {
         this.age = age;
     }
 
+    public void update(AccountDto dto){
+        if (dto.getNickname() != null){
+            this.nickname = dto.getNickname();
+        }
+        if (dto.getPassword() != null && dto.getPassword().isEmpty()){
+            this.password = dto.getPassword();
+        }
+        if (dto.getAge() != 0 ){
+            this.age = dto.getAge();
+        }
+        this.address.update(dto);
+    }
 }
 

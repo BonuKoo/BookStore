@@ -25,12 +25,12 @@ public class HelloControllerForJavaMail {
     @Autowired
     private JavaMailSender mailSender;
 
-
+    /*
     @GetMapping("")
     public String hello(){
         return "/hello/hello";
     }
-    
+    */
     @PostMapping("/resetPassword")
     public String requestTemporaryPassword(@RequestParam Long id,
                                            @RequestParam String email,
@@ -67,4 +67,3 @@ public class HelloControllerForJavaMail {
     }
 
 }
-
