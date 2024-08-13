@@ -2,8 +2,10 @@ package com.myboard.toy.order.domain;
 
 import com.myboard.toy.order.domain.status.DeliveryStatus;
 import com.myboard.toy.order.domain.status.OrderStatus;
+import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.security.domain.entity.Account;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,30 +31,34 @@ public class Order {
     @JoinColumn(name = "account_id")
     private Account account;
     
-    //다 대 다
+    //일 대 다
     @OneToMany(mappedBy = "order", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    //주문 상태
+    //주문 총 가격
+    private int totalAmount;
+
+    //주문시간
+    private LocalDateTime orderDate;
+
     @OneToOne(cascade = ALL,fetch = LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime orderDate; //주문시간
-
+    //주문 상태
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-
-    // Builder용 생성자
+    //Builder용 생성자
+    @Builder
     public Order(Account account, Delivery delivery, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate) {
         this.account = account;
         this.delivery = delivery;
         this.orderItems = orderItems;
         this.status = status;
         this.orderDate = orderDate;
+        this.totalAmount = getTotalPrice(); // 주문 총액 계산
     }
-
 
     /* 연관관계 */
     public void setAccount(Account account){
@@ -60,35 +66,63 @@ public class Order {
         account.getOrders().add(this);
     }
 
+    //주문 항목 추가
     public void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
+        this.orderItems.add(orderItem);
         orderItem.setOrder(this);
+        this.totalAmount += orderItem.getTotalPrice();
     }
 
+    //배송 정보 설정
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
 
-    /* 주문 요청 */
-    public static Order createOrder(Account account, Delivery delivery, OrderItem... orderItems) {
-        Order order = new Order(account, delivery, Arrays.asList(orderItems), OrderStatus.ORDER, LocalDateTime.now());
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
-        return order;
+    //주문 상태 변경
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
+
 
     /* 주문 취소 요청*/
     public void cancel(){
-        if (delivery.getStatus() == DeliveryStatus.COMP){
-            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        if (this.delivery.getStatus() == DeliveryStatus.COMP){
+            throw new IllegalStateException("이미 배송완료 된 상품은 취소가 불가능합니다.");
         }
         this.setStatus(OrderStatus.CANCEL);
         for (OrderItem orderItem : orderItems){
             orderItem.cancel();
         }
     }
+
+    //총 주문 금액 계산
+    private int calculateTotalAmount(){
+        return this.orderItems.stream()
+                .mapToInt(OrderItem::getTotalPrice)
+                .sum();
+    }
+
+    /* 주문 요청 메서드 - Cart를 사용함 */
+    public static Order createOrderFromCart(Account account, Cart cart, Delivery delivery, List<OrderItem> orderItems) {
+
+        Order order = Order.builder()
+                .account(account)
+                .delivery(delivery)
+                .orderItems(orderItems)
+                .status(OrderStatus.ORDER)
+                .orderDate(LocalDateTime.now())
+                .build();
+        // orderItem 설정
+        for (OrderItem orderItem : orderItems){
+            orderItem.setOrder(order);
+        }
+        // 주문 총액 계산
+        order.totalAmount = order.calculateTotalAmount();
+
+        return order;
+    }
+
 
     //==조회 로직==//
     /** 전체 주문 가격 조회 */
@@ -99,7 +133,7 @@ public class Order {
         }
         return totalPrice;
     }
-
+    /*
     public static class Builder {
         private Account account;
         private Delivery delivery;
@@ -136,5 +170,6 @@ public class Order {
             return new Order(account, delivery, orderItems, status, orderDate);
         }
     }
+    */
 
 }

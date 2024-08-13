@@ -74,6 +74,10 @@ spring:
     org.apache.coyote.http11: trace
   profiles:
     active: local
+  freemaker:
+    cache: false
+  thymeleaf:
+    cache: false
 
 file:
   dir: C:/BWProject/toyProject/boardFile/ #학원
@@ -83,3 +87,7 @@ naver:
   key:
     client_id: ol6ufIkPouDkI1SwOF_x
     client_secret: jiPERDkQiD
+
+toss:
+  api:
+    key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6

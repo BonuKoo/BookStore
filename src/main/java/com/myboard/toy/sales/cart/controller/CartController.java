@@ -80,9 +80,7 @@ public class CartController {
             Model model){
 
         AccountDto accountId = userService.getAccountIdByPrincipal(principal);
-
         List<CartListDto> cartList = cartService.getCartList(accountId);
-
         CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(accountId);
 
         model.addAttribute("cartList",cartList);
@@ -90,9 +88,6 @@ public class CartController {
         model.addAttribute("cartTotalPrice",cartTotalPrice);
         return "cart/list";
     }
-
-
-
 
 }
 

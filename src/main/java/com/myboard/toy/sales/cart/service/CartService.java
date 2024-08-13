@@ -48,14 +48,19 @@ public class CartService {
                 .build();
     }
 
+    //TODO
+    // Cart -> CartDTO
     public Cart getOrCreateCart(AccountDto accountDto){
         Long accountId = accountDto.getId();
         Optional<Account> accountOpt = userRepository.findById(accountId);
         Account account = accountOpt.orElseThrow();
+
         Optional<Cart> cartExist = cartRepository.findByAccount(account);
 
         if (cartExist.isPresent()){
+
             return cartExist.get();
+
         }else {
             Cart newCart = new Cart();
             newCart.createCart(account);

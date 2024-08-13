@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <title>주문 확인</title>
+</head>
+<body>
+<h1>주문이 완료되었습니다!</h1>
+<p>주문 번호: <span th:text="${order.id}"></span></p>
+<p>주문 총액: <span th:text="${order.totalAmount} + ' 원'"></span></p>
+<p>배송 주소: <span th:text="${order.delivery.address}"></span></p>
+<p>배송 옵션: <span th:text="${order.delivery.option}"></span></p>
+
+<a href="/cart/list">장바구니로 돌아가기</a>
+</body>
+</html>
