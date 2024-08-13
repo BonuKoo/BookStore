@@ -1,11 +1,13 @@
 package com.myboard.toy.sales.cart.service;
 
 import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.dto.CartDto;
 import com.myboard.toy.sales.domain.dto.CartListDto;
 import com.myboard.toy.sales.domain.dto.CartTotalPriceDto;
 import com.myboard.toy.sales.cart.repository.CartRepository;
-import com.myboard.toy.sales.cartitem.repository.CartItemRepository;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
+import com.myboard.toy.security.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CartService {
 
+    private final UserRepository userRepository;
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
 
     /* Find */
-    public Cart findCartByAccount(Account account){
+    public Cart findCartByAccountId(AccountDto dto){
+
+        Long accountId = dto.getId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
 
         Optional<Cart> cart = cartRepository.findByAccount(account);
 
@@ -30,21 +36,29 @@ public class CartService {
             return newCart;
         } else
             return cart.get();
-
     }
 
-    public Cart getOrCreateCart(Account account){
+    public CartDto getCartIdByAccountId(AccountDto dto){
+        Long accountId = dto.getId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
+        Long cardId = account.getCart().getId();
+        return CartDto.builder()
+                .id(cardId)
+                .build();
+    }
 
+    public Cart getOrCreateCart(AccountDto accountDto){
+        Long accountId = accountDto.getId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
         Optional<Cart> cartExist = cartRepository.findByAccount(account);
 
         if (cartExist.isPresent()){
             return cartExist.get();
         }else {
-
             Cart newCart = new Cart();
-
             newCart.createCart(account);
-
             return cartRepository.save(newCart);
         }
     }
@@ -53,12 +67,24 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public List<CartListDto> getCartList(Account account){
+
+    public List<CartListDto> getCartList(AccountDto dto){
+
+        Long accountId = dto.getId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
+
         Long cartId = account.getCart().getId();
         return cartRepository.getCartList(cartId);
     };
 
-    public CartTotalPriceDto getCartTotalPrice(Account account){
+    public CartTotalPriceDto getCartTotalPrice(AccountDto dto){
+
+        Long accountId = dto.getId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
+
+
         Long cartId = account.getCart().getId();
 
         List<CartListDto> cartList = cartRepository.getCartList(cartId);

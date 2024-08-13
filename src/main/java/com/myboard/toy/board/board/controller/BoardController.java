@@ -6,9 +6,7 @@ import com.myboard.toy.board.domain.dto.BoardPageDTO;
 import com.myboard.toy.board.board.service.BoardService;
 import com.myboard.toy.infra.file.service.FileService;
 import com.myboard.toy.infra.file.service.FileStore;
-import com.myboard.toy.board.reply.service.ReplyService;
 import com.myboard.toy.security.domain.dto.AccountDto;
-import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,15 +54,14 @@ public class BoardController {
                                 Principal principal,
                                 RedirectAttributes redirectAttributes) throws IOException {
 
+        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
+        //Account의 Id를 반환
+        boardDTO.addAccountId(accountId.getId());
 
-            Account account = userService.getAccountByPrincipal(principal);
-
-            boardDTO.registerAccount(account);
-
-            // 게시글 생성
-            BoardDTO createdBoard = boardService.createBoard(boardDTO);
-            redirectAttributes.addAttribute("id", createdBoard.getId());
-            return "redirect:/boards/{id}";
+        // 게시글 생성
+        BoardDTO createdBoard = boardService.createBoard(boardDTO);
+        redirectAttributes.addAttribute("id", createdBoard.getId());
+        return "redirect:/boards/{id}";
 
     }
 

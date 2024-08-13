@@ -355,37 +355,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('editProfileForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // 기본 폼 제출 막기
-
-        var formData = new FormData(event.target);
-
-        fetch('/update-profile', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest' // AJAX 요청임을 나타냄
-            }
-        })
-        .then(response => response.json()) // 서버에서 JSON 응답을 받을 경우
-        .then(data => {
-            if (data.success) {
-                // 업데이트가 성공하면 프로필 페이지로 이동
-                window.location.href = '/profile';
-            } else {
-                // 업데이트 실패 시 사용자에게 알림
-                document.getElementById('message').textContent = data.message;
-            }
-        })
-        .catch(error => {
-            console.error('업데이트 오류:', error);
-            document.getElementById('message').textContent = '업데이트 중 오류가 발생했습니다.';
-        });
-    });
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('editProfileForm').addEventListener('submit', function(event) {
         event.preventDefault(); // 기본 폼 제출 막기
@@ -395,28 +364,43 @@ document.addEventListener('DOMContentLoaded', function() {
         var message = '';
 
         // 비밀번호 유효성 검사
-        if (password && (password.length < 8 || password.length > 20)) {
+        if (password.length < 8 || password.length > 20) {
             message = '비밀번호는 8자 이상, 20자 이하로 입력해주세요.';
         } else if (password !== confirmPassword) {
-            message = '비밀번호가 일치하지 않습니다.';
+            message = '비밀번호와 확인 비밀번호가 일치하지 않습니다.';
         }
 
-        document.getElementById('message').textContent = message;
+        if (message) {
+            document.getElementById('message').textContent = message;
+            document.getElementById('message').style.color = 'red';
+        } else {
+            document.getElementById('message').textContent = '';
+            // 유효성 검사가 통과되었을 때만 폼 제출
+            submitForm();
+        }
+    });
+});
 
-        // 유효성 검사가 통과되었을 때만 폼 제출
-        if (message === '') {
-            var formData = new FormData(event.target);
+function submitForm() {
+    var formData = new FormData(document.getElementById('editProfileForm'));
 
-            fetch('/update-profile', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '/profile';
-                } else {
-                    document.getElementBy
+    fetch('/update-profile', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/profile';
+        } else {
+            document.getElementById('message').textContent = data.message;
+        }
+    })
+    .catch(error => {
+        console.error('업데이트 오류:', error);
+        document.getElementById('message').textContent = '업데이트 중 오류가 발생했습니다.';
+    });
+}

@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Embeddable
 @Builder
 public class Address {

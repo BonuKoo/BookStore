@@ -2,7 +2,9 @@ package com.myboard.toy.sales.cartitem.controller;
 
 import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.cartitem.service.CartItemService;
+import com.myboard.toy.sales.domain.dto.CartDto;
 import com.myboard.toy.sales.domain.dto.CartItemRemoveRequestForm;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +33,15 @@ public class CartItemController {
             RedirectAttributes redirectAttributes){
 
         try {
-            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
-            Long cartId = account.getCart().getId();
 
+            AccountDto accountId = userService.getAccountIdByPrincipal(principal);
+
+            CartDto cartDto = cartService.getCartIdByAccountId(accountId);
+            Long cartId = cartDto.getId();
             CartItemRemoveRequestForm form = CartItemRemoveRequestForm.builder()
                     .cartId(cartId)
                     .itemIsbn(itemIsbn)
                     .build();
-
             cartItemService.removeCartItem(form);
 
             redirectAttributes.addFlashAttribute("message", "Item removed successfully.");

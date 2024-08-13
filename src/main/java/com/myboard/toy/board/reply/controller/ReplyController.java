@@ -1,12 +1,11 @@
 package com.myboard.toy.board.reply.controller;
 
-import com.myboard.toy.board.board.service.BoardService;
 import com.myboard.toy.board.reply.service.ReplyService;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ import java.security.Principal;
 public class ReplyController {
 
     private final ReplyService replyService;
-    private final BoardService boardService;
     private final UserService userService;
 
     /*
@@ -32,9 +30,9 @@ public class ReplyController {
                               Principal principal
                               ) {
 
-        Account account = userService.getAccountByPrincipal(principal);
+        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
 
-        replyService.createReply(id, content, account);
+        replyService.createReply(id, content, accountId);
         return "redirect:/boards/" + id; // 댓글이 생성된 게시글 상세 페이지로 리다이렉트
     }
 

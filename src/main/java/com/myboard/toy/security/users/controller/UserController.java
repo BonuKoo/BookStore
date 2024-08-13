@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -56,7 +57,8 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(Model model,
                              Principal principal){
-        AccountDto account = userService.getUserDetailsByPrincipal(principal);
+
+        AccountDto account = userService.getProfile(principal);
 
         model.addAttribute("account", account);
         return "user/profile";
@@ -64,8 +66,8 @@ public class UserController {
 
     @GetMapping("/edit-profile")
     public String editProfilePage(Model model, Principal principal) {
-        AccountDto account = userService.getUserDetailsByPrincipal(principal);
 
+        AccountDto account = userService.getUserDetailsByPrincipal(principal);
         model.addAttribute("account", account);
         return "user/edit-profile";
     }
@@ -83,6 +85,4 @@ public class UserController {
         }
         return response;
     }
-
 }
-

@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -74,32 +73,61 @@ public class UserService {
 
         Account account = getAccountByPrincipal(principal);
 
-        //비밀번호 암호화
+        //비밀번호 암호화 처리
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()){
             String encodedPassword = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(encodedPassword);
         }
+
+        // Address 필드가 null인지 확인하고 초기화
+        if(account.getAddress()==null){
+            account.setAddress(new Address());
+        }
+
         account.update(dto);
+
         userRepository.save(account);
     }
 
-    // Principal을 통해 AccountDto를 얻는 공통 메서드
-    private AccountDto getAccountDtoFromPrincipal(Principal principal) {
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-        return (AccountDto) authenticationToken.getPrincipal();
+    public AccountDto getProfile(Principal principal){
+
+        Account account = getAccountByPrincipal(principal);
+        if (account.getAddress()==null){
+            account.setAddress(new Address());
+        }
+        return AccountDto.builder()
+                .username(account.getUsername())
+                .nickname(account.getNickname())
+                .age(account.getAge())
+                .postcode(account.getAddress().getPostcode())
+                .roadAddress(account.getAddress().getRoadAddress())
+                .jibunAddress(account.getAddress().getJibunAddress())
+                .detailAddress(account.getAddress().getDetailAddress())
+                .extraAddress(account.getAddress().getExtraAddress())
+                .build();
     }
 
-    // Principal을 통해 AccountDto를 얻고 반환
+    public AccountDto getAccountIdByPrincipal(Principal principal){
+        Account account = getAccountByPrincipal(principal);
+        return AccountDto.builder()
+                .id(account.getId())
+                .build();
+    }
+    // Principal을 통해 AccountDto를 얻고, pricinpal을 단순 반환
     public AccountDto getUserDetailsByPrincipal(Principal principal) {
         return getAccountDtoFromPrincipal(principal);
     }
 
-    // Principal을 통해 Account을 얻고 반환
-    public Account getAccountByPrincipal(Principal principal) {
+    // Principal을 통해 Account을 얻는다.
+    private Account getAccountByPrincipal(Principal principal) {
         AccountDto accountDto = getAccountDtoFromPrincipal(principal);
         Long id = accountDto.getId();
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
     }
-
+    // Principal을 통해 AccountDto를 얻는 공통 메서드
+    private AccountDto getAccountDtoFromPrincipal(Principal principal) {
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        return (AccountDto) authenticationToken.getPrincipal();
+    }
 }

@@ -5,12 +5,14 @@ import com.myboard.toy.board.domain.Board;
 import com.myboard.toy.board.domain.Reply;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
 import com.myboard.toy.board.reply.repository.ReplyRepository;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,11 @@ public class ReplyService {
         Create
      */
 
-    public ReplyDTO createReply(Long boardId, String content, Account account) {
+    public ReplyDTO createReply(Long boardId, String content, AccountDto accountId) {
+        Long acId = accountId.getId();
+
+        Optional<Account> accountOpt = userRepository.findById(acId);
+        Account account = accountOpt.orElseThrow();
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + boardId));

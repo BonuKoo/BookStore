@@ -4,12 +4,11 @@ import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.cartitem.service.CartItemService;
 import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateAmountRequestForm;
-import com.myboard.toy.security.domain.entity.Account;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +39,10 @@ public class RestCartItemController {
     ) {
         Map<String, String> response = new HashMap<>();
         try {
-            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
-            Cart cart = cartService.findCartByAccount(account);
+
+            AccountDto accountId = userService.getAccountIdByPrincipal(principal);
+
+            Cart cart = cartService.findCartByAccountId(accountId);
 
             form.setAmount(form.getAmount()); // 수량 증가
 
@@ -50,7 +51,6 @@ public class RestCartItemController {
             response.put("message", "Item quantity increased successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
             response.put("message", "Failed to update item quantity.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -63,8 +63,10 @@ public class RestCartItemController {
     ) {
         Map<String, String> response = new HashMap<>();
         try {
-            Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
-            Cart cart = cartService.findCartByAccount(account);
+
+            AccountDto accountId = userService.getAccountIdByPrincipal(principal);
+
+            Cart cart = cartService.findCartByAccountId(accountId);
 
             form.setAmount(Math.max(0, form.getAmount())); // 수량 감소
 
@@ -73,42 +75,8 @@ public class RestCartItemController {
             response.put("message", "Item quantity decreased successfully.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
             response.put("message", "Failed to update item quantity.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-    /*
-
-        REMOVE
-
-    */
-    /*
-    @PostMapping("/removeItem")
-    public ResponseEntity<Map<String, String>> removeItemFromCart(
-            Principal principal,
-            @RequestBody CartItemRemoveRequestForm form
-    ) {
-        Map<String, String> response = new HashMap<>();
-        try {
-            Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
-
-
-            form.setCartId(account.getCart().getId());
-
-            cartItemService.removeCartItem(form);
-
-            response.put("message", "Item removed successfully.");
-            return ResponseEntity.ok(response);
-        } catch (NoSuchElementException e) {
-            response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.put("message", "Failed to remove item.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-    */
-
 }

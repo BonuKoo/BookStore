@@ -18,6 +18,9 @@ public class BoardDTO {
     private String content;
     private Long accountId;
     private Account account;
+    //Account -> Account Id로 바꿀 준비
+    //성능 시험
+    //TODO
     private List<Reply> replies;
 
 
@@ -56,8 +59,11 @@ public class BoardDTO {
         this.replies = replies;
     }
 
-    public void registerAccount(Account account) {
+    public void addAccount(Account account) {
         this.account = account;
     }
 
+    public void addAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 }

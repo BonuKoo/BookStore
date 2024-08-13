@@ -80,15 +80,16 @@
 
             <h2>주소</h2>
             <p><strong>Postcode:</strong>
-                <span th:text="${account.postcode}"></span></p>
+                <span th:text="${account.postcode != null ? account.postcode : ''}"></span></p>
             <p><strong>Road Address:</strong>
-                <span th:text="${account.roadAddress}"></span></p>
+                <span th:text="${account.roadAddress != null ? account.roadAddress : ''}"></span></p>
             <p><strong>Jibun Address:</strong>
-                <span th:text="${account.jibunAddress}"></span></p>
+                <span th:text="${account.jibunAddress != null ? account.jibunAddress : ''}"></span></p>
             <p><strong>Detail Address:</strong>
-                <span th:text="${account.detailAddress}"></span></p>
+                <span th:text="${account.detailAddress != null ? account.detailAddress : ''}"></span></p>
             <p><strong>Extra Address:</strong>
-                <span th:text="${account.extraAddress}"></span></p>
+                <span th:text="${account.extraAddress != null ? account.extraAddress : ''}"></span></p>
+
         </div>
 
         <!-- Edit 버튼 -->

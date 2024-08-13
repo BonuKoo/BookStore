@@ -6,8 +6,12 @@ import com.myboard.toy.board.domain.dto.BoardSearchCondition;
 import com.myboard.toy.board.domain.dto.BoardDTO;
 import com.myboard.toy.board.domain.dto.BoardPageDTO;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
+import com.myboard.toy.common.exception.UserNotFoundException;
 import com.myboard.toy.infra.file.domain.board.UploadFileOfBoard;
 import com.myboard.toy.infra.file.service.FileStore;
+import com.myboard.toy.security.domain.entity.Account;
+import com.myboard.toy.security.users.repository.UserRepository;
+import com.myboard.toy.security.users.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,14 +19,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class BoardService {
-
+    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-
     private final FileStore fileStore;
 
     //리스트
@@ -44,9 +49,8 @@ public class BoardService {
     }
 
     //단 건 조회 + 파일도 불러오기 실험
-    //TODO 수정 필요 - QueryDsl Class도 참고해야함
-    public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
 
+    public BoardDTO getDetailBoardByIdWithReplyV2(Long id){
 
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " +id));
@@ -95,11 +99,13 @@ public class BoardService {
 
     //파일 업로드 기능 추가
     public BoardDTO createBoard(BoardDTO boardDTO) throws IOException {
-
+        Long accountId = boardDTO.getAccountId();
+        Optional<Account> accountOpt = userRepository.findById(accountId);
+        Account account = accountOpt.orElseThrow();
         Board board = Board.builder()
                 .title(boardDTO.getTitle())
                 .content(boardDTO.getContent())
-                .account(boardDTO.getAccount())
+                .account(account)
                 .build();
 
         // 파일 저장 로직

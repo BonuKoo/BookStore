@@ -84,7 +84,7 @@ public class Account implements Serializable {
         if (dto.getNickname() != null){
             this.nickname = dto.getNickname();
         }
-        if (dto.getPassword() != null && dto.getPassword().isEmpty()){
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()){
             this.password = dto.getPassword();
         }
         if (dto.getAge() != 0 ){

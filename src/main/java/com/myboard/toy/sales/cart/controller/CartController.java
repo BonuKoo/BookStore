@@ -9,6 +9,7 @@ import com.myboard.toy.sales.domain.dto.CartTotalPriceDto;
 import com.myboard.toy.sales.domain.CartItem;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateRequestForm;
 import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,15 @@ public class CartController {
             Principal principal,
             RedirectAttributes redirectAttributes){
 
+        // 로그인 사용자 Id
+        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
 
-        // 로그인 사용자 정보
-        Account account = userService.getAccountByPrincipal(principal);
+        Cart cart = cartService.getOrCreateCart(accountId);
 
         // 상품 정보 찾기
         Item item = itemService.findByIsbn(isbn);
 
         // 카트 가져오거나 생성
-        Cart cart = cartService.getOrCreateCart(account);
-
         CartItemUpdateRequestForm form = CartItemUpdateRequestForm.builder()
                 .cart(cart)
                 .item(item)
@@ -79,11 +79,11 @@ public class CartController {
             Principal principal,
             Model model){
 
-        Account account = userService.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
+        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
 
-        List<CartListDto> cartList = cartService.getCartList(account);
+        List<CartListDto> cartList = cartService.getCartList(accountId);
 
-        CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(account);
+        CartTotalPriceDto cartTotalPrice = cartService.getCartTotalPrice(accountId);
 
         model.addAttribute("cartList",cartList);
 
