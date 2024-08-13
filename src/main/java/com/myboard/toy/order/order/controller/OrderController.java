@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/order")
+//@RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -22,15 +22,10 @@ public class OrderController {
     private final UserService userService;
     private final ItemService itemService;
 
-    // TODO
-    /*
-    @GetMapping("/orderForm")
-    public String orderForm(
-            Principal principal, Model model) {
-
-        Account account = accountUtils.getAccountByPrincipal((UsernamePasswordAuthenticationToken) principal);
-
-        return "/order/orderForm";
+  //  @GetMapping(name = "/orderForm")
+    public String showOrderForm(Model model,
+                                Principal principal){
+        //장바구니에 담겨있는 값들을 바탕으로 주문을 처리해야 한다.
+        return "orderForm";
     }
-    */
 }

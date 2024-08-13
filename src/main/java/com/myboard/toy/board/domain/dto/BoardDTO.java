@@ -20,7 +20,7 @@ public class BoardDTO {
     private Account account;
     //Account -> Account Id로 바꿀 준비
     //성능 시험
-    //TODO
+
     private List<Reply> replies;
 
 

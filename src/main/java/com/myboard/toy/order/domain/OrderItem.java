@@ -46,10 +46,12 @@ public class OrderItem {
         item.removeStock(count);
         return orderItem;
     }
+
     /* 주문 취소 */
     public void cancel(){
         getItem().addStock(count);
     }
+
     /* 조회 */
     /* 주문 전체 가격 조회 */
     public int getTotalPrice(){

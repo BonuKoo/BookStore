@@ -5,6 +5,7 @@
     <table>
         <thead>
         <tr>
+            <th>선택</th>
             <th>제목</th>
             <th>개당 가격</th>
             <th>개수</th>
@@ -14,6 +15,10 @@
 
         <tbody>
         <tr th:each="item : ${cartList}">
+            <!--체크박스-->
+            <td>
+                <input type="checkbox" name="selectedItems" th:value="${item.isbn}" />
+            </td>
             <!--이름-->
             <td th:text="${item.name}"></td>
             <!--개당 가격-->
@@ -43,6 +48,12 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- 주문 폼으로 이동 -->
+    <form th:action="@{/order/orderForm}" method="get">
+        <button type="submit">주문하기</button>
+    </form>
+
 </div>
 </html>
 
