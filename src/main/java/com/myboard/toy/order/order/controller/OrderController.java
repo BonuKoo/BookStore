@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -69,7 +70,7 @@ public class OrderController {
     public String submitOrder(
             @RequestParam("address") String addressString,
             Principal principal,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
 
         AccountDto accountId = userService.getAccountIdByPrincipal(principal);
         Cart cart = cartService.getOrCreateCart(accountId);
@@ -83,13 +84,13 @@ public class OrderController {
 
         Order order = orderService.createOrderFromCart(accountId, cart, delivery);
 
+        redirectAttributes.addAttribute("orderId",order.getId());
 
-        model.addAttribute("order", order);
-
-
-        return "toss/checkout";
+        //주문 ID를 URL 파라미터로 전달
+        return "redirect:/v2/toss";
     }
 
+    /*
     private Address parseAddress(String addressString){
 
         String[] parts = addressString.split(", ");
@@ -103,5 +104,5 @@ public class OrderController {
                 .detailAddress(parts[3])
                 .extraAddress(parts[4])
                 .build();
-    }
+    }*/
 }

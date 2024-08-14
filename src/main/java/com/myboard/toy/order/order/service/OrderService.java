@@ -4,6 +4,7 @@ import com.myboard.toy.common.exception.ItemNotFoundException;
 import com.myboard.toy.common.exception.OrderNotFoundException;
 import com.myboard.toy.common.exception.UserNotFoundException;
 import com.myboard.toy.order.domain.Delivery;
+import com.myboard.toy.order.domain.dto.OrderDto;
 import com.myboard.toy.order.domain.status.DeliveryStatus;
 import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.sales.domain.Item;
@@ -71,5 +72,17 @@ public class OrderService {
         cart.getCartItems().clear();
         return order;
     }
+    //일단 결제되는 것까지 수행
+    @Transactional
+    public OrderDto findOrderById(Long orderId){
+        Optional<Order> orderOpt = orderRepository.findById(orderId);
+        Order order = orderOpt.get();
 
+        OrderDto orderDto = OrderDto.builder()
+                .orderId(order.getId())
+                .totalAmount(order.getTotalAmount())
+                .build();
+
+        return orderDto;
+    }
 }

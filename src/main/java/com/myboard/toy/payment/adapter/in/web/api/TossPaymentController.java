@@ -23,7 +23,9 @@ public class TossPaymentController {
 
     @PostMapping("/confirm")
     public ResponseEntity<ApiResponse<JSONObject>> confirm(@RequestBody TossPaymentConfirmRequest request) {
+
         // TossPaymentExecutor를 통해 동기적으로 API 호출 및 결과 반환
+
         JSONObject response = tossPaymentExecutor.execute(
                 request.getPaymentKey(),
                 request.getOrderId(),

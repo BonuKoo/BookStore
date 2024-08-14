@@ -9,7 +9,6 @@ public class TossPaymentExecutor {
 
     private final TossPaymentsClient tossPaymentsClient;
 
-
     public TossPaymentExecutor(TossPaymentsClient tossPaymentsClient) {
         this.tossPaymentsClient = tossPaymentsClient;
     }
