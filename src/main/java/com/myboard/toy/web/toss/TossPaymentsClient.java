@@ -1,15 +1,18 @@
 package com.myboard.toy.web.toss;
 
+import com.myboard.toy.payment.adapter.out.web.config.TossWebClientConfiguration;
 import org.json.simple.JSONObject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "tossPaymentsClient", url = "https://api.tosspayments.com")
+@FeignClient(url = "${toss.api.url}",
+        name = "tossPaymentsClient",
+        configuration = TossWebClientConfiguration.class)
 public interface TossPaymentsClient {
 
-    @PostMapping("/v1/payments/confirm")
+    @PostMapping("/v2/payments/confirm")
     JSONObject confirmPayment(
             @RequestHeader("Authorization") String authorization,
             @RequestHeader("Content-Type") String contentType,

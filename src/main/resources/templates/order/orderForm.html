@@ -1,59 +1,50 @@
 <html layout:decorate="~{layout}">
-<!-- layout:fragment 시작~ -->
-<div layout:fragment="content" id="contents">
+    <div layout:fragment="content" id="contents">
 
-<div class="container">
+        <h1>주문하기</h1>
+        <form th:action="@{/order/submit}" method="post">
 
-    <h1>주문하기</h1>
+            <!-- 배송 정보 입력 -->
+            <div class="address-container">
+                <label for="address" class="address-label">배송 주소:</label>
+                <input type="text" id="address" name="address" th:value="${address}" required readonly class="address-input">
+            </div>
 
-    <form th:action="@{/order/submit}" method="post">
-        <!-- 배송 정보 입력 -->
-        <fieldset>
-            <legend>배송 정보</legend>
-            <label for="address">배송 주소:</label>
-            <input type="text" id="address" name="address" th:value="${orderForm.address}" required />
-            <br />
+            <!-- 주문 내역 테이블 -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>ISBN</th>
+                    <th>단가</th>
+                    <th>수량</th>
+                    <th>합계</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 선택된 장바구니 아이템 반복 출력 -->
+                <tr th:each="item : ${cartList}">
+                    <!--상품명-->
+                    <td th:text="${item.item.title}"></td>
+<!--                    <td th:text="${item.item.isbn}"></td>-->
+                    <!--가격-->
+                    <td th:text="${item.item.price} + '원'"></td>
+                    <!--수량-->
+                    <td th:text="${item.count}"></td>
+                    <!--해당하는 상품의 총 가격-->
+                    <td th:text="${item.item.price * item.count} + '원'"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4">총 가격</td>
+                    <td th:text="${cartTotalPrice} + '원'"></td>
+                </tr>
+                </tfoot>
+            </table>
 
-            <label for="deliveryOption">배송 옵션:</label>
-            <select id="deliveryOption" name="deliveryOption" required>
-                <option value="STANDARD" th:selected="${orderForm.deliveryOption == 'STANDARD'}">표준 배송</option>
-                <option value="EXPRESS" th:selected="${orderForm.deliveryOption == 'EXPRESS'}">빠른 배송</option>
-            </select>
-            <br />
-        </fieldset>
-
-        <!-- 주문 내역 테이블 -->
-        <table class="table">
-            <thead>
-            <tr>
-                <th>제목</th>
-                <th>ISBN</th>
-                <th>단가</th>
-                <th>수량</th>
-                <th>합계</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- 장바구니 아이템 반복 출력 -->
-            <tr th:each="item : ${orderItems}">
-                <td th:text="${item.item.title}"></td>
-                <td th:text="${item.item.isbn}"></td>
-                <td th:text="${item.item.price} + ' 원'"></td>
-                <td th:text="${item.quantity}"></td>
-                <td th:text="${item.item.price * item.quantity} + ' 원'"></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="4">총 가격</td>
-                <td th:text="${totalPrice} + ' 원'"></td>
-            </tr>
-            </tfoot>
-        </table>
-
-        <!-- 주문 제출 버튼 -->
-        <button type="submit">주문하기</button>
-    </form>
+            <!-- 결제 버튼 -->
+            <button type="submit">결제하기</button>
+        </form>
     </div>
-</div>
 </html>

@@ -1,10 +1,13 @@
 package com.myboard.toy.order.order.controller;
 
+import com.myboard.toy.order.domain.Address;
 import com.myboard.toy.order.domain.Delivery;
 import com.myboard.toy.order.domain.Order;
+import com.myboard.toy.order.domain.OrderItem;
 import com.myboard.toy.order.domain.status.DeliveryStatus;
 import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.CartItem;
 import com.myboard.toy.sales.item.service.ItemService;
 import com.myboard.toy.order.order.service.OrderService;
 import com.myboard.toy.security.domain.dto.AccountDto;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -32,42 +36,72 @@ public class OrderController {
     private final ItemService itemService;
     private final CartService cartService;
 
-    @GetMapping(name = "/orderForm")
-    public String showOrderForm(Model model,
-                                Principal principal){
-        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
+    @GetMapping("/orderForm")
+    public String showOrderForm(
+            @RequestParam("selectedItems") List<String> selectedItems,
+            Model model,
+            Principal principal){
 
+        AccountDto accountId = userService.getAccountIdByPrincipal(principal);
         Cart cart = cartService.getOrCreateCart(accountId);
 
-        model.addAttribute("cartList", cart.getCartItems());
+        List<CartItem> selectedCartItems = cart.getCartItems().stream()
+                .filter(item -> selectedItems.contains(item.getItem().getIsbn()))
+                .toList();
+
+        String address = userService.getAddress(accountId);
+
+        // 선택된 아이템들의 총 가격 계산
+        int totalPrice = selectedCartItems.stream()
+                .mapToInt(item -> item.getItem().getPrice() * item.getCount())
+                .sum();
+
+
+        model.addAttribute("cartList", selectedCartItems);
         //총 가격 계산
-        model.addAttribute("cartTotalPrice",cart.getTotPrice());
+        model.addAttribute("cartTotalPrice", totalPrice);
+        model.addAttribute("address", address);
 
-        return "toss/checkout";
-
+        return "order/orderForm";
     }
 
-    @PostMapping("/order/submit")
+    @PostMapping("/submit")
     public String submitOrder(
-//            @RequestParam("address") String address,
-//            @RequestParam("status") String status,
+            @RequestParam("address") String addressString,
             Principal principal,
-            Model model){
+            Model model) {
 
         AccountDto accountId = userService.getAccountIdByPrincipal(principal);
-
         Cart cart = cartService.getOrCreateCart(accountId);
 
-        // 추후 webPage에서 address도 받을 수 있도록 변경
+        //Address address = parseAddress(addressString);
 
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.READY)
+                .address(addressString) // 사용자가 입력한 주소를 설정
                 .build();
-        //주문 생성 및 저장
+
         Order order = orderService.createOrderFromCart(accountId, cart, delivery);
 
-        model.addAttribute("order",order);
-        return "order/confirmation";
+
+        model.addAttribute("order", order);
+
+
+        return "toss/checkout";
     }
 
+    private Address parseAddress(String addressString){
+
+        String[] parts = addressString.split(", ");
+        if (parts.length != 5) {
+            throw new IllegalArgumentException("주소 형식이 올바르지 않습니다.");
+        }
+        return Address.builder()
+                .postcode(parts[0])
+                .roadAddress(parts[1])
+                .jibunAddress(parts[2])
+                .detailAddress(parts[3])
+                .extraAddress(parts[4])
+                .build();
+    }
 }

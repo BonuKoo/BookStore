@@ -18,16 +18,24 @@ public class Delivery {
     @OneToOne(mappedBy = "delivery",fetch = LAZY)
     private Order order;
 
-    @Embedded
-    private Address address;
+    //@Embedded
+    //private Address address;
+
+    private String address;
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
     //private String option; // 예: STANDARD, EXPRESS 등
-
+    /*
     @Builder
     public Delivery(Address address, DeliveryStatus status) {
+        this.address = address;
+        this.status = status;
+    }*/
+
+    @Builder
+    public Delivery(String address, DeliveryStatus status) {
         this.address = address;
         this.status = status;
     }

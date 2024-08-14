@@ -87,7 +87,10 @@ naver:
   key:
     client_id: ol6ufIkPouDkI1SwOF_x
     client_secret: jiPERDkQiD
+    url: https://openapi.naver.com/v1/search
 
 toss:
   api:
-    key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    clientKey: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    secretKey : test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    url: https://api.tosspayments.com

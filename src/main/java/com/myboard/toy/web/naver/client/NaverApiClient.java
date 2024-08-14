@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(url = "https://openapi.naver.com/v1/search",
+@FeignClient(url = "${naver.key.url}",
         name = "bookClient",
         configuration = NaverFeignConfiguration.class)
 public interface NaverApiClient {

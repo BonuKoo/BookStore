@@ -5,9 +5,7 @@ import com.myboard.toy.order.domain.status.OrderStatus;
 import com.myboard.toy.sales.domain.Cart;
 import com.myboard.toy.security.domain.entity.Account;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +15,8 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
 
-@Data
+
+@Getter
 @NoArgsConstructor
 @Table(name = "orders")
 @Entity
@@ -30,7 +29,11 @@ public class Order {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
-    
+
+    //주문 이름
+    @Column(name = "order_name")
+    private String orderName;
+
     //일 대 다
     @OneToMany(mappedBy = "order", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();

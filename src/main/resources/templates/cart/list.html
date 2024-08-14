@@ -1,60 +1,56 @@
 <html layout:decorate="~{layout}">
-<!-- layout:fragment 시작~ -->
-<div layout:fragment="content" id="contents">
+    <div layout:fragment="content" id="contents">
 
-    <h1>Cart List</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>선택</th>
-            <th>제목</th>
-            <th>개당 가격</th>
-            <th>개수</th>
-            <th>값</th>
-        </tr>
-        </thead>
+        <h1>Cart List</h1>
+        <form th:action="@{/order/orderForm}" method="get">
+            <table>
+                <thead>
+                <tr>
+                    <th>선택</th>
+                    <th>제목</th>
+                    <th>개당 가격</th>
+                    <th>개수</th>
+                    <th>값</th>
+                </tr>
+                </thead>
 
-        <tbody>
-        <tr th:each="item : ${cartList}">
-            <!--체크박스-->
-            <td>
-                <input type="checkbox" name="selectedItems" th:value="${item.isbn}" />
-            </td>
-            <!--이름-->
-            <td th:text="${item.name}"></td>
-            <!--개당 가격-->
-            <td th:text="${item.price} + ' 원'"></td>
-            <!--개수-->
-            <td>
-                <input type="button" th:attr="onclick='count(\'minus\', \'' + ${item.isbn} + '\')'" value="-" />
-                <span th:id="${item.isbn}" th:text="${item.amount} + ' 개'"></span>
-                <input type="button" th:attr="onclick='count(\'plus\', \'' + ${item.isbn} + '\')'" value="+" />
-            </td>
-            <!--가격 * 개수-->
-            <td th:text="${item.totPrice} + ' 원'"></td>
+                <tbody>
+                <tr th:each="item : ${cartList}">
+                    <!-- 체크박스 -->
+                    <td>
+                        <input type="checkbox" name="selectedItems" th:value="${item.isbn}" />
+                    </td>
+                    <!-- 이름 -->
+                    <td th:text="${item.name}"></td>
+                    <!-- 개당 가격 -->
+                    <td th:text="${item.price} + ' 원'"></td>
+                    <!-- 개수 -->
+                    <td>
+                        <input type="button" th:attr="onclick='count(\'minus\', \'' + ${item.isbn} + '\')'" value="-" />
+                        <span th:id="${item.isbn}" th:text="${item.amount} + ' 개'"></span>
+                        <input type="button" th:attr="onclick='count(\'plus\', \'' + ${item.isbn} + '\')'" value="+" />
+                    </td>
+                    <!-- 가격 * 개수 -->
+                    <td th:text="${item.totPrice} + ' 원'"></td>
+                    <!-- 제거 버튼 -->
+                    <td>
+                        <form th:action="@{/removeItem}" method="post">
+                            <input type="hidden" name="itemIsbn" th:value="${item.isbn}" />
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                <!-- 장바구니 총 합 -->
+                <tr>
+                    <td colspan="3">총 가격</td>
+                    <td th:text="${cartTotalPrice.cartTotPrice} + ' 원'"></td>
+                </tr>
+                </tbody>
+            </table>
 
-                <!-- 제거 버튼 -->
-            <td>
-                <form th:action="@{/removeItem}" method="post">
-                    <input type="hidden" name="itemIsbn" th:value="${item.isbn}" />
-                    <button type="submit">Remove</button>
-                </form>
-            </td>
+            <!-- 주문 폼으로 이동 -->
+            <button type="submit">주문하기</button>
+        </form>
 
-        </tr>
-        <!-- 장바구니 총 합-->
-        <tr>
-            <td colspan="3">총 가격</td>
-            <td th:text="${cartTotalPrice.cartTotPrice} + ' 원'"></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- 주문 폼으로 이동 -->
-    <form th:action="@{/order/orderForm}" method="get">
-        <button type="submit">주문하기</button>
-    </form>
-
-</div>
+    </div>
 </html>
-

@@ -57,9 +57,10 @@ public class OrderService {
                 })
                 .toList();
 
-        //계정의 주소를 우선 받도록 설정 TODO 추후 웹에서 받도록 수정
-        delivery.setAddress(account.getAddress());
-
+        /* TODO : 주문 이름 빌더 생성
+        //orderName 생성
+        String orderName ="주문";
+        */
         //Order 생성
         Order order = Order.createOrderFromCart(account, cart, delivery, orderItems);
 

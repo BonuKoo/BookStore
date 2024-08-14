@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-@Slf4j
-@RequestMapping("/toss")
-@Controller
+//@Slf4j
+//@RequestMapping("/toss")
+//@Controller
 @RequiredArgsConstructor
 public class WidgetController {
 
@@ -27,17 +27,22 @@ public class WidgetController {
 
 
     @RequestMapping(value = "/confirm", method = RequestMethod.POST)
+
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
 
         JSONParser parser = new JSONParser();
+
         String orderId;
         String amount;
         String paymentKey;
+
         try {
+
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
-            paymentKey = (String) requestData.get("paymentKey");
+
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+            paymentKey = (String) requestData.get("paymentKey");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -59,14 +64,14 @@ public class WidgetController {
         return ResponseEntity.ok(response);
     }
 
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
-        return "toss/success";
-    }
-
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(HttpServletRequest request, Model model) throws Exception {
         return "toss/checkout";
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
+        return "toss/success";
     }
 
     @RequestMapping(value = "/fail", method = RequestMethod.GET)

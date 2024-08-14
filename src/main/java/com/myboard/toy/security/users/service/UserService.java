@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -51,9 +52,7 @@ public class UserService {
 
     //String -> 조회는 username이 아니라 id로..
     public Account getAccountById(Long id){
-
         Account account = userRepository.findById(id).orElseThrow();
-
         return account;
     }
 
@@ -106,6 +105,42 @@ public class UserService {
                 .detailAddress(account.getAddress().getDetailAddress())
                 .extraAddress(account.getAddress().getExtraAddress())
                 .build();
+    }
+
+    public String getAddress(AccountDto dto){
+        Long id = dto.getId();
+        Optional<Account> accountOpt = userRepository.findById(id);
+
+        if (accountOpt.isPresent()){
+
+            Account account = accountOpt.get();
+            Address address = account.getAddress();
+
+            //StringBuilder를 사용해서 주소 문자열 생성
+            StringBuilder addressBuilder = new StringBuilder();
+
+            if (address.getPostcode() != null) {
+                addressBuilder.append(address.getPostcode()).append(" ");
+            }
+            if (address.getRoadAddress() != null) {
+                addressBuilder.append(address.getRoadAddress()).append(" ");
+            }
+            if (address.getJibunAddress() != null) {
+                addressBuilder.append(address.getJibunAddress()).append(" ");
+            }
+            if (address.getDetailAddress() != null) {
+                addressBuilder.append(address.getDetailAddress()).append(" ");
+            }
+            if (address.getExtraAddress() != null) {
+                addressBuilder.append(address.getExtraAddress());
+            }
+
+            //String으로 반환
+            return addressBuilder.toString().trim();
+        } else {
+            throw new RuntimeException("Account not found with id: " + id);
+        }
+
     }
 
     public AccountDto getAccountIdByPrincipal(Principal principal){

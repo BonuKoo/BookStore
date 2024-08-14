@@ -36,7 +36,7 @@ public class NaverFeignConfiguration {
     }
 
 
-    @Bean
+    @Bean("naverRequestInterceptor")
     public RequestInterceptor requestInterceptor() {
         return template -> {
             template.header("X-Naver-Client-Id", clientId);
