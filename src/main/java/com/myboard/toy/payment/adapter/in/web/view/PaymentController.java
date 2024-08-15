@@ -12,12 +12,12 @@ public class PaymentController {
 
     @GetMapping("/success")
     public String successPage(){
-        return "success";
+        return "toss/success";
     }
 
     @GetMapping("/fail")
     public String failPage(){
-        return "fail";
+        return "toss/fail";
     }
 
 }

@@ -48,8 +48,10 @@
                 </tbody>
             </table>
 
-            <!-- 주문 폼으로 이동 -->
-            <button type="submit">주문하기</button>
+            <!-- 주문하기 버튼 (cartList가 비어있지 않을 때만 표시) -->
+            <div th:if="${#lists.size(cartList) > 0}">
+                <button type="submit">주문하기</button>
+            </div>
         </form>
 
     </div>
