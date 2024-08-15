@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="https://static.toss.im/icons/png/4x/icon-toss-logo.png" />
-  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="/css/toss/style.css" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -21,10 +21,6 @@
     <div id="payment-method"></div>
     <!-- 이용약관 UI -->
     <div id="agreement"></div>
-
-<!--    &lt;!&ndash; 숨겨진 요소로 주문 ID와 총액을 저장 &ndash;&gt;-->
-<!--    <p>주문 ID: <span id="order-id" th:text="${orderId}" hidden="hidden"></span></p>-->
-<!--&lt;!&ndash;    <p>주문 총액: <span id="total-amount" th:text="${order.totalAmount}" hidden="hidden"></span> 원</p>&ndash;&gt;-->
 
     <!-- 쿠폰 체크박스 -->
     <div style="padding-left: 25px">
@@ -45,6 +41,11 @@
   </div>
 </div>
 
+<script th:inline="javascript">
+  var orderId = [[${orderId}]];
+  var amount = [[${amount}]];
+</script>
+
 <script>
   main();
 
@@ -52,67 +53,66 @@
     const button = document.getElementById("payment-button");
     const coupon = document.getElementById("coupon-box");
 
-    const orderId = getOrderIdFromUrl();
-    const amount = await fetchAmount(orderId);
+    // `amount`를 TossPayments에서 요구하는 형식으로 변환
+    const formattedAmount = {
+      currency: "KRW",
+      value: amount
+    };
+
+    // `orderId` 유효성 검사 및 처리
+    let validatedOrderId = orderId;
+    if (typeof orderId !== 'string' || orderId.length < 6 || orderId.length > 64) {
+      console.error("Invalid orderId. It must be a string with a length between 6 and 64 characters.");
+      // 필요한 경우 기본값으로 처리하거나 오류 메시지를 표시합니다.
+      validatedOrderId = generateRandomOrderId();
+    }
 
     // 토스 결제 위젯 초기화
     const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-    const customerKey = generateRandomString();
+    const customerKey = generateRandomString(); // Random customerKey 생성
     const tossPayments = TossPayments(clientKey);
 
     const widgets = tossPayments.widgets({ customerKey });
 
     // 결제 금액 설정
-    await widgets.setAmount(amount);
+    await widgets.setAmount(formattedAmount);
 
     // 결제 UI 렌더링
     await widgets.renderPaymentMethods({ selector: "#payment-method", variantKey: "DEFAULT" });
     await widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" });
 
-    // 결제 금액 업데이트
+    // 쿠폰 박스 상태에 따른 결제 금액 업데이트
     coupon.addEventListener("change", async function () {
-      const updatedAmount = coupon.checked ? { currency: "KRW", value: amount.value - 5000 } : amount;
+      const updatedAmount = coupon.checked ? { currency: "KRW", value: amount - 5000 } : formattedAmount;
       await widgets.setAmount(updatedAmount);
     });
 
     // 결제하기 버튼 클릭 시 결제 요청
     button.addEventListener("click", async function () {
-      await widgets.requestPayment({
-        orderId: orderId,
-        orderName: "임의",
-        successUrl: window.location.origin + "/success",
-        failUrl: window.location.origin + "/fail",
-        customerEmail: "customer123@gmail.com",
-        customerName: "김토스",
-        customerMobilePhone: "01012341234",
-      });
+      try {
+        await widgets.requestPayment({
+          orderId: validatedOrderId, // 유효성 검사 후의 orderId 사용
+          orderName: "임의",
+          successUrl: window.location.origin + "/success",
+          failUrl: window.location.origin + "/fail",
+          customerEmail: "customer123@gmail.com",
+          customerName: "김토스",
+          customerMobilePhone: "01012341234",
+        });
+      } catch (error) {
+        console.error("결제 요청 중 오류가 발생했습니다:", error);
+      }
     });
   }
 
- function getOrderIdFromUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const orderId = urlParams.get('orderId');
-      if (!orderId) {
-        throw new Error("Order ID is missing in the URL");
-      }
-      return orderId;
-    }
-
-
-    async function fetchAmount(orderId) {
-      const response = await fetch(`/api/order/total-amount?orderId=${orderId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch amount");
-      }
-      const data = await response.json();
-      return {
-        currency: "KRW",
-        value: data.amount,
-      };
-    }
-
   function generateRandomString() {
-    return window.btoa(Math.random()).slice(0, 20);
+    return window.btoa(Math.random().toString()).slice(0, 20);
+  }
+
+  // 유효하지 않은 orderId일 경우 생성
+  function generateRandomOrderId() {
+    const randomStr = generateRandomString();
+    return randomStr.slice(0, 6); // 최소 6자로 자름
   }
 </script>
 </body>

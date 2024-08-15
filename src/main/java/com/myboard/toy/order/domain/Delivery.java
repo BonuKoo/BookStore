@@ -18,6 +18,9 @@ public class Delivery {
     @OneToOne(mappedBy = "delivery",fetch = LAZY)
     private Order order;
 
+    protected Delivery() {
+    }
+
     //@Embedded
     //private Address address;
 
@@ -27,12 +30,6 @@ public class Delivery {
     private DeliveryStatus status;
 
     //private String option; // 예: STANDARD, EXPRESS 등
-    /*
-    @Builder
-    public Delivery(Address address, DeliveryStatus status) {
-        this.address = address;
-        this.status = status;
-    }*/
 
     @Builder
     public Delivery(String address, DeliveryStatus status) {

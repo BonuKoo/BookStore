@@ -34,7 +34,6 @@ public class OrderController {
 
     private final OrderService orderService;
     private final UserService userService;
-    private final ItemService itemService;
     private final CartService cartService;
 
     @GetMapping("/orderForm")
