@@ -1,0 +1,105 @@
+/* 장바구니 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+thead th {
+    background-color: #f5f5f5;
+    color: #555;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 가격과 개수의 강조 스타일 */
+tbody td:nth-child(3),
+tbody td:nth-child(5) {
+    font-weight: bold;
+    color: #ff5722;
+}
+
+/* 체크박스 스타일 */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* 수량 조절 버튼 스타일 */
+input[type="button"] {
+    font-size: 18px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 5px;
+}
+
+input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* 제거 버튼 스타일 */
+button[type="submit"] {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #c82333;
+}
+
+/* 장바구니 총합 스타일 */
+tfoot td {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+tfoot tr {
+    background-color: #f8f9fa;
+}
+
+tfoot td[colspan="3"] {
+    text-align: right;
+}
+
+tfoot td {
+    padding: 15px 10px;
+}
+
+/* 주문하기 버튼 스타일 */
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}

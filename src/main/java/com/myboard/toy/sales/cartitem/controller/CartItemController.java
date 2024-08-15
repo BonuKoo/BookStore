@@ -24,9 +24,10 @@ public class CartItemController {
     private final CartItemService cartItemService;
     private final CartService cartService;
     private final UserService userService;
+
     /* DELETE */
 
-    @PostMapping("removeItem")
+    @PostMapping("/removeItem")
     public String deleteCartItem(
             Principal principal,
             @RequestParam("itemIsbn") String itemIsbn,

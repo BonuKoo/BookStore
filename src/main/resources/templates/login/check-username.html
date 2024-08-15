@@ -7,85 +7,9 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>아이디 중복 확인</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #modal {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-        #modalMessage {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        #modalCloseBtn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #modalCloseBtn:hover {
-            background-color: #0056b3;
-        }
-        .overlay {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .input-group button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .input-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/user/checkusername.css}">
 </head>
 <body>
 
@@ -111,74 +35,6 @@
     <p id="modalMessage">아이디를 입력하세요</p>
     <button id="modalCloseBtn">Close</button>
 </div>
-
-<script>
-    document.getElementById('checkUsernameBtn').addEventListener('click', function() {
-        const username = document.getElementById('username').value.trim();
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        // 아이디가 비어있다면
-        if (username === '') {
-            document.getElementById('modalMessage').innerText = '아이디를 입력하세요';
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('modal').style.display = 'block';
-            return; // POST 요청을 실행하지 않음
-        }
-
-        fetch('/check-username', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken
-            },
-            body: JSON.stringify({ username: username })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('modalMessage').innerText = data.message;
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('modal').style.display = 'block';
-
-            // Check the availability and adjust the UI accordingly
-            if (data.exists === false) {
-                document.getElementById('checkUseBtn').style.display = 'inline-block'; // Show button if username is available
-                document.getElementById('usernameAvailable').value = 'true';
-            } else {
-                document.getElementById('checkUseBtn').style.display = 'none'; // Hide button if username is not available
-                document.getElementById('usernameAvailable').value = 'false';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-    document.getElementById('modalCloseBtn').addEventListener('click', function() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('modal').style.display = 'none';
-    });
-
-    document.getElementById('overlay').addEventListener('click', function() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('modal').style.display = 'none';
-    });
-</script>
-<script>
-    document.getElementById('checkUseBtn').addEventListener('click', function() {
-        const username = document.getElementById('username').value.trim();
-
-        // 현재 창이 팝업 창이라고 가정하고, 부모 창의 필드를 찾아 값을 설정합니다.
-        if (window.opener && !window.opener.closed) {
-            // 부모 창의 아이디 필드에 값을 설정
-            window.opener.document.getElementById('username').value = username;
-
-            // 팝업 창 닫기
-            window.close();
-        } else {
-            alert('부모 창이 열려있지 않습니다.');
-        }
-    });
-</script>
+<script th:src="@{/js/user/checkusername/checkusername.js}"></script>
 </body>
 </html>
