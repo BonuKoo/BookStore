@@ -103,3 +103,27 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #218838;
 }
+
+   /* 모달 스타일링 */
+    #errorModal {
+        display: none; /* 기본적으로 모달은 숨김 상태 */
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        padding: 20px;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1000; /* 다른 요소보다 위에 표시되도록 */
+    }
+
+    #errorModal .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #000;
+    }

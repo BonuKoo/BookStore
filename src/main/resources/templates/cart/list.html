@@ -10,7 +10,7 @@
 <div layout:fragment="content" id="contents">
 
     <h1>Cart List</h1>
-    <form th:action="@{/order/orderForm}" method="get" id="order-form">
+    <form th:action="@{/order/orderForm}" method="get" id="order-form" onsubmit="return validateSelection()">
 
         <table>
             <thead>
@@ -30,6 +30,7 @@
                 <td>
                     <input type="checkbox" name="selectedItems" th:value="${item.isbn}">
                 </td>
+
                 <!-- 이름 -->
                 <td th:text="${item.name}"></td>
                 <!-- 개당 가격 -->
@@ -71,6 +72,14 @@
         </div>
 
     </form>
+
+    <!-- 모달 HTML 추가 -->
+    <div id="errorModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="errorMessage">최소 한개의 주문을 선택하셔야 합니다!</p>
+<!--        <button onclick="closeModal()">확인</button>-->
+
+    </div>
 
 </div>
 </body>

@@ -106,3 +106,27 @@ function count(type, itemIsbn) {
         console.error('Error during request:', error);
     });
 }
+
+// 모달을 표시하는 함수
+function showModal(message) {
+    const modal = document.getElementById('errorModal');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.textContent = message;
+    modal.style.display = 'block';
+}
+
+// 모달을 닫는 함수
+function closeModal() {
+    document.getElementById('errorModal').style.display = 'none'; // 모달 숨기기
+}
+
+// 체크박스 선택 여부를 확인하는 함수
+function validateSelection() {
+    const checkboxes = document.querySelectorAll('input[name="selectedItems"]:checked');
+    if (checkboxes.length === 0) {
+        showModal("최소 한개의 주문을 선택하셔야 합니다!");
+        return false; // 폼 제출 방지
+    }
+    return true; // 폼 제출 허용
+}
+
