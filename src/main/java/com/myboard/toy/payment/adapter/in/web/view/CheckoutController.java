@@ -19,7 +19,9 @@ public class CheckoutController {
     private final OrderService orderService;
 
     @GetMapping("")
-    public String successPage(@RequestParam("orderId") Long orderId, Model model){
+    public String successPage(@RequestParam(value = "orderId", required = false)
+                                  Long orderId,
+                              Model model){
 
         OrderDto order = orderService.findOrderById(orderId);
 

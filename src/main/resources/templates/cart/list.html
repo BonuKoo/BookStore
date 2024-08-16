@@ -38,19 +38,22 @@
                 <td>
                     <input type="button" th:attr="onclick='count(\'minus\', \'' + ${item.isbn} + '\')'" value="-">
                     <span th:id="${item.isbn}" th:text="${item.amount} + ' 개'"></span>
-                    <input type="button" th:attr="onclick='count(\'plus\', \'' + ${item.isbn} + '\')'" value="+">
+                    <input type="button"
+                           th:attr="onclick='count(\'plus\', \'' + ${item.isbn} + '\')'" value="+">
                 </td>
                 <!-- 가격 * 개수 -->
                 <td th:text="${item.totPrice} + ' 원'"></td>
 
                 <!-- 제거 버튼 -->
                 <td>
-                    <form th:action="@{/removeItem}" method="post" style="display: inline;">
-                        <input type="hidden" name="itemIsbn" th:value="${item.isbn}">
-                        <button type="submit" class="remove-button">Remove</button>
+                    <form action="/api/cart/removeItem" method="post" style="display: inline;">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="itemIsbn" th:value="${item.isbn}"/>
+                        <input type="button"
+                               th:attr="onclick='removeItem(\'' + ${item.isbn} + '\')'"
+                               value="Remove">
                     </form>
                 </td>
-
             </tr>
             </tbody>
 

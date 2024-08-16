@@ -17,16 +17,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.NoSuchElementException;
 
-@Controller
-@RequiredArgsConstructor
+//@Controller
+//@RequiredArgsConstructor
 public class CartItemController {
 
-    private final CartItemService cartItemService;
-    private final CartService cartService;
-    private final UserService userService;
+    //private final CartItemService cartItemService;
+    //private final CartService cartService;
+    //private final UserService userService;
 
     /* DELETE */
-
+    /*
     @PostMapping("/removeItem")
     public String deleteCartItem(
             Principal principal,
@@ -57,5 +57,5 @@ public class CartItemController {
             redirectAttributes.addFlashAttribute("error", "Failed to remove item.");
             return "redirect:/cart/list";
         }
-    }
+    }*/
 }
