@@ -17,17 +17,22 @@ public class NaverBookService {
 
     private final NaverApiClient naverApiClient;
 
-    //== 정의된 DTO==//
     public NaverBookListResponseDto getBookListByDTO(NaverBookListRequestDto requestDto) {
+        String sort = requestDto.getSort();
+
+        // sort 값이 null이거나 비어 있으면 기본값으로 "sim"을 사용
+        if (sort == null || sort.trim().isEmpty()) {
+            sort = "sim";
+        }
 
         ResponseEntity<NaverBookListResponseDto> response = naverApiClient.getBookInformationListV2(
                 requestDto.getQuery(),
-                Integer.parseInt(requestDto.getDisplay()), // 고정값 100
-                Integer.parseInt(requestDto.getStart()), // start 값
-                requestDto.getSort()
+                Integer.parseInt(requestDto.getDisplay()),
+                Integer.parseInt(requestDto.getStart()),
+                sort
         );
-        return response.getBody();
 
+        return response.getBody();
     }
 
     public NaverBookDetailViewResponseDto getBookDetailByDTO(NaverBookDetailRequestDto requestDto) {

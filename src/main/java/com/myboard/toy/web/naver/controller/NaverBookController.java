@@ -27,23 +27,18 @@ public class NaverBookController {
     private final NaverBookService naverBookService;
     private final ItemService itemService;
 
-
     @GetMapping("/search-books")
     public String searchBookListByString(
             @RequestParam(value = "query", defaultValue = "aws") String query,
-            @RequestParam(value = "page", defaultValue = "1") Integer page, // 현재 페이지
-            @RequestParam(value = "sort", required = false) String sort, // 정렬
+            @RequestParam(value = "display", defaultValue = "5") Integer display,
+            @RequestParam(value = "start", defaultValue = "1") Integer start,
             Model model
     ) {
 
-// 페이지에 따라 start 값을 계산합니다.
-        Integer start = (page - 1) / 10 + 1;
-        final Integer DISPLAY = 100;
-        // API 요청 시 항목 수 (이것은 고정)
         // requestDto 생성
         NaverBookListRequestDto requestDto = NaverBookListRequestDto.builder()
                 .query(query)
-                .display("100")
+                .display(display.toString())
                 .start(start.toString())
                 .build();
 
@@ -52,8 +47,6 @@ public class NaverBookController {
 
         // 데이터 변환 및 포맷팅
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-
-        //응답 값을 books로 매핑
         List<NaverBook> books = responseDto.getItems().stream()
                 .map(item -> new NaverBook(
                         item.getTitle(),
@@ -64,15 +57,12 @@ public class NaverBookController {
                 ))
                 .toList();
 
-        int pageSize = 10;
-        int fromIndex = (page - 1) % 10 * pageSize;
-        int toIndex = Math.min(fromIndex + pageSize, books.size());
-
-        List<NaverBook> pagedList = books.subList(fromIndex, toIndex);
-
-        model.addAttribute("bookList", pagedList);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", (int) Math.ceil((double) books.size() / pageSize));
+// 모델에 필요한 데이터 추가
+        model.addAttribute("bookList", books);
+        model.addAttribute("query", query);
+        model.addAttribute("display", display);
+        model.addAttribute("start", start);
+        model.addAttribute("hasNext", responseDto.getItems().size() == display); // 다음 페이지가 있는지 확인
 
         return "/book/listbynaver";
     }
