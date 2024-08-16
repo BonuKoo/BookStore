@@ -9,32 +9,25 @@
 <div layout:fragment="content" id="contents">
     <div id="profile">
         <h1>프로필</h1>
-        <div class="profile-info">
+        <div class="profile-card">
+            <h2>기본 정보</h2>
             <p><strong>ID:</strong> <span th:text="${account.username}"></span></p>
             <p><strong>닉네임:</strong> <span th:text="${account.nickname}"></span></p>
             <p><strong>나이:</strong> <span th:text="${account.age}"></span></p>
-
-            <h2>주소</h2>
-            <p><strong>Postcode:</strong>
-                <span th:text="${account.postcode != null ? account.postcode : ''}"></span></p>
-            <p><strong>Road Address:</strong>
-                <span th:text="${account.roadAddress != null ? account.roadAddress : ''}"></span></p>
-            <p><strong>Jibun Address:</strong>
-                <span th:text="${account.jibunAddress != null ? account.jibunAddress : ''}"></span></p>
-            <p><strong>Detail Address:</strong>
-                <span th:text="${account.detailAddress != null ? account.detailAddress : ''}"></span></p>
-            <p><strong>Extra Address:</strong>
-                <span th:text="${account.extraAddress != null ? account.extraAddress : ''}"></span></p>
-
         </div>
-
-        <!-- Edit 버튼 -->
+        <div class="profile-card">
+            <h2>주소</h2>
+            <p><strong>Postcode:</strong> <span th:text="${account.postcode != null ? account.postcode : ''}"></span></p>
+            <p><strong>Road Address:</strong> <span th:text="${account.roadAddress != null ? account.roadAddress : ''}"></span></p>
+            <p><strong>Jibun Address:</strong> <span th:text="${account.jibunAddress != null ? account.jibunAddress : ''}"></span></p>
+            <p><strong>Detail Address:</strong> <span th:text="${account.detailAddress != null ? account.detailAddress : ''}"></span></p>
+            <p><strong>Extra Address:</strong> <span th:text="${account.extraAddress != null ? account.extraAddress : ''}"></span></p>
+        </div>
         <div class="form-container">
             <a th:href="@{/edit-profile}" class="btn-edit">정보수정</a>
         </div>
-        <!-- 회원탈퇴 버튼 -->
-
     </div>
+
 </div>
 </body>
 </html>

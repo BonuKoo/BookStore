@@ -51,8 +51,9 @@
                         <img src="/img/profile.png" alt="프로필 링크" class="profile-img"/>
                     </a>
                 </li>
-                <li>
-                    <a th:href="@{/accountDashboard}" sec:authorize="hasAuthority('ROLE_ADMIN')">유저 관리 탭
+                <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                    <a th:href="@{/accountDashboard}" class="admin-link">
+                        <img src="/img/admin.png" alt="유저 관리 탭" class="admin-img"/>
                     </a>
                 </li>
             </ul>

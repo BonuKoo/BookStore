@@ -1,4 +1,5 @@
 //회원정보 수정
+/*
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('edit-profile').addEventListener('submit', function(event) {
         event.preventDefault(); // 기본 폼 제출 막기
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+*/
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('editProfileForm').addEventListener('submit', function(event) {
@@ -60,9 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
         var confirmPassword = document.getElementById('passwordConfirm').value.trim();
         var message = '';
 
-        // 비밀번호 유효성 검사
-        if (password.length < 8 || password.length > 20) {
-            message = '비밀번호는 8자 이상, 20자 이하로 입력해주세요.';
+        // 비밀번호 검증식
+        const regex_pwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.~_-])[A-Za-z\d@$!%*?&#.~_-]{8,20}$/;
+
+
+if (!regex_pwd.test(password)) {
+            message = '비밀번호는 8자 이상, 20자 이하로 입력해야 하며, 하나 이상의 대문자, 소문자, 숫자 및 특수 문자를 포함해야 합니다.';
         } else if (password !== confirmPassword) {
             message = '비밀번호와 확인 비밀번호가 일치하지 않습니다.';
         }
@@ -105,6 +110,7 @@ function submitForm() {
 function sample4_execDaumPostcode() {
     new daum.Postcode({
         oncomplete: function(data) {
+
             var roadAddr = data.roadAddress; // 도로명 주소 변수
             var extraRoadAddr = ''; // 참고 항목 변수
 

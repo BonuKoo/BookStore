@@ -32,17 +32,17 @@ public class FormUserDetailsService implements UserDetailsService {
         if (account == null) {
             throw new UsernameNotFoundException("No user found with username: " + username);
         }
+
         List<GrantedAuthority> authorities = account.getUserRoles()
                 .stream()
                 .map(Role::getRoleName)
                 .collect(Collectors.toSet())
                 .stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
         ModelMapper mapper = new ModelMapper();
 
         AccountDto accountDto = mapper.map(account, AccountDto.class);
-
-
+        accountDto.setPostcode(account.getAddress().getPostcode());
         return new AccountContext(accountDto, authorities);
     }
 }
-

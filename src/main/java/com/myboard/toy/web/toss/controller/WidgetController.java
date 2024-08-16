@@ -23,9 +23,11 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class WidgetController {
 
+    /*
     private final TossPaymentsClient tossPaymentsClient;
+    */
 
-
+    /*
     @RequestMapping(value = "/confirm", method = RequestMethod.POST)
 
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -83,5 +85,5 @@ public class WidgetController {
         model.addAttribute("message", failMessage);
 
         return "toss/fail";
-    }
+    }*/
 }

@@ -5,6 +5,7 @@ import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -67,8 +69,12 @@ public class UserController {
     @GetMapping("/edit-profile")
     public String editProfilePage(Model model, Principal principal) {
 
+
         AccountDto account = userService.getUserDetailsByPrincipal(principal);
+        log.info("postcode :{}", account.getPostcode());
+        //log.info("roadAddress :{}", account.getRoadAddress());
         model.addAttribute("account", account);
+
         return "user/edit-profile";
     }
 

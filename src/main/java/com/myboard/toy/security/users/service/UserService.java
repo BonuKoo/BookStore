@@ -161,9 +161,11 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
     }
+
     // Principal을 통해 AccountDto를 얻는 공통 메서드
     private AccountDto getAccountDtoFromPrincipal(Principal principal) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
         return (AccountDto) authenticationToken.getPrincipal();
     }
+
 }

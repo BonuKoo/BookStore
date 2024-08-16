@@ -24,18 +24,17 @@ public class NaverBookController {
     private final NaverBookService naverBookService;
     private final ItemService itemService;
 
-    //== String 타입 반환 ==//
-
     @GetMapping("/search-books")
     public String searchBookListByString(
             @RequestParam(value = "query",defaultValue = "aws") String query,
-            @RequestParam(value = "display", defaultValue = "10", required = false) Integer display,
+            @RequestParam(value = "display", defaultValue = "100", required = false) Integer display,
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "sort", required = false) String sort,
             Model model
     ) {
 
-        NaverBookListRequestDto requestDto = new NaverBookListRequestDto(                query,
+        NaverBookListRequestDto requestDto = new NaverBookListRequestDto(
+                query,
                 display != null ? display.toString() : null,
                 start != null ? start.toString() : null,
                 sort);

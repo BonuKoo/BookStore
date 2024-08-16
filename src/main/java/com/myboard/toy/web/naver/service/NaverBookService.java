@@ -17,29 +17,6 @@ public class NaverBookService {
 
     private final NaverApiClient naverApiClient;
 
-    /*
-    public String getStringBookList(String query, Integer display, Integer start, String sort) {
-        ResponseEntity<String> response = naverApiClient.getBookInformationListV1(query, display, start, sort);
-        return response.getBody();
-    }
-
-    public String getStringBookDetail(String title, String isbn) {
-        ResponseEntity<String> response = naverApiClient.getBookDetailV1(title, isbn, 10, 1, "sim");
-        return response.getBody();
-    }
-
-
-    public ResponseEntity<String> getRestBookList(String query, Integer display, Integer start, String sort) {
-        ResponseEntity<String> response = naverApiClient.getBookInformationListV1(query, display, start, sort);
-        return response;
-    }
-
-
-    public ResponseEntity<String> getRestBookDetail(String title, String isbn) {
-        ResponseEntity<String> response = naverApiClient.getBookDetailV1(title, isbn, 10, 1, "sim");
-        return response;
-    }*/
-
     //== 정의된 DTO==//
     public NaverBookListResponseDto getBookListByDTO(NaverBookListRequestDto requestDto) {
 

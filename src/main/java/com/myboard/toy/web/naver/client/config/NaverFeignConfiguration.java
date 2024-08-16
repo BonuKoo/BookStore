@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
 public class NaverFeignConfiguration {
 
     //Key
-    @Value("${naver.key.client_id}")
+    @Value("${naver.api.client_id}")
     private String clientId;
-    @Value("${naver.key.client_secret}")
+    @Value("${naver.api.client_secret}")
     private String clientSecret;
 
     @Bean
@@ -43,5 +43,5 @@ public class NaverFeignConfiguration {
             template.header("X-Naver-Client-Secret", clientSecret);
         };
     }
-
 }
+

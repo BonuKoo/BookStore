@@ -18,22 +18,22 @@
     <div class="input-group">
         <label for="username">아이디 입력:</label>
         <input type="text" id="username" name="username" placeholder="아이디를 입력하세요."
-               minlength="3" maxlength="10" required>
+               minlength="7" maxlength="15" pattern="[A-Za-z0-9]+" title="영어와 숫자만 입력 가능합니다" required>
         <button type="button" id="checkUsernameBtn">중복 확인</button>
-        <button type="button" id="checkUseBtn" style="display: none;">아이디 사용</button> <!-- Initially hidden -->
+        <button type="button" id="checkUseBtn" style="display: none;">아이디 사용</button> <!-- 처음에는 숨김 -->
 
     </div>
 
-    <!-- Hidden input to store the username availability -->
+    <!-- 아이디 사용 가능 여부를 저장하는 숨겨진 입력 필드 -->
     <input type="hidden" id="usernameAvailable" name="usernameAvailable" value="false">
 
 </div>
 
-<!-- Modal and Overlay -->
+<!-- 모달 및 오버레이 -->
 <div id="overlay" class="overlay"></div>
 <div id="modal">
     <p id="modalMessage">아이디를 입력하세요</p>
-    <button id="modalCloseBtn">Close</button>
+    <button id="modalCloseBtn">닫기</button>
 </div>
 <script th:src="@{/js/user/checkusername/checkusername.js}"></script>
 </body>

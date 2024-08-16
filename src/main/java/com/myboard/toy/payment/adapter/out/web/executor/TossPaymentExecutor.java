@@ -12,7 +12,6 @@ public class TossPaymentExecutor {
     public TossPaymentExecutor(TossPaymentsClient tossPaymentsClient) {
         this.tossPaymentsClient = tossPaymentsClient;
     }
-
     public JSONObject execute(String paymentKey, String orderId, String amount){
         //Request Body 구성
         JSONObject paymentDetails = new JSONObject();

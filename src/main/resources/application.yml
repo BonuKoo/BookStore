@@ -84,13 +84,13 @@ file:
   #dir: C:/Project/toyProject/boardFile/ #집
 
 naver:
-  key:
+  api:
     client_id: ol6ufIkPouDkI1SwOF_x
     client_secret: jiPERDkQiD
     url: https://openapi.naver.com/v1/search
 
 toss:
   api:
-    clientKey: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
-    secretKey : test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    clientKey: test_ck_P9BRQmyarYgENJg4Gj2p3J07KzLN
+    secretKey : test_sk_Gv6LjeKD8aaDve6mmQKL8wYxAdXy
     url: https://api.tosspayments.com

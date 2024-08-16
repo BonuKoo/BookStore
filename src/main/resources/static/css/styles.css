@@ -84,7 +84,6 @@ header hr {
 .cart-img {
     width: 30px;
     height: auto;
-    /* vertical-align: middle; /* 상단 여백 제거 */
 }
 
 /* 프로필 링크 스타일 */
@@ -96,8 +95,19 @@ header hr {
 .profile-img {
     width: 30px; /* 장바구니 이미지와 동일한 크기 */
     height: auto;
-    /* vertical-align: middle; /* 상단 여백 제거 */
 }
+
+.profile-link{
+    display: inline-block;
+}
+
+.admin-img{
+    width: 30px;
+    height: auto;
+}
+
+
+
 
 /* header-content 내의 user-actions을 오른쪽 구석으로 이동 */
 .header-content > .user-actions {
