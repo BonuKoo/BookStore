@@ -55,6 +55,5 @@ public class NaverBookListResponseDto {
 
         private String discountFormatted;
 
-
     }
 }

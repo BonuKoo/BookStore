@@ -20,6 +20,40 @@
             width: 50px;
             height: auto;
         }
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .pagination a:hover {
+            background-color: #e9ecef;
+        }
+        .pagination .prev, .pagination .next {
+            font-weight: bold;
+        }
+        .pagination span {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination .page-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .pagination .page-numbers li {
+            margin: 0 2px;
+        }
     </style>
 </head>
 <body>
@@ -40,16 +74,30 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${bookList.items}">
+            <tr th:each="item : ${bookList}">
                 <td>
                     <a th:href="@{/bookDetail(isbn=${item.isbn})}" th:text="${item.title}"></a>
                 </td>
                 <td><img th:src="${item.image}" alt="도서 이미지"/></td>
                 <td th:text="${item.author}"></td>
-                <td th:text="${item.discountFormatted}+' 원'"></td> <!-- 포맷된 할인 가격 -->
+                <td th:text="${item.discountFormatted} + ' 원'"></td>
             </tr>
             </tbody>
         </table>
+
+        <!-- 페이지 네비게이션 -->
+        <div class="pagination">
+            <a th:if="${currentPage > 1}" th:href="@{/search-books(query=${query}, page=${currentPage - 1}, sort=${sort})}" class="prev">« Previous</a>
+
+            <ul class="page-numbers">
+                <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${pageNum == currentPage ? 'active' : ''}">
+                    <a th:href="@{/search-books(query=${query}, page=${pageNum}, sort=${sort})}" th:text="${pageNum}"></a>
+                </li>
+            </ul>
+
+            <a th:if="${currentPage < totalPages}" th:href="@{/search-books(query=${query}, page=${currentPage + 1}, sort=${sort})}" class="next">Next »</a>
+        </div>
     </section>
 </div>
 </body>

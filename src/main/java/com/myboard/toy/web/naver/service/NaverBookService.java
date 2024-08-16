@@ -22,11 +22,12 @@ public class NaverBookService {
 
         ResponseEntity<NaverBookListResponseDto> response = naverApiClient.getBookInformationListV2(
                 requestDto.getQuery(),
-                requestDto.getDisplay() != null ? Integer.parseInt(requestDto.getDisplay()) : null,
-                requestDto.getStart() != null ? Integer.parseInt(requestDto.getStart()) : null,
+                Integer.parseInt(requestDto.getDisplay()), // 고정값 100
+                Integer.parseInt(requestDto.getStart()), // start 값
                 requestDto.getSort()
         );
         return response.getBody();
+
     }
 
     public NaverBookDetailViewResponseDto getBookDetailByDTO(NaverBookDetailRequestDto requestDto) {

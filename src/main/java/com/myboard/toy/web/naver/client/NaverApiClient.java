@@ -19,7 +19,7 @@ public interface NaverApiClient {
     @GetMapping("/book.json")
     ResponseEntity<NaverBookListResponseDto> getBookInformationListV2(
             @RequestParam("query") String query,
-            @RequestParam(value = "display", required = false) Integer display,
+            @RequestParam(value = "display", defaultValue = "100",required = false) Integer display,
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "sort", required = false) String sort
     );
