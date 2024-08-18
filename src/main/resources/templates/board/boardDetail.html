@@ -1,4 +1,10 @@
 <html layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>상세 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/board/boardDetail.css}">
+</head>
+
 <!-- layout:fragment 시작~ -->
 <div layout:fragment="content" id="contents">
 
@@ -36,17 +42,14 @@
                         >삭제</button>
                     </form>
 
-                    <!-- 수정 -->
                     <form th:action="@{/replies/update/{boardId}/{replyId}(boardId=${board.id}, replyId=${reply.id})}"
                           method="post" class="inline-form">
-                        <input type="text" name="content" th:value="${reply.content}" class="input-text"
+                        <input type="text" name="content"
+                               th:placeholder="${reply.content}"
+                               class="input-text"
                                sec:authorize="isAuthenticated()"
-                               th:if="${principal != null and principal.id == reply.account.id}"
-                        />
-                        <button type="submit" class="button update-button"
-                                sec:authorize="isAuthenticated()"
-                                th:if="${principal != null and principal.id == reply.account.id}"
-                        >수정</button>
+                               th:if="${principal != null and principal.id == reply.account.id}" />
+                        <button type="submit" class="submit-button">수정</button>
                     </form>
 
                 </li>

@@ -1,0 +1,127 @@
+/* 전체 컨테이너 */
+.content-container {
+    margin: 20px auto;
+    max-width: 900px; /* 컨테이너 폭을 조정하여 카드와 레이아웃의 균형을 맞추었습니다. */
+    padding: 20px;
+    background-color: #fff; /* 배경 색상 변경 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex; /* Flexbox로 레이아웃을 설정 */
+    justify-content: space-between;
+}
+
+/* 좌측 섹션 */
+.left-section {
+    flex: 2; /* 좌측 섹션의 비율을 조정 */
+    margin-right: 20px; /* 우측 섹션과의 간격 */
+}
+
+/* 우측 섹션 */
+.right-section {
+    flex: 1; /* 우측 섹션의 비율을 조정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 도서 상세 */
+.book-detail {
+    margin-bottom: 20px;
+}
+
+/* 제목 스타일 */
+.book-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+
+/* 도서 이미지 */
+.book-image {
+    max-width: 150px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px; /* 이미지의 모서리를 둥글게 */
+}
+
+/* 테이블 스타일 */
+.book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.book-table th, .book-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.book-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.book-table td {
+    background-color: #fff;
+}
+
+/* 링크 스타일 */
+.book-link {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.book-link:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.form-control {
+    border-radius: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.btn-outline-dark {
+    border: 1px solid #343a40;
+    color: #343a40;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-outline-dark:hover {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.bi-cart-fill {
+    font-size: 18px;
+}

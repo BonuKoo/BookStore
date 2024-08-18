@@ -1,0 +1,73 @@
+/* =============================== 게시글 생성 페이지 전용 CSS ========================== */
+
+/* container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* post-form */
+.post-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* form-group */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 150px;
+}
+
+/* file-input */
+.file-input {
+    margin-bottom: 10px;
+}
+
+/* buttonsContainer */
+#buttonsContainer {
+    margin-top: 20px;
+}
+
+/* submit-button */
+.submit-button {
+    background-color: #007bff; /* 기본 색상 */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+/* 미리보기 이미지 */
+#buttonsContainer img {
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

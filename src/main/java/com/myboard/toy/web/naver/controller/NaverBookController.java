@@ -30,7 +30,7 @@ public class NaverBookController {
     @GetMapping("/search-books")
     public String searchBookListByString(
             @RequestParam(value = "query", defaultValue = "aws") String query,
-            @RequestParam(value = "display", defaultValue = "5") Integer display,
+            @RequestParam(value = "display", defaultValue = "10") Integer display,
             @RequestParam(value = "start", defaultValue = "1") Integer start,
             Model model
     ) {

@@ -80,8 +80,8 @@ spring:
     cache: false
 
 file:
-  dir: C:/BWProject/toyProject/boardFile/ #학원
-  #dir: C:/Project/toyProject/boardFile/ #집
+  #dir: C:/BWProject/toyProject/boardFile/ #학원
+  dir: C:/Project/toyProject/boardFile/ #집
 
 naver:
   api:

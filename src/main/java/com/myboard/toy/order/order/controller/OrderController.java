@@ -15,6 +15,7 @@ import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.angus.mail.imap.protocol.MODSEQ;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,7 @@ public class OrderController {
     private final UserService userService;
     private final CartService cartService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/orderForm")
     public String showOrderForm(
             @RequestParam("selectedItems") List<String> selectedItems,

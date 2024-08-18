@@ -13,6 +13,7 @@ import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,7 +75,7 @@ public class CartController {
     /*
          Read
       */
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/cart/list")
     private String getCartList(
             Principal principal,
@@ -89,7 +90,6 @@ public class CartController {
         model.addAttribute("cartTotalPrice",cartTotalPrice);
         return "cart/list";
     }
-
 }
 
 

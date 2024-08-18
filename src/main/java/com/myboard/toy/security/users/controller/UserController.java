@@ -6,6 +6,7 @@ import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +56,8 @@ public class UserController {
     public String checkUsernamePage(Model model) {
         return "login/check-username";
     }
-    
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public String getProfile(Model model,
                              Principal principal){
@@ -66,9 +68,9 @@ public class UserController {
         return "user/profile";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/edit-profile")
     public String editProfilePage(Model model, Principal principal) {
-
 
         AccountDto account = userService.getUserDetailsByPrincipal(principal);
         log.info("postcode :{}", account.getPostcode());

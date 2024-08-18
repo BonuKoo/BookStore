@@ -1,0 +1,120 @@
+/* =============================== 게시글 목록 페이지 전용 CSS ========================== */
+
+/* create-button */
+.create-button {
+    background-color: #007bff; /* 기본 색상 */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 18px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.create-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* search-form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+    padding: 12px;
+    width: 350px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.search-form button {
+    padding: 12px 24px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.search-form button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* board-table */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.board-table th, .board-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    text-align: left;
+}
+
+.board-table th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: bold;
+}
+
+.board-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.board-table tbody tr:hover {
+    background-color: #e2e6ea;
+}
+
+.board-table a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.board-table a:hover {
+    text-decoration: underline;
+}
+
+/* pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* prev-button, next-button */
+.prev-button, .next-button {
+    display: inline-block;
+}

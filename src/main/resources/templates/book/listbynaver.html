@@ -1,34 +1,9 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>도서 검색 결과</title>
-    <style>
-        .book-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .book-table th, .book-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .book-table th {
-            background-color: #f4f4f4;
-        }
-        .book-table img {
-            width: 50px;
-            height: auto;
-        }
-
-        .pagination-buttons {
-            margin-top: 20px;
-        }
-        .pagination-buttons button {
-            padding: 10px 20px;
-            margin-right: 10px;
-        }
-    </style>
+        <meta charset="UTF-8">
+        <title>도서 검색 결과</title>
+        <link rel="stylesheet" th:href="@{/css/naver/listbynaver.css}">
 </head>
 <body>
 <div layout:fragment="content" id="contents">
@@ -38,33 +13,24 @@
             <button type="submit">검색</button>
         </form>
         <h1>도서 검색 결과</h1>
-        <table class="book-table">
-            <thead>
-            <tr>
-                <th>제목</th>
-                <th>이미지</th>
-                <th>저자</th>
-                <th>판매가격</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${bookList}">
-                <td>
-                    <a th:href="@{/bookDetail(isbn=${item.isbn})}" th:text="${item.title}"></a>
-                </td>
-                <td><img th:src="${item.image}" alt="도서 이미지"/></td>
-                <td th:text="${item.author}"></td>
-                <td th:text="${item.discountFormatted} + ' 원'"></td>
-            </tr>
-            </tbody>
-        </table>
-
+        <div class="book-card-container">
+            <div class="book-card" th:each="item : ${bookList}">
+                <div class="book-card-image">
+                    <img th:src="${item.image}" alt="도서 이미지"/>
+                </div>
+                <div class="book-card-content">
+                    <h2><a th:href="@{/bookDetail(isbn=${item.isbn})}" th:text="${item.title}"></a></h2>
+                    <p th:text="${item.author}"></p>
+                    <p th:text="${item.discountFormatted} + ' 원'"></p>
+                </div>
+            </div>
+        </div>
 
         <div class="pagination-buttons">
             <form th:if="${start > 1}" th:action="@{/search-books}" method="get" style="display: inline;">
                 <input type="hidden" name="query" th:value="${query}">
                 <input type="hidden" name="display" th:value="${display}">
-                <input type="hidden" name="start" th:value="${start - 5}">
+                <input type="hidden" name="start" th:value="${start - 10}">
                 <input type="hidden" name="sort" th:value="${sort}">
                 <button type="submit">Previous</button>
             </form>
@@ -72,7 +38,7 @@
             <form th:if="${hasNext}" th:action="@{/search-books}" method="get" style="display: inline;">
                 <input type="hidden" name="query" th:value="${query}">
                 <input type="hidden" name="display" th:value="${display}">
-                <input type="hidden" name="start" th:value="${start + 5}">
+                <input type="hidden" name="start" th:value="${start + 10}">
                 <input type="hidden" name="sort" th:value="${sort}">
                 <button type="submit">Next</button>
             </form>

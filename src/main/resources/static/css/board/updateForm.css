@@ -1,0 +1,76 @@
+/* =============================== 게시글 수정 페이지 전용 CSS ========================== */
+
+/* container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* post-form */
+.post-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* form-group */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 150px;
+}
+
+/* buttons-container */
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* button */
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* edit-button */
+.edit-button {
+    background-color: #28a745; /* 수정 버튼 색상 */
+    color: #fff;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
+
+/* delete-button */
+.delete-button {
+    background-color: #dc3545; /* 삭제 버튼 색상 */
+    color: #fff;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
