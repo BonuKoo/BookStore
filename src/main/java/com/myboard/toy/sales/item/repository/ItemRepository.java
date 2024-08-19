@@ -1,6 +1,6 @@
 package com.myboard.toy.sales.item.repository;
 
-import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.domain.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

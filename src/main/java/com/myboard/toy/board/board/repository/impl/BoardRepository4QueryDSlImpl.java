@@ -1,10 +1,10 @@
 package com.myboard.toy.board.board.repository.impl;
 
 import com.myboard.toy.board.board.repository.BoardRepository4QueryDSl;
-import com.myboard.toy.board.domain.QBoard;
-import com.myboard.toy.board.domain.QReply;
 import com.myboard.toy.board.domain.dto.BoardPageDTO;
 import com.myboard.toy.board.domain.dto.BoardSearchCondition;
+import com.myboard.toy.board.domain.entity.QBoard;
+import com.myboard.toy.board.domain.entity.QReply;
 import com.myboard.toy.security.domain.entity.QAccount;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;

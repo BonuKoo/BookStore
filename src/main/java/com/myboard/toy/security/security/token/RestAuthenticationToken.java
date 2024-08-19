@@ -34,8 +34,3 @@ public class RestAuthenticationToken extends AbstractAuthenticationToken {
         return this.principal;
     }
 }
-
-/*
-*
-*   인증 객체 토큰
-* */

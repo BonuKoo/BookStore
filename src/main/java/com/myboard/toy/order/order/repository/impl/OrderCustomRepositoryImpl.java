@@ -1,7 +1,7 @@
 package com.myboard.toy.order.order.repository.impl;
 
 
-import com.myboard.toy.order.domain.Order;
+import com.myboard.toy.order.domain.entity.Order;
 import com.myboard.toy.order.domain.dto.OrderSearch;
 import com.myboard.toy.order.order.repository.OrderCustomRepository;
 import jakarta.persistence.EntityManager;

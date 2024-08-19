@@ -1,22 +1,5 @@
 package com.myboard.toy.application.cart.cartservice;
 
-import com.myboard.toy.sales.cart.service.CartService;
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.sales.domain.CartItem;
-import com.myboard.toy.sales.domain.Item;
-import com.myboard.toy.sales.cart.repository.CartRepository;
-import com.myboard.toy.sales.item.repository.ItemRepository;
-import com.myboard.toy.security.domain.entity.Account;
-import com.myboard.toy.security.users.repository.UserRepository;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-
 //@SpringBootTest
 public class CartServiceTest {
     /*

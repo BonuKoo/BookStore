@@ -1,8 +1,8 @@
 package com.myboard.toy.sales.cartitem.repository;
 
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.sales.domain.CartItem;
-import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.domain.entity.Cart;
+import com.myboard.toy.sales.domain.entity.CartItem;
+import com.myboard.toy.sales.domain.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

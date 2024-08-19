@@ -27,10 +27,4 @@ public class AdminDashboardController {
 		return "/admin";
 	}
 
-	/*
-	@GetMapping(value = "/api")
-	public String restDashboard(){
-		return "rest/dashboard";
-	}*/
-
 }

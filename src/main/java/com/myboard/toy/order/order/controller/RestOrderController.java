@@ -1,6 +1,5 @@
 package com.myboard.toy.order.order.controller;
 
-import com.myboard.toy.order.domain.Order;
 import com.myboard.toy.order.domain.dto.OrderDto;
 import com.myboard.toy.order.order.service.OrderService;
 import lombok.RequiredArgsConstructor;

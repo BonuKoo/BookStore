@@ -1,11 +1,11 @@
 package com.myboard.toy.sales.cart.repository.impl;
 
-import com.myboard.toy.sales.domain.QCart;
-import com.myboard.toy.sales.domain.QCartItem;
-import com.myboard.toy.sales.domain.QItem;
 import com.myboard.toy.sales.domain.dto.CartListDto;
 import com.myboard.toy.sales.domain.dto.CartTotalPriceDto;
 import com.myboard.toy.sales.cart.repository.CartRepository4QueryDsl;
+import com.myboard.toy.sales.domain.entity.QCart;
+import com.myboard.toy.sales.domain.entity.QCartItem;
+import com.myboard.toy.sales.domain.entity.QItem;
 import com.myboard.toy.security.domain.entity.QAccount;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

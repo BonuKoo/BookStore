@@ -3,7 +3,7 @@ package com.myboard.toy.infra.file.service.impl;
 import com.myboard.toy.board.board.repository.BoardRepository;
 import com.myboard.toy.infra.file.service.FileService;
 import com.myboard.toy.infra.file.service.FileStore;
-import com.myboard.toy.board.domain.Board;
+import com.myboard.toy.board.domain.entity.Board;
 import com.myboard.toy.infra.file.domain.board.UploadFileOfBoard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

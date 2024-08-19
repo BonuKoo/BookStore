@@ -1,6 +1,6 @@
 package com.myboard.toy.sales.cart.repository;
 
-import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.entity.Cart;
 import com.myboard.toy.security.domain.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 

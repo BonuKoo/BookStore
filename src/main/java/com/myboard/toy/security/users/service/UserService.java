@@ -2,7 +2,7 @@ package com.myboard.toy.security.users.service;
 
 import com.myboard.toy.common.exception.UserNotFoundException;
 import com.myboard.toy.order.domain.Address;
-import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.entity.Cart;
 import com.myboard.toy.security.admin.repository.RoleRepository;
 import com.myboard.toy.security.domain.dto.AccountDto;
 import com.myboard.toy.security.domain.entity.Account;
@@ -140,6 +140,14 @@ public class UserService {
         } else {
             throw new RuntimeException("Account not found with id: " + id);
         }
+
+    }
+
+    @Transactional
+    public void deleteAccount(Principal principal){
+        AccountDto accountDto = getAccountDtoFromPrincipal(principal);
+        Long id = accountDto.getId();
+        userRepository.deleteById(id);
 
     }
 

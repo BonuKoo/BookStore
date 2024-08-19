@@ -1,6 +1,6 @@
 package com.myboard.toy.sales.cart.service;
 
-import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.entity.Cart;
 import com.myboard.toy.sales.domain.dto.CartDto;
 import com.myboard.toy.sales.domain.dto.CartListDto;
 import com.myboard.toy.sales.domain.dto.CartTotalPriceDto;

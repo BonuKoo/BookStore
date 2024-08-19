@@ -1,6 +1,6 @@
 package com.myboard.toy.infra.file.domain.board;
 
-import com.myboard.toy.board.domain.Board;
+import com.myboard.toy.board.domain.entity.Board;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

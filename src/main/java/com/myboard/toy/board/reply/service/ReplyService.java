@@ -1,8 +1,8 @@
 package com.myboard.toy.board.reply.service;
 
 import com.myboard.toy.board.board.repository.BoardRepository;
-import com.myboard.toy.board.domain.Board;
-import com.myboard.toy.board.domain.Reply;
+import com.myboard.toy.board.domain.entity.Board;
+import com.myboard.toy.board.domain.entity.Reply;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
 import com.myboard.toy.board.reply.repository.ReplyRepository;
 import com.myboard.toy.security.domain.dto.AccountDto;

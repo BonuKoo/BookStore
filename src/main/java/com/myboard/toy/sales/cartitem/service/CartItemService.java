@@ -2,12 +2,12 @@ package com.myboard.toy.sales.cartitem.service;
 
 import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.item.service.ItemService;
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.sales.domain.CartItem;
+import com.myboard.toy.sales.domain.entity.Cart;
+import com.myboard.toy.sales.domain.entity.CartItem;
 import com.myboard.toy.sales.domain.dto.CartItemRemoveRequestForm;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateAmountRequestForm;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateRequestForm;
-import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.domain.entity.Item;
 import com.myboard.toy.sales.cart.repository.CartRepository;
 import com.myboard.toy.sales.cartitem.repository.CartItemRepository;
 import lombok.RequiredArgsConstructor;

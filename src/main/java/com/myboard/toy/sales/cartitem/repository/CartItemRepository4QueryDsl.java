@@ -1,6 +1,6 @@
 package com.myboard.toy.sales.cartitem.repository;
 
-import com.myboard.toy.sales.domain.CartItem;
+import com.myboard.toy.sales.domain.entity.CartItem;
 import com.myboard.toy.security.domain.entity.Account;
 
 import java.util.Optional;

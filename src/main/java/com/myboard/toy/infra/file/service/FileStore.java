@@ -46,7 +46,6 @@ public class FileStore {
         return new UploadFileOfBoard(originalFilename,storeFileName,filePath,fileType,fileSize);
     }
 
-
     //이미지 여러 개 저장
     public List<UploadFileOfBoard> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
         List<UploadFileOfBoard> storeFileResult = new ArrayList<>();
@@ -75,7 +74,5 @@ public class FileStore {
         String ext = extractExt(originalFilename);
         return uuid + "." + ext;
     }
-
-
 
 }

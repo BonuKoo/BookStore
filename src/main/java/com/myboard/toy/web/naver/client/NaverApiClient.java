@@ -2,7 +2,7 @@ package com.myboard.toy.web.naver.client;
 
 import com.myboard.toy.web.naver.dto.NaverBookDetailViewResponseDto;
 import com.myboard.toy.web.naver.dto.NaverBookListResponseDto;
-import com.myboard.toy.web.naver.client.config.NaverFeignConfiguration;
+import com.myboard.toy.web.naver.booksearch.adapter.in.web.config.NaverWebClientConfiguration;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(url = "${naver.api.url}",
         name = "bookClient",
-        configuration = NaverFeignConfiguration.class)
+        configuration = NaverWebClientConfiguration.class)
 public interface NaverApiClient {
 
     //== V2 DTO 반환 == //

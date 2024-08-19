@@ -1,17 +1,15 @@
 package com.myboard.toy.board.board.service;
 
 import com.myboard.toy.board.board.repository.BoardRepository;
-import com.myboard.toy.board.domain.Board;
+import com.myboard.toy.board.domain.entity.Board;
 import com.myboard.toy.board.domain.dto.BoardSearchCondition;
 import com.myboard.toy.board.domain.dto.BoardDTO;
 import com.myboard.toy.board.domain.dto.BoardPageDTO;
 import com.myboard.toy.board.domain.dto.ReplyDTO;
-import com.myboard.toy.common.exception.UserNotFoundException;
 import com.myboard.toy.infra.file.domain.board.UploadFileOfBoard;
 import com.myboard.toy.infra.file.service.FileStore;
 import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.repository.UserRepository;
-import com.myboard.toy.security.users.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 

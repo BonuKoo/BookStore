@@ -7,11 +7,12 @@ import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -59,8 +60,8 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
-    public String getProfile(Model model,
-                             Principal principal){
+    public String getProfilePage(Model model,
+                                 Principal principal){
 
         AccountDto account = userService.getProfile(principal);
 
@@ -93,4 +94,26 @@ public class UserController {
         }
         return response;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete-account")
+    public String deleteAccount(){
+        return "user/deleteuser";
+    }
+
+    //@PostMapping("/delete-account")
+    /*
+    public String deleteAccount(@AuthenticationPrincipal Principal principal, Model model){
+        try {
+
+        userService.deleteAccount(principal.getName());
+            SecurityContextHolder.clearContext(); //현재 인증된 사용자 정보 제거
+            return "redirect:/logout";
+        }catch (Exception e){
+            model.addAttribute("error","Failed to delete account" + e.getMessage());
+            return "user/deleteuser";
+        }
+    }
+    */
+
 }

@@ -1,7 +1,7 @@
 package com.myboard.toy.sales.domain.dto;
 
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.domain.entity.Cart;
+import com.myboard.toy.sales.domain.entity.Item;
 import com.myboard.toy.security.domain.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <th:block layout:fragment="head">
+        <script th:src="@{/js/user/delete/deleteuser.js}"></script>
+    </th:block>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+<body>
+<div layout:fragment="content" id="contents">
+    <h1>Are you sure you want to delete your account?</h1>
+    <button type="button" onclick="removeUser()">Delete my account</button>
+    <a href="/">Cancel</a>
+    <p th:if="${error != null}" th:text="${error}"></p>
+</div>
+</body>
+</html>

@@ -46,7 +46,6 @@ dependencies {
 
 	// DB 접근
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// View Template (타임리프)
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -76,9 +75,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
-	// WebSocket
-	// implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	// p6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'

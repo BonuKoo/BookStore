@@ -1,22 +1,16 @@
 package com.myboard.toy.order.order.controller;
 
-import com.myboard.toy.order.domain.Address;
-import com.myboard.toy.order.domain.Delivery;
-import com.myboard.toy.order.domain.Order;
-import com.myboard.toy.order.domain.OrderItem;
+import com.myboard.toy.order.domain.entity.Delivery;
+import com.myboard.toy.order.domain.entity.Order;
 import com.myboard.toy.order.domain.status.DeliveryStatus;
 import com.myboard.toy.sales.cart.service.CartService;
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.sales.domain.CartItem;
-import com.myboard.toy.sales.item.service.ItemService;
+import com.myboard.toy.sales.domain.entity.Cart;
+import com.myboard.toy.sales.domain.entity.CartItem;
 import com.myboard.toy.order.order.service.OrderService;
 import com.myboard.toy.security.domain.dto.AccountDto;
-import com.myboard.toy.security.domain.entity.Account;
 import com.myboard.toy.security.users.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.angus.mail.imap.protocol.MODSEQ;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

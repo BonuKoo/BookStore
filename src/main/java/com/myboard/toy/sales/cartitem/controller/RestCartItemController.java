@@ -2,7 +2,7 @@ package com.myboard.toy.sales.cartitem.controller;
 
 import com.myboard.toy.sales.cart.service.CartService;
 import com.myboard.toy.sales.cartitem.service.CartItemService;
-import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.entity.Cart;
 import com.myboard.toy.sales.domain.dto.CartDto;
 import com.myboard.toy.sales.domain.dto.CartItemRemoveRequestForm;
 import com.myboard.toy.sales.domain.dto.CartItemUpdateAmountRequestForm;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.HashMap;

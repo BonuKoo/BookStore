@@ -1,14 +1,13 @@
 package com.myboard.toy.security.domain.entity;
 
 import com.myboard.toy.order.domain.Address;
-import com.myboard.toy.board.domain.Board;
-import com.myboard.toy.sales.domain.Cart;
-import com.myboard.toy.order.domain.Order;
-import com.myboard.toy.board.domain.Reply;
+import com.myboard.toy.board.domain.entity.Board;
+import com.myboard.toy.sales.domain.entity.Cart;
+import com.myboard.toy.order.domain.entity.Order;
+import com.myboard.toy.board.domain.entity.Reply;
 import com.myboard.toy.security.domain.dto.AccountDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.util.ArrayList;

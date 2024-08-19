@@ -1,7 +1,7 @@
 package com.myboard.toy.security.security.listener;
 
 
-import com.myboard.toy.sales.domain.Cart;
+import com.myboard.toy.sales.domain.entity.Cart;
 import com.myboard.toy.sales.cart.repository.CartRepository;
 import com.myboard.toy.security.admin.repository.ResourcesRepository;
 import com.myboard.toy.security.admin.repository.RoleHierarchyRepository;

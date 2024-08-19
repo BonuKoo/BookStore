@@ -1,7 +1,7 @@
 package com.myboard.toy.sales.item.service;
 
 import com.myboard.toy.common.exception.ItemNotFoundException;
-import com.myboard.toy.sales.domain.Item;
+import com.myboard.toy.sales.domain.entity.Item;
 import com.myboard.toy.web.naver.dto.NaverBookDetailViewResponseDto;
 import com.myboard.toy.sales.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;

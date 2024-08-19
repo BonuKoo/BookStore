@@ -1,7 +1,7 @@
 package com.myboard.toy.board.domain.dto;
 
 import com.myboard.toy.infra.file.domain.board.UploadFileOfBoard;
-import com.myboard.toy.board.domain.Reply;
+import com.myboard.toy.board.domain.entity.Reply;
 import com.myboard.toy.security.domain.entity.Account;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
