@@ -101,19 +101,4 @@ public class UserController {
         return "user/deleteuser";
     }
 
-    //@PostMapping("/delete-account")
-    /*
-    public String deleteAccount(@AuthenticationPrincipal Principal principal, Model model){
-        try {
-
-        userService.deleteAccount(principal.getName());
-            SecurityContextHolder.clearContext(); //현재 인증된 사용자 정보 제거
-            return "redirect:/logout";
-        }catch (Exception e){
-            model.addAttribute("error","Failed to delete account" + e.getMessage());
-            return "user/deleteuser";
-        }
-    }
-    */
-
 }

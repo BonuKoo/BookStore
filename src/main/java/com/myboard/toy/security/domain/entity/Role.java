@@ -31,12 +31,12 @@ public class Role implements Serializable {
     private String isExpression;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleSet", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleSet", cascade = CascadeType.PERSIST)
     @OrderBy("orderNum desc")
     private Set<Resources> resourcesSet = new LinkedHashSet<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles", cascade = CascadeType.PERSIST)
     private Set<Account> accounts = new HashSet<>();
 
     @Override

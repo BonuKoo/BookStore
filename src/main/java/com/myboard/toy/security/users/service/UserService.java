@@ -148,7 +148,6 @@ public class UserService {
         AccountDto accountDto = getAccountDtoFromPrincipal(principal);
         Long id = accountDto.getId();
         userRepository.deleteById(id);
-
     }
 
     public AccountDto getAccountIdByPrincipal(Principal principal){

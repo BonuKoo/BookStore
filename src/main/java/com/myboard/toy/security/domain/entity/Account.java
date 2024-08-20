@@ -55,7 +55,7 @@ public class Account implements Serializable {
 
     //권한
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY) //, cascade={CascadeType.ALL}
     @JoinTable(name = "account_roles", joinColumns = {
             @JoinColumn(name = "account_id") },
             inverseJoinColumns = {
@@ -68,7 +68,7 @@ public class Account implements Serializable {
     private Cart cart;
 
     @Builder.Default
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
 
