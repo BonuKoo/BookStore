@@ -1,13 +1,73 @@
 <html layout:decorate="~{layout}">
-<!-- layout:fragment 시작~ -->
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+            margin: 100px auto;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #1a73e8;
+        }
+
+        .welcome-message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .btn-container {
+            margin-top: 30px;
+        }
+
+        .btn {
+            background-color: #1a73e8;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #0c58c2;
+        }
+    </style>
+</head>
 <div layout:fragment="content" id="contents">
     <!-- section 시작 -->
-<section>
-    <h2>
-        환영합니다.
-    </h2>
-</section>
-    <!-- layout:fragment 끝~ -->
+    <section>
+        <h2>안녕하세요!</h2>
+        <div class="welcome-message">
+            <!-- 인증된 사용자일 경우 -->
+            <span sec:authorize="isAuthenticated()">
+                <span th:text="${nickname}">닉네임</span>님, 환영합니다!
+            </span>
+
+            <!-- 인증되지 않은 사용자일 경우 -->
+            <span sec:authorize="isAnonymous()">
+                환영합니다! 로그인해보세요.
+            </span>
+        </div>
+        <div class="btn-container" sec:authorize="isAnonymous()">
+            <a href="/login" class="btn">로그인</a>
+            <a href="/signup" class="btn">회원가입</a>
+        </div>
+    </section>
 </div>
-<!--html ~layout~-->
 </html>

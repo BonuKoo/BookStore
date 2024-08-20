@@ -14,24 +14,32 @@ header hr {
 }
 
 .header-content {
+    position: relative; /* Make this relative to position the logo absolutely */
     display: flex;
-    justify-content: center; /* 중앙 정렬 */
-    align-items: center;
-    position: relative; /* 절대 위치 요소를 사용하기 위해 */
-    width: 100%;
+    justify-content: center; /* Center the contents horizontally */
+    align-items: center; /* Center the contents vertically */
+    height: 80px; /* Adjust height to accommodate the larger logo */
+    background-color: white;
 }
 
+/* Book Logo Positioning */
 .logo-container {
-    flex: 1; /* 중앙 정렬을 위해 flex: 1 추가 */
+    flex: 1;
     display: flex;
-    justify-content: center; /* 로고를 중앙에 배치 */
+    justify-content: flex-start; /* Aligns the logo to the left */
+    align-items: center;
+    padding-left: 20%; /* Move the logo towards the center by adding padding */
 }
 
+.book-logo {
+    height: 60px; /* Adjust size as needed */
+    width: auto;
+}
+/* Central Logo Positioning */
 .site-name {
-    flex: 2; /* 사이트 이름의 크기를 조정 */
-    text-align: center; /* 사이트 이름 중앙 정렬 */
-    display: flex;
-    position: relative; /* 절대 위치 요소의 기준 */
+    flex: 2;
+    text-align: center;
+    position: relative;
 }
 
 .site-name h1 {
@@ -72,6 +80,15 @@ header hr {
     height: auto;
 }
 
+.admin-link {
+    display: inline-block;
+}
+
+.admin-img {
+    width: 30px; /* 장바구니 이미지와 동일한 크기 */
+    height: auto;
+}
+
 .header-content > .user-actions {
     margin-left: auto; /* 오른쪽으로 밀어 붙이기 */
 }
@@ -105,13 +122,25 @@ header hr {
 }
 
 .logo {
-    height: 100px; /* 높이를 조정 */
-    width: auto; /* 비율에 맞게 너비 자동 조정 */
+    height: 60px; /* Keep the smaller logo size */
+    width: auto; /* Maintain aspect ratio */
     display: block;
-    margin: 0 auto; /* 로고를 중앙에 배치 */
-    padding: 10px 0; /* 로고와 hr 사이의 간격 조정 */
+    margin: 0 auto; /* Center the logo horizontally */
+    padding: 10px 0; /* Adjust spacing around the logo */
 }
 
+/* Central Logo Positioning */
+.site-name {
+    position: absolute; /* Position it absolutely within the header */
+    top: 50%; /* Move it down to the middle */
+    left: 50%; /* Center it horizontally */
+    transform: translate(-50%, -50%); /* Offset it by 50% of its width and height to truly center */
+}
+
+.site-logo {
+    height: 80px; /* Size of the logo */
+    width: 120;
+}
 .user-nav ul li a:hover {
     background-color: #495057;
     border-radius: 5px;
