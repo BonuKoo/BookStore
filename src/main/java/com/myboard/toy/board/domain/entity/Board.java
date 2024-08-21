@@ -22,7 +22,7 @@ public class Board {
     private String content;
 
     //계정 추가
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "account_id")
     private Account account;
 

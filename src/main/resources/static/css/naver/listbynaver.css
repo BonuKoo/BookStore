@@ -6,6 +6,48 @@
     justify-content: center; /* 카드들을 중앙에 정렬 */
 }
 
+.search-form {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    margin-bottom: 20px; /* 아래 여백 */
+}
+
+.search-form input[type="text"] {
+    width: 300px; /* 검색창 너비 */
+    padding: 10px; /* 내부 여백 */
+    border: 2px solid #ddd; /* 테두리 */
+    border-radius: 20px 0 0 20px; /* 왼쪽 모서리만 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    transition: all 0.3s ease; /* 전환 효과 */
+}
+
+.search-form input[type="text"]:focus {
+    border-color: #007bff; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 */
+    outline: none; /* 기본 아웃라인 제거 */
+}
+
+.search-form button {
+    padding: 10px 20px; /* 버튼 내부 여백 */
+    border: 2px solid #007bff; /* 테두리 */
+    border-radius: 0 20px 20px 0; /* 오른쪽 모서리만 둥글게 */
+    background-color: #007bff; /* 배경색 */
+    color: white; /* 텍스트 색상 */
+    cursor: pointer; /* 커서 변경 */
+    font-size: 1em; /* 폰트 크기 */
+    transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+}
+
+.search-form button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 배경색 */
+}
+
+.search-form button:focus {
+    outline: none; /* 기본 아웃라인 제거 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 */
+}
+
+
 .book-card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -50,13 +92,36 @@
 .book-card-content a:hover {
     color: #007bff;
 }
-
 .pagination-buttons {
     margin-top: 20px;
     text-align: center;
 }
 
-.pagination-buttons button {
-    padding: 10px 20px; /* 버튼 크기 조정 */
-    margin-right: 10px;
+.pagination-button {
+    padding: 10px 20px; /* 버튼 내부 여백 */
+    margin: 0 5px; /* 버튼 간격 */
+    border: 2px solid #007bff; /* 테두리 */
+    border-radius: 50px; /* 완전히 둥근 모서리 */
+    background-color: #007bff; /* 기본 배경색 */
+    color: white; /* 텍스트 색상 */
+    cursor: pointer; /* 마우스 커서 변경 */
+    font-size: 1em; /* 폰트 크기 */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* 배경색과 테두리 색상 전환 효과 */
+}
+
+.pagination-button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 배경색 */
+    border-color: #0056b3; /* 마우스 오버 시 테두리 색상 */
+}
+
+.pagination-button:focus {
+    outline: none; /* 기본 아웃라인 제거 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 */
+}
+
+.pagination-button:disabled {
+    background-color: #ddd; /* 비활성화 상태의 배경색 */
+    border-color: #ddd; /* 비활성화 상태의 테두리 색상 */
+    color: #aaa; /* 비활성화 상태의 텍스트 색상 */
+    cursor: not-allowed; /* 비활성화 상태의 커서 */
 }

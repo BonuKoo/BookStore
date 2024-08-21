@@ -32,7 +32,7 @@
                 <input type="hidden" name="display" th:value="${display}">
                 <input type="hidden" name="start" th:value="${start - 10}">
                 <input type="hidden" name="sort" th:value="${sort}">
-                <button type="submit">Previous</button>
+                <button type="submit" class="pagination-button">Previous</button>
             </form>
 
             <form th:if="${hasNext}" th:action="@{/search-books}" method="get" style="display: inline;">
@@ -40,9 +40,8 @@
                 <input type="hidden" name="display" th:value="${display}">
                 <input type="hidden" name="start" th:value="${start + 10}">
                 <input type="hidden" name="sort" th:value="${sort}">
-                <button type="submit">Next</button>
+                <button type="submit" class="pagination-button">Next</button>
             </form>
-
         </div>
 
     </section>
