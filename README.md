@@ -24,3 +24,8 @@
 
 ### 환경 설정
 application.yml 파일에서 데이터베이스 설정을 맞춰야 합니다.
+![(2) 검색 결과](https://github.com/user-attachments/assets/81bc633b-66dc-48f7-87bd-9aea8903665b)
+![(3)회원가입 page](https://github.com/user-attachments/assets/9760b83b-c34f-405f-8aa4-d5fadfdcb556)
+![(10) 페이징](https://github.com/user-attachments/assets/d27f5788-e006-4117-bf57-c74ce5450c42)
+![(12)알람2](https://github.com/user-attachments/assets/7c352243-0a51-4518-b3e8-aab942f49c98)
+![(1)home-로그인X](https://github.com/user-attachments/assets/5c4729ec-116f-49a2-b186-4d4a45f4cd8c)
