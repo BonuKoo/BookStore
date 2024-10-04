@@ -30,3 +30,6 @@ application.yml 파일에서 데이터베이스 설정을 맞춰야 합니다.
 ![(3)회원가입 page](https://github.com/user-attachments/assets/9760b83b-c34f-405f-8aa4-d5fadfdcb556)
 - 로그인
 ![(1)home-로그인X](https://github.com/user-attachments/assets/5c4729ec-116f-49a2-b186-4d4a45f4cd8c)
+
+
+[발표자료(BookStore).pdf](https://github.com/user-attachments/files/17252245/BookStore.pdf)
