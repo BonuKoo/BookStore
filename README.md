@@ -23,4 +23,4 @@
 - H2
 
 ### 환경 설정
-application.yml 파일에서 데이터베이스와 Redis 등의 설정을 맞춰야 합니다.
+application.yml 파일에서 데이터베이스 설정을 맞춰야 합니다.
