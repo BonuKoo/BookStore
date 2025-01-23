@@ -44,11 +44,11 @@ public class Cart {
 
     // == TotPrice == //
     private void setTotPrice(int totPrice) {
-        this.totPrice = totPrice;
+        //this.totPrice = totPrice;
     }
 
     public void updateTotPrice(int amount){
-        this.totPrice += amount;
+        //this.totPrice += amount;
     }
 
     public void addCartItem(CartItem cartItem){

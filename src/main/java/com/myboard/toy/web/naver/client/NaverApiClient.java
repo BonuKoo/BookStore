@@ -43,7 +43,7 @@ public interface NaverApiClient {
     display : Integer   N        표시할 검색 결과 개수  기본 값 : 10, 최댓값 : 100
     start   : Integer   N        검색 시작 위치 (기본 값 : 1, 최댓값 : 1000)
     sort    : String    N        검색 결과 정렬 방법 - sim  : 정확도 순으로 내림차순 정렬 (default)
-                                                  - date : 출간ㄴ일순으로 내림차순 정렬
+                                                  - date : 출ㄴ일순으로 내림차순 정렬
  */
 
 /*

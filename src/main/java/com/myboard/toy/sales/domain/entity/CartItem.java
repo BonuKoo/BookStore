@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Entity
 public class CartItem {
 
@@ -40,5 +41,7 @@ public class CartItem {
     private void setItem(Item item) {
         this.item = item;
     }
+
+
 
 }

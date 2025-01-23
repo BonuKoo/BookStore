@@ -33,24 +33,24 @@ spring:
 #        connectiontimeout: 5000
 #        timeout: 5000
 #        writetimeout: 5000
-  mail:
-    host: smtp.kakao.com                #이메일 서버의 호스트명 (여기서는 Gmail의 SMTP 서버)
-    port: 465                           #Gmail의 경우 587
-    username: zxcqew32@kakao.com     #Gmail 계정 아이디
-    password: bunwoo5%5%
-    properties:
-      mail:
-        smtp:
-          ssl:
-            enable: true
-          auth: true
-          starttls:
-            enable: true
-            required: true
-        debug: true
-        connectiontimeout: 5000
-        timeout: 5000
-        writetimeout: 5000
+#  mail:
+#    host: smtp.kakao.com                #이메일 서버의 호스트명 (여기서는 Gmail의 SMTP 서버)
+#    port: 465                           #Gmail의 경우 587
+#    username: zxcqew32@kakao.com     #Gmail 계정 아이디
+#    password: bunwoo5%5%
+#    properties:
+#      mail:
+#        smtp:
+#          ssl:
+#            enable: true
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#        debug: true
+#        connectiontimeout: 5000
+#        timeout: 5000
+#        writetimeout: 5000
 #smtp.ssl.enable=true
 #properties.mail.smtp.auth=trues
 
@@ -58,29 +58,62 @@ spring:
   #  console:
   #    enabled: true
 
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password: 1234
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    driver-class-name: org.h2.Driver
-    username: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/toy
+    username: root
     password: 1234
+    hikari:
+      maximum-pool-size: 40
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
   logging.level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: OFF
     org.apache.coyote.http11: trace
+    org.springframework.security: DEBUG
   profiles:
     active: local
   freemaker:
     cache: false
   thymeleaf:
     cache: false
+  redis:
+    host: localhost           # Redis 서버 호스트
+    port: 6379                # Redis 서버 포트
+    password:                 # (옵션 ) 비밀번호
+    timeout: 2000ms           # 연결 타임아웃 시간
+    lettuce:                  # Redis 클라이언트 Lettuce 관련 설정
+      pool:                   # 커넥션 풀 설정
+        enabled: true         # 커넥션 풀 활성화
+        max-active: 8         # 최대 커넥션 수
+        max-idle: 8           # 최대 유휴 커넥션 수
+        min-idle: 0           # 최소 유휴 커넥션 수
+        max-wait: -1ms        # 커넥션 풀에서 연결을 기다리는 최대 시간
+
+#액츄에이터 기능 웹 노출
+# Micrometer와 Prometheus 연동 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Prometheus 메트릭 노출"
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true  # Prometheus 활성화
+
 
 file:
-  #dir: C:/BWProject/toyProject/boardFile/ #학원
   dir: C:/Project/toyProject/boardFile/ #집
 
 naver:

@@ -11,6 +11,7 @@ import com.myboard.toy.sales.domain.entity.Item;
 import com.myboard.toy.sales.cart.repository.CartRepository;
 import com.myboard.toy.sales.cartitem.repository.CartItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CartItemService {
 
@@ -78,7 +80,22 @@ public class CartItemService {
         CartItem cartItem = cartItemRepository.findByCartAndItem(cart, item)
                 .orElseThrow(() -> new IllegalArgumentException("해당 CartItem이 존재하지 않습니다."));
 
+
         cartItem.updateCount(form.getAmount());
+
+        cartItemRepository.save(cartItem);
+    }
+
+    @Transactional
+    public void updateCartItemAmount2(Cart cart,String itemId, int count) {
+
+        Item item = itemService.findByIsbn(itemId);
+
+        CartItem cartItem = cartItemRepository.findByCartAndItem(cart, item)
+                .orElseThrow(() -> new IllegalArgumentException("해당 CartItem이 존재하지 않습니다."));
+
+
+        cartItem.updateCount(count);
 
         cartItemRepository.save(cartItem);
     }

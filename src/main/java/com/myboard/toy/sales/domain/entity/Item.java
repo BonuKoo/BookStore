@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name ="dtype")
@@ -24,12 +27,16 @@ public class Item {
     private int price;          //가격
     private int stockQuantity;  //재고
 
-    /*
-    //TODO : Category 나중에 다 대 다 중간 테이블로 풀어야 함
-    @Builder.Default
-    @ManyToMany(mappedBy = "items")
-    private List<Category> categories = new ArrayList<>();
-    */
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
+
+
+    public Item(String isbn, String title, int price, int stockQuantity) {
+        this.isbn = isbn;
+        this.title = title;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
 
     //재고 추가
     public void addStock(int quantity){
@@ -38,12 +45,13 @@ public class Item {
 
     //재고 줄어듬
     public void removeStock(int quantity) {
-        int restStock = this.stockQuantity - quantity;
 
-        if (restStock < 0) {
-            throw new NotEnoughStockException();
+        if (this.stockQuantity - quantity < 0) {
+            throw new RuntimeException("재고는 0개 미만이 될 수 없습니다.");
         }
-        this.stockQuantity = restStock;
+
+        this.stockQuantity -= quantity;
+
     }
 
     public void setIsbn(String isbn) {

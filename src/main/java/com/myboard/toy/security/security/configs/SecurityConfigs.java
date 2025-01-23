@@ -16,6 +16,7 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -48,7 +49,7 @@ public class SecurityConfigs {
                         .successHandler(successHandler)
                         .failureHandler(failureHandler)
                         .permitAll())
-//                .csrf(AbstractHttpConfigurer::disable)
+                //.csrf(AbstractHttpConfigurer::disable)  //주석 처리
                 .authenticationProvider(authenticationProvider)
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(new FormAccessDeniedHandler("/denied"))
@@ -73,8 +74,10 @@ public class SecurityConfigs {
                         .requestMatchers("/api/user").hasAuthority("ROLE_USER")
                         .requestMatchers("/api/manager").hasAuthority("ROLE_MANAGER")
                         .requestMatchers("/api/admin").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/cart2/**").permitAll() // cart2 경로 열어줌
+
                         .anyRequest().permitAll())
-                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)  //주석 처리
                 .authenticationManager(authenticationManager)
                     .exceptionHandling(exception -> exception.authenticationEntryPoint(new RestAuthenticationEntryPoint())
                     .accessDeniedHandler(new RestAccessDeniedHandler()))

@@ -86,10 +86,19 @@ dependencies {
 	// ModelMapper
 	implementation 'org.modelmapper:modelmapper:3.1.0'
 
+	//메모리 방식 캐싱 - redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis 스타터
+
 	compileOnly 'org.projectlombok:lombok'
 
 	//devTools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	//성능 지표 확인
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'  // Actuator 추가
+
+	implementation 'io.micrometer:micrometer-registry-prometheus'  // Prometheus와의 연동
+
 
 	annotationProcessor 'org.projectlombok:lombok'
 

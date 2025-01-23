@@ -10,4 +10,5 @@ public interface CartRepository extends JpaRepository<Cart,Long>,CartRepository4
 
     Optional<Cart> findByAccount(Account account);
 
+    Optional<Cart> findByAccount_Id(Long accountId);
 }

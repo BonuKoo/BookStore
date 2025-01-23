@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItemUpdateAmountRequestForm {
-
+    private Long accountId;     // 임시 변수
     private String itemIsbn;    //아이템 Key 값
     private int amount;         //수정할 개수
 

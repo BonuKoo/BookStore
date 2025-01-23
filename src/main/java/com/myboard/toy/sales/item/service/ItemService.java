@@ -26,7 +26,7 @@ public class ItemService {
 
         if (findIsbn.isEmpty()){
             int discount = Integer.parseInt(dto.getChannel().getItems().get(0).getDiscount());
-            int defau_Quantity = 9999;
+            int defau_Quantity = 100;
 
             Item item = Item.builder()
                     .isbn(dto.getChannel().getItems().get(0).getIsbn())
@@ -49,6 +49,17 @@ public class ItemService {
         return itemRepository.findByIsbn(isbn)
                 .orElseThrow(()->new ItemNotFoundException("해당하는 상품은 존재하지 않습니다."));
     }
+
+    @Transactional
+    public void decrease(String isbn, int quantity){
+
+        Item item = itemRepository.findByIsbn(isbn)
+                .orElseThrow();
+        item.removeStock(quantity);
+
+        itemRepository.saveAndFlush(item);
+
+    };
 
 }
 
