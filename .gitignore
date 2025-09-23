@@ -1,0 +1,58 @@
+# 프로젝트 전용으로 추가된 제외 파일 목록
+docker-compose.yml
+prometheus.yml
+
+# 프로필 예외 처리
+# 로컬, aws 구분
+application.yml
+application-aws.yml
+
+#Mongo 관련
+/src/main/java/com/bookService/core/test/cart/mongo/
+# Controller
+CartMongoController.java
+
+# Service
+CartMongoService.java
+# Document
+CartDocument.java
+CartItemDocument.java
+
+
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
