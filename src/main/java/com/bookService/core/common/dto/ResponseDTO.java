@@ -1,4 +1,4 @@
-package com.bookService.core.domain.login.dto;
+package com.bookService.core.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

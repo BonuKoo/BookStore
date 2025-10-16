@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = "username") })
 public class AccountEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

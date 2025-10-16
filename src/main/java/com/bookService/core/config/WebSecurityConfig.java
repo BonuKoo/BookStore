@@ -3,6 +3,7 @@ package com.bookService.core.config;
 import com.bookService.core.security.jwt.JwtAuthenticationFilter;
 import com.bookService.core.security.jwt.OAuthSuccessHandler;
 import com.bookService.core.security.jwt.RedirectUrlCookieFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,18 +51,22 @@ public class WebSecurityConfig {
                 )// 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/auth/**").permitAll() // root 및 auth, 경로는 인증 없이 허용
-                        .requestMatchers("/api/naver/**").permitAll()  // ✅ 네이버 API는 로그인 없이도 접근 가능
+                        .requestMatchers("/api/naver/**").permitAll()  //  네이버 API는 로그인 없이도 접근 가능
                         .requestMatchers("/v1/toss/**").permitAll()
                         .requestMatchers("/actuator/prometheus").permitAll()
                         .anyRequest().authenticated()
-                ) // JWT 필터를 UsernamePasswordAuthenticationFilter 이후에 실행되도록 추가
+                )
+                // JWT 필터를 UsernamePasswordAuthenticationFilter 이후에 실행되도록 추가
+                 /** 문제 부분 */
                 .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
                 // OAuth2 필터
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oAuthSuccessHandler)
                 )
-
                 // 인증 실패 시 403 Forbidden 반환
+                /** 미인증 요청이 컨트롤러까지 흘러가지 않도록, 403이 아닌 401로 수정*/
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
                 )

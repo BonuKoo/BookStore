@@ -1,6 +1,6 @@
 package com.bookService.core.domain.todo.controller;
 
-import com.bookService.core.domain.login.dto.ResponseDTO;
+import com.bookService.core.common.dto.ResponseDTO;
 import com.bookService.core.domain.todo.dto.TodoDTO;
 import com.bookService.core.domain.todo.entity.TodoEntity;
 import com.bookService.core.domain.todo.service.TodoService;
@@ -10,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor    // 생성자 주입을 위한 Lombok 어노테이션
 @RestController             // REST 컨트롤러 선언

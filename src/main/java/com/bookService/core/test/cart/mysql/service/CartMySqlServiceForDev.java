@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping
-public class CartMySqlServiceTest {
+public class CartMySqlServiceForDev {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;

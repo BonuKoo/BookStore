@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 /*
 @Configuration
-//@EnableBatchProcessing
+@EnableBatchProcessing
 @RequiredArgsConstructor
 @Slf4j*/
 public class ItemBatchConfig {
@@ -30,8 +30,8 @@ public class ItemBatchConfig {
     private final PlatformTransactionManager transactionManager;
     private final ItemRepository itemRepository;
 
-    private static final int TOTAL_ITEMS = 100_000_000;
-    private static final int CHUNK_SIZE = 1000;
+    private static final int TOTAL_ITEMS = 60_000;
+    private static final int CHUNK_SIZE = 100;
 
     // Job 정의
     @Bean
@@ -58,7 +58,7 @@ public class ItemBatchConfig {
     @StepScope
     public ItemReader<Item> itemReader() {
         return new ItemReader<>() {
-            private int index = 100001;
+            private int index = 2000;
 
             @Override
             public Item read() {
@@ -94,4 +94,5 @@ public class ItemBatchConfig {
     private String buildIsbn(int index) {
         return String.format("ISBN%07d", index);
     }*/
+
 }

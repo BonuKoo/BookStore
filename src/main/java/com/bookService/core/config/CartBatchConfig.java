@@ -7,6 +7,7 @@ import com.bookService.core.domain.login.repository.AccountJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -22,8 +23,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.List;
 /*
 @Configuration
-@RequiredArgsConstructor*/
-//@EnableBatchProcessing
+@RequiredArgsConstructor
+@EnableBatchProcessing*/
 public class CartBatchConfig {
 /*
     private final JobRepository jobRepository;
@@ -34,9 +35,9 @@ public class CartBatchConfig {
     private static final int START_ACCOUNT_ID = 5;
     private static final int END_ACCOUNT_ID = 10005;
     private static final int CHUNK_SIZE = 100;
-*/
+
     // Job 정의
-    /*
+
     @Bean
     public Job cartInsertJob(Step cartInsertStep) {
         return new JobBuilder("cartInsertJob", jobRepository)

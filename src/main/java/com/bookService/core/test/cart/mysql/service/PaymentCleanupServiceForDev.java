@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentCleanupService {
+public class PaymentCleanupServiceForDev {
 
     private final SpringDataJpaPaymentOrderHistoryRepository historyRepository;
     private final SpringDataJpaPaymentOrderRepository orderRepository;

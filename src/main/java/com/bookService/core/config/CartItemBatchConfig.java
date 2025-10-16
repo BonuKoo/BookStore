@@ -22,22 +22,29 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 //@Configuration
 @RequiredArgsConstructor
 public class CartItemBatchConfig {
 
-    /*
+
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
     private final CartRepository cartRepository;
     private final ItemRepository itemRepository;
 
-    private static final int START_CART_ID = 2; // Cart PK 기준
-    private static final int END_CART_ID = 10002;
-    private static final int CHUNK_SIZE = 100;
-    private static final int CART_ITEM_COUNT = 5; // CartItem 개수 고정
-    private static final int MAX_ISBN = 9_999_999;
+    private static final int START_CART_ID = 3; // Cart PK 기준
+    private static final int END_CART_ID = 9002;
+    private static final int CHUNK_SIZE = 10;
+    private static final int CART_ITEM_COUNT = 6; // CartItem 개수 고정
+//    private static final int MAX_ISBN = 9_999_999;
+
+    // 장바구니에 넣을 ISBN 목록 515 ~ 520, 521, 560,
+    private static final List<String> TARGET_ISBNs = IntStream.range(521, 560)
+            .mapToObj(i -> String.format("ISBN%07d", i))
+            .collect(Collectors.toList());
 
     @Bean
     public Job cartItemInsertJob(Step cartItemInsertStep) {
@@ -64,30 +71,49 @@ public class CartItemBatchConfig {
         return new ListItemReader<>(carts);
     }
 
-    // Processor: CartItem 5개 생성 후 Cart에 추가
+    // Processor: 대상 ISBN 6개를 Cart에 추가 (랜덤 대신 고정된 목록 사용)
     @Bean
     public ItemProcessor<Cart, Cart> cartItemProcessor() {
+        // 미리 Item 엔티티를 모두 로드하여 캐시합니다. (N+1 방지)
+        List<Item> items = itemRepository.findAllById(TARGET_ISBNs);
+
         return cart -> {
-            Random random = new Random();
+            // CartItem이 이미 존재하는지 확인 (불필요한 중복 삽입 방지)
+            if (cart.getCartItems().size() >= CART_ITEM_COUNT) {
+                return cart; // 이미 충분한 아이템이 있다면 스킵
+            }
 
-            for (int i = 0; i < CART_ITEM_COUNT; i++) {
-                int isbnNum = 1 + random.nextInt(7);
-                String isbn = String.format("ISBN%07d", isbnNum);
+            int newlyAddedCount = 0;
 
-                // 중복 Item 방지
+            for (String isbn : TARGET_ISBNs) {
+                // Item 캐시에서 해당 Item을 찾습니다.
+                Item item = items.stream()
+                        .filter(i -> i.getIsbn().equals(isbn))
+                        .findFirst()
+                        .orElse(null);
+
+                if (item == null) continue;
+
+                // 이미 장바구니에 해당 ISBN이 있는지 확인
                 boolean alreadyExists = cart.getCartItems().stream()
                         .anyMatch(ci -> ci.getItem().getIsbn().equals(isbn));
                 if (alreadyExists) continue;
 
-                Item item = itemRepository.findById(isbn).orElse(null);
-                if (item == null) continue; // 존재하지 않는 Item 스킵
-
+                // 1. CartItem 생성 및 추가
                 CartItem cartItem = new CartItem();
                 cartItem.setCart(cart);
                 cartItem.setItem(item);
                 cartItem.setAmount(5);
 
-                cart.addCartItem(cartItem); // totPrice 계산 포함
+                cart.addCartItem(cartItem);
+
+                // 2. 카운트 증가
+                newlyAddedCount++;
+
+                //  핵심 수정: 6개를 채웠다면 루프를 즉시 중단합니다.
+                if (newlyAddedCount >= CART_ITEM_COUNT) {
+                    break;
+                }
             }
 
             return cart;
@@ -99,5 +125,5 @@ public class CartItemBatchConfig {
     public ItemWriter<Cart> cartItemWriter() {
         return carts -> cartRepository.saveAll(carts);
     }
-    */
+
 }

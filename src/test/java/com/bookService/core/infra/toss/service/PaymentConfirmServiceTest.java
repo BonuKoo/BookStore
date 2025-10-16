@@ -4,38 +4,21 @@ import com.bookService.core.common.util.IdempotencyCreator;
 import com.bookService.core.domain.cart.service.CartService;
 import com.bookService.core.domain.cartitem.dto.CartListDTOForQueryProjection;
 import com.bookService.core.domain.cartitem.repository.CartItemRepository;
-import com.bookService.core.domain.checkout.dto.CheckoutCommand;
+import com.bookService.core.domain.checkout.dto.CheckoutCommandForDev;
 import com.bookService.core.domain.checkout.dto.CheckoutRequest;
-import com.bookService.core.domain.checkout.dto.CheckoutResult;
-import com.bookService.core.domain.checkout.service.CheckoutService;
-import com.bookService.core.domain.payment.dto.*;
-import com.bookService.core.domain.payment.entity.PaymentEvent;
-import com.bookService.core.domain.payment.entity.PaymentOrder;
-import com.bookService.core.domain.payment.entity.PaymentOrderHistory;
-import com.bookService.core.domain.payment.enumtype.PSPConfirmationStatus;
-import com.bookService.core.domain.payment.enumtype.PaymentMethod;
-import com.bookService.core.domain.payment.enumtype.PaymentStatus;
-import com.bookService.core.domain.payment.enumtype.PaymentType;
-import com.bookService.core.domain.payment.persistent.repository.PaymentOrderHistoryRepository;
+import com.bookService.core.test.checkout.service.CheckoutServiceForDev;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentEventRepository;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentOrderHistoryRepository;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentOrderRepository;
 import com.bookService.core.infra.toss.executor.TossPaymentExecutor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 //@SpringBootTest
 @AutoConfigureMockMvc
@@ -43,7 +26,7 @@ import static org.mockito.Mockito.when;
 class PaymentConfirmServiceTest {
 
 
-    @Autowired private CheckoutService checkoutService;
+    @Autowired private CheckoutServiceForDev checkoutServiceForDev;
     @Autowired private PaymentConfirmService confirmService;
     @Autowired private CartService cartService;
     @Autowired private SpringDataJpaPaymentEventRepository paymentEventRepository;
@@ -56,7 +39,7 @@ class PaymentConfirmServiceTest {
 
     private Long testUserId1;
     private List<CartListDTOForQueryProjection> cartItemList;
-    private CheckoutCommand command;
+    private CheckoutCommandForDev command;
 
 //    @BeforeEach
     void setUp(){
@@ -74,7 +57,7 @@ class PaymentConfirmServiceTest {
         String idempotencyKey = IdempotencyCreator.create(checkoutRequest);
         Long cartId = cartService.findCartByAccountIdStringType(userId);
 
-        command = CheckoutCommand.builder()
+        command = CheckoutCommandForDev.builder()
                 .cartId(cartId)
                 .buyerId(Long.parseLong(userId))
                 .cartItemIds(checkoutRequest.getCartItemIds())
@@ -89,6 +72,7 @@ class PaymentConfirmServiceTest {
      * */
 
 //    @Test
+    /*
     void shouldConfirmPaymentAndMarkSuccess_inRealDb() {
         // 1. Checkout 실행
         CheckoutResult checkoutResult = checkoutService.checkout(command);
@@ -220,5 +204,5 @@ class PaymentConfirmServiceTest {
         });
     }
 
-
+*/
 }

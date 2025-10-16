@@ -36,10 +36,6 @@ public class ItemService {
         }
     }
 
-    public List<Item> findItems(){
-        return itemRepository.findAll();
-    }
-
     public Item findByIsbn(String isbn) {
         return itemRepository.findByIsbn(isbn)
                 .orElseThrow(()->new ItemNotFoundException("해당하는 상품은 존재하지 않습니다."));

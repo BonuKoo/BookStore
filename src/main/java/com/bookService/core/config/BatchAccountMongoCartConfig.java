@@ -1,7 +1,9 @@
 package com.bookService.core.config;
 
+/*
 import com.bookService.core.domain.cart.dto.CartDocument;
 import com.bookService.core.domain.cartitem.dto.CartItemDocument;
+*/
 import com.bookService.core.domain.login.entity.AccountEntity;
 import com.bookService.core.domain.login.repository.AccountJpaRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package com.bookService.core.domain.checkout.dto;
 
-import com.bookService.core.domain.cartitem.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,14 +10,9 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CheckoutRequest {
-
     private List<Long> cartItemIds;  //  주문 목록
-    private String seed;            // 시간
-
-    public CheckoutRequest(List<Long> cartItemIds, String seed) {
-        this.cartItemIds = cartItemIds;
-        this.seed = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toString();
-    }
+    private String seed = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toString();            // 시간
 }
 

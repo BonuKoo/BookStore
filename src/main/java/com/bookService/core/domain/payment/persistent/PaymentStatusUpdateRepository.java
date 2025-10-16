@@ -1,6 +1,6 @@
 package com.bookService.core.domain.payment.persistent;
 
-import com.bookService.core.common.exception.PaymentAlreadyProcessedException;
+import com.bookService.core.common.exception.checkout.PaymentAlreadyProcessedException;
 import com.bookService.core.domain.payment.enumtype.PaymentMethod;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
 import com.bookService.core.domain.payment.dto.PaymentExtraDetails;

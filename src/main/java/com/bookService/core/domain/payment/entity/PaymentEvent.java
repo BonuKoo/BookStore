@@ -1,5 +1,6 @@
 package com.bookService.core.domain.payment.entity;
 
+import com.bookService.core.domain.login.entity.AccountEntity;
 import com.bookService.core.domain.payment.enumtype.PaymentMethod;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
 import com.bookService.core.domain.payment.enumtype.PaymentType;
@@ -11,23 +12,33 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+@SequenceGenerator(
+        name = "payment_event_seq_generator",
+        sequenceName = "payment_event_seq", // DB에 생성될 시퀀스명
+        allocationSize = 500                 // 미리 50개 ID를 가져와 batch insert 활성화
+)
+*/
 @Entity @Table(name = "payment_event")
 @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data @Builder
 public class PaymentEvent {
 
-    @Id
+    @Id @Column(name = "payment_event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_event_id")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_event_seq_generator")
     private Long id;
 
     @Version
     @Column(name = "version")
     private Long version; // Lock
 
-
-    @Column(name = "buyer_id", nullable = false)
+    @Column(name = "buyer_id", nullable = true)
     private Long buyerId; // 결제자 ID
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer", nullable = false) // AccountEntity의 PK를 참조하는 외래 키 컬럼
+    private AccountEntity accountEntity;
 
     @Column(name = "is_payment_done", nullable = false)
     private boolean isPaymentDone;

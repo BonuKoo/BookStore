@@ -26,7 +26,6 @@ public class CartRepository4QueryDslImpl implements CartRepository4QueryDsl {
     QItem item = new QItem(QItem.item);
 
     //cart id를 받아야 한다.
-
     @Override
     public List<CartListDTOForQueryProjection> getCartList(Long cartId) {
 

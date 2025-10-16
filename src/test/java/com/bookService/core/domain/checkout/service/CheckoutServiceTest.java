@@ -1,32 +1,5 @@
 package com.bookService.core.domain.checkout.service;
 
-import com.bookService.core.common.util.IdempotencyCreator;
-import com.bookService.core.config.JwtConfig;
-import com.bookService.core.domain.cart.service.CartService;
-import com.bookService.core.domain.cartitem.dto.CartListDTOForQueryProjection;
-import com.bookService.core.domain.cartitem.repository.CartItemRepository;
-import com.bookService.core.domain.checkout.dto.CheckoutCommand;
-import com.bookService.core.domain.checkout.dto.CheckoutRequest;
-import com.bookService.core.domain.checkout.dto.CheckoutResult;
-import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentEventRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 

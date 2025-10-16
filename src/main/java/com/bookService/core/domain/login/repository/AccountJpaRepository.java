@@ -13,16 +13,8 @@ import java.util.Optional;
 public interface AccountJpaRepository extends JpaRepository<AccountEntity, Long> {
 
     AccountEntity findByUsername(String username);
-
     Boolean existsByUsername(String username);
 
-    AccountEntity findByUsernameAndPassword(String username, String password);
 
-    Optional<AccountEntity> findTopByUsernameStartingWithOrderByUsernameDesc(String prefix);
-
-    @Query(value = "SELECT * FROM account_entity ORDER BY RAND() LIMIT :limit", nativeQuery = true)
-    List<AccountEntity> findRandomAccounts(@Param("limit") int limit);
-
-    List<AccountEntity> findAllByIdBetween(Long start, Long end);
 
 }

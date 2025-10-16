@@ -1,6 +1,5 @@
 package com.bookService.core.domain.checkout.dto;
 
-import com.bookService.core.domain.cartitem.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

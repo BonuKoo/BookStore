@@ -10,7 +10,7 @@ import com.bookService.core.domain.cartitem.dto.CartTotalPriceDto;
 import com.bookService.core.domain.cartitem.service.CartItemService;
 import com.bookService.core.domain.item.service.ItemService;
 import com.bookService.core.domain.login.dto.AccountDTO;
-import com.bookService.core.domain.login.dto.ResponseDTO;
+import com.bookService.core.common.dto.ResponseDTO;
 import com.bookService.core.domain.login.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

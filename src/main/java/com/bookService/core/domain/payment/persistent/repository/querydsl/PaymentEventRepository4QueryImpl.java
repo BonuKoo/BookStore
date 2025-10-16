@@ -1,5 +1,6 @@
 package com.bookService.core.domain.payment.persistent.repository.querydsl;
 
+import com.bookService.core.domain.payment.dto.PaymentCheckoutOptDtoForQueryProjection;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
 import com.bookService.core.domain.payment.dto.PaymentEventDto;
 import com.bookService.core.domain.payment.dto.PaymentOrderDto;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4Query{
@@ -95,6 +97,23 @@ public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4
                 .set(paymentEvent.isPaymentDone, true)
                 .where(paymentEvent.id.eq(paymentEventDto.getId()))
                 .execute();
+    }
+
+    @Override
+    public Optional<PaymentCheckoutOptDtoForQueryProjection> findPaymentOptByOrderID(String orderId) {
+        PaymentCheckoutOptDtoForQueryProjection projectionOpt = queryFactory
+                .select(Projections.constructor(PaymentCheckoutOptDtoForQueryProjection.class,
+                        paymentEvent.orderId,
+                        paymentEvent.orderName,
+                        paymentOrder.amount.sum().castToNum(Long.class)
+                        ))
+                .from(paymentEvent)
+                .join(paymentEvent.paymentOrders,paymentOrder)
+                .where(paymentEvent.orderId.eq(orderId))
+                .groupBy(paymentEvent.orderId, paymentEvent.orderName)
+                .fetchOne();
+
+        return Optional.ofNullable(projectionOpt);
     }
     /*
 

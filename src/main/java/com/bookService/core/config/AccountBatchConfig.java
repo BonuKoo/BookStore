@@ -16,7 +16,6 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,24 +23,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 //@Configuration
 //@EnableBatchProcessing
-
-/*
 @RequiredArgsConstructor
 @Slf4j
-*/
+
 public class AccountBatchConfig {
-/*
+
+    /*
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
     private final AccountJpaRepository accountJpaRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EntityManagerFactory entityManagerFactory;
-
-    private static final int TOTAL_ACCOUNTS = 100_000;
-    private static final int CHUNK_SIZE = 1000;
 */
-    // Job 정의
     /*
+    private static final int TOTAL_ACCOUNTS = 110_000;
+    private static final int CHUNK_SIZE = 1000;
+
+
+    // Job 정의
     @Bean
     public Job accountInsertJob(Step accountInsertStep) {
         return new JobBuilder("accountInsertJob", jobRepository)
@@ -49,9 +47,9 @@ public class AccountBatchConfig {
                 .start(accountInsertStep)
                 .build();
     }
-*/
+
     // Step 정의 (Bean으로 주입)
-/*
+
     @Bean
     public Step accountInsertStep() throws Exception {
         return new StepBuilder("accountInsertStep", jobRepository)
@@ -61,8 +59,7 @@ public class AccountBatchConfig {
                 .writer(accountWriter())
                 .build();
     }
-*/
-/*
+
     // Reader: JpaPagingItemReader (StepScope 필수)
     @Bean
     public ItemReader<AccountEntity> accountReader() {
@@ -81,8 +78,8 @@ public class AccountBatchConfig {
         };
     }
 
-*/
-    /*
+
+
     // Processor: DTO -> Entity + 패스워드 암호화
     @Bean
     @StepScope

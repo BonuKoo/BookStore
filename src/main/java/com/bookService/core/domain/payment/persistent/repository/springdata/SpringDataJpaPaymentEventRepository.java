@@ -16,6 +16,4 @@ public interface SpringDataJpaPaymentEventRepository extends JpaRepository<Payme
 
     Optional<PaymentEvent> findByOrderName(String orderName);
 
-
-
 }

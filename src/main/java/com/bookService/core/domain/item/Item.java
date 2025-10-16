@@ -16,18 +16,19 @@ import java.util.List;
 @AllArgsConstructor
 public class Item {
 
-    @Id
-    @Column(name = "isbn",unique = true)
+    @Id @Column(name = "isbn",unique = true)
     private String isbn;        //ISBN 번호
     private String title;
     private int price;          //가격
     private int stockQuantity;  //재고
-
     private Long sellerId; // 판매자 Id
+    
+    // Lock을 위한 버전 필드
+    @Version
+    private Long version;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
-
 
     public Item(String isbn, String title, int price, int stockQuantity) {
         this.isbn = isbn;
@@ -41,19 +42,21 @@ public class Item {
         this.stockQuantity += quantity;
     }
 
-    //재고 줄어듬
+    //재고 감소
     public void removeStock(int quantity) {
-
         if (this.stockQuantity - quantity < 0) {
+            // TODO :: 재고 부족 명확한 예외 만들어야 함
             throw new RuntimeException("재고는 0개 미만이 될 수 없습니다.");
         }
-
         this.stockQuantity -= quantity;
-
     }
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public void decrease(int quantity){
+        removeStock(quantity);
     }
 
 }

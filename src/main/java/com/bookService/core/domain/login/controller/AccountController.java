@@ -1,15 +1,13 @@
 package com.bookService.core.domain.login.controller;
 
 import com.bookService.core.domain.login.dto.AccountDTO;
-import com.bookService.core.domain.login.dto.ResponseDTO;
+import com.bookService.core.common.dto.ResponseDTO;
 import com.bookService.core.domain.login.entity.AccountEntity;
 import com.bookService.core.domain.login.service.AccountService;
 import com.bookService.core.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

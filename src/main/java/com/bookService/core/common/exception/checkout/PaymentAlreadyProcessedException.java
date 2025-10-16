@@ -1,4 +1,4 @@
-package com.bookService.core.common.exception;
+package com.bookService.core.common.exception.checkout;
 
 
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;

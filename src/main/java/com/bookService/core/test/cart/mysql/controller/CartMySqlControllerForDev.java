@@ -7,7 +7,7 @@ import com.bookService.core.domain.cartitem.CartItem;
 import com.bookService.core.domain.cartitem.dto.*;
 import com.bookService.core.domain.cartitem.service.CartItemService;
 import com.bookService.core.domain.login.dto.AccountDTO;
-import com.bookService.core.domain.login.dto.ResponseDTO;
+import com.bookService.core.common.dto.ResponseDTO;
 import com.bookService.core.domain.login.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +24,8 @@ import java.util.NoSuchElementException;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/mysql/cart")
-public class CartMySqlControllerTest {
-
+@RequestMapping("/mysql/cart/test")
+public class CartMySqlControllerForDev {
     private final AccountService accountService;
     private final CartService cartService;
     private final CartItemService cartItemService;
@@ -101,7 +100,6 @@ public class CartMySqlControllerTest {
         }
     }
 
-    /* 감소 */
     @PostMapping("/decreaseItem")
     public ResponseEntity<Map<String, String>> decreaseAmount(
             @AuthenticationPrincipal String userId,
