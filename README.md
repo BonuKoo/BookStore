@@ -9,8 +9,8 @@
 
 | 구분 | 기술 / 라이브러리 | 역할 |
 | :--- | :--- | :--- |
-| **Framework** | **Spring Boot (Java 17)** |
-| **Database** | **MySQL** |
+| **Framework** | **Spring Boot (Java 17)** |빠른 서버 구축 및 간결한 개발 환경 제공|
+| **Database** | **MySQL** | 데이터 무결성 및 트랜잭션 보장 : 주문, 결제 기록, 장바구니 등 데이터를 ACID 원칙에 따라 안전하게 저장 및 트랜잭션 관리를 통해 결제 과정의 데이터 일관성을 책임|
 | **Build Tool** | **Gradle** | 의존성 관리 및 프로젝트 빌드 자동화 |
 | **Payment Gateway** | **Toss Payments** | 결제 승인, 취소 등 실제 금융 거래 처리 |
 | **Security** | **Spring Security, JWT** | API 접근 통제 및 사용자 권한 관리 |
