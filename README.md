@@ -1,13 +1,10 @@
 
 
-# 📚 BookStore: E-commerce Payment & Auth Module
-
-> Kakao OAuth를 통한 안전한 신원 인증 및 Toss API를 활용한 전자 상거래 결제 모듈 구현.
->
-> [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](링크)
-> [![Java Version](https://img.shields.io/badge/java-17-blue)](링크)
-> [![License](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
-> 
+# BookStore
+---
+## 프로젝트 개요
+> Toss API를 활용한 PG 연계 전자상거래 흐름 구현
+ 
 ## 🛠️ 기술 스택 (Tech Stack)
 
 | 구분 | 기술 / 라이브러리 | 역할 |
@@ -50,3 +47,8 @@
     * 장바구니 상품을 기반으로 **주문 객체를 생성**하고, 이를 결제 모듈로 전달하여 **결제를 요청**하는 End-to-End 흐름 구현.
 * **🔒 재고 확인 및 Locking 처리 로직:**
     * 주문 생성 시점에 **동시성 문제**를 방지하기 위해 **낙관적 Locking**을 활용한 **재고 차감** 로직 구현.
+
+
+ 
+ 
+ 
