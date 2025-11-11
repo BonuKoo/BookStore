@@ -9,8 +9,8 @@
 
 | 구분 | 기술 / 라이브러리 | 역할 |
 | :--- | :--- | :--- |
-| **Framework** | **Spring Boot (Java 17)** | 서버 구축 및 RESTful API 구현의 핵심 프레임워크 |
-| **Database** | **MySQL** | 주문, 장바구니, 사용자 정보 등 영속성 데이터 관리 |
+| **Framework** | **Spring Boot (Java 17)** |
+| **Database** | **MySQL** |
 | **Build Tool** | **Gradle** | 의존성 관리 및 프로젝트 빌드 자동화 |
 | **Payment Gateway** | **Toss Payments** | 결제 승인, 취소 등 실제 금융 거래 처리 |
 | **Security** | **Spring Security, JWT** | API 접근 통제 및 사용자 권한 관리 |
