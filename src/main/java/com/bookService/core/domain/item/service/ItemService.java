@@ -40,7 +40,6 @@ public class ItemService {
         return itemRepository.findByIsbn(isbn)
                 .orElseThrow(()->new ItemNotFoundException("해당하는 상품은 존재하지 않습니다."));
     }
-
     @Transactional
     public void decrease(String isbn, int quantity){
 

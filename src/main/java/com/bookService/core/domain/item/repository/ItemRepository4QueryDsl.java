@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface ItemRepository4QueryDsl {
 
-    Optional<Item> findByIdWithPessimisticLock(String isbn);
+//    Optional<Item> findByIdWithPessimisticLock(String isbn);
 
-    Optional<Item> findByIdWithOptimisticLoc(String isbn);
+    //Optional<Item> findByIdWithOptimisticLoc(String isbn);
 
 }

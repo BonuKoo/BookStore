@@ -1,4 +1,4 @@
-package com.bookService.core.config;
+package com.bookService.core.config.batch;
 
 import com.bookService.core.domain.cart.Cart;
 import com.bookService.core.domain.cart.repository.CartRepository;
@@ -17,11 +17,9 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

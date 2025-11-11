@@ -56,6 +56,7 @@ dependencies {
 
 	//p6spy
 //	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
 	// https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jfr
 	implementation("org.hibernate.orm:hibernate-jfr:6.6.22.Final")
 
@@ -89,7 +90,16 @@ dependencies {
 
 	implementation 'io.micrometer:micrometer-registry-prometheus'  // Prometheus와의 연동
 
-
+//	// RabbitMQ
+//	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+//	// Slack API
+//	implementation 'com.slack.api:slack-api-client:1.28.0'
+	// WebFlux
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	// Logging
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+	// Retry
+	implementation 'org.springframework.retry:spring-retry'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

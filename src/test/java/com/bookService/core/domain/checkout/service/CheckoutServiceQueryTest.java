@@ -18,9 +18,10 @@ import java.util.List;
 
 //@SpringBootTest
 public class CheckoutServiceQueryTest {
-
+    /*
     @Autowired
     CheckoutServiceForDev checkoutService;
+    */
     /*
     @BeforeEach
     void setUp() {
@@ -28,8 +29,10 @@ public class CheckoutServiceQueryTest {
     }*/
 
     // CartItem IDs 3개를 가정
+    /*
     private final String ids = "893";
     private final List<Long> cartItemIdsArray = new ArrayList<>(List.of(209420L, 209421L, 209422L));
+    */
     /*
     @Test
     void queryCountTest_BeforeFix() {

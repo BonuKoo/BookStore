@@ -1,6 +1,7 @@
 package com.bookService.core.test.checkout.service;
 
 import com.bookService.core.common.exception.checkout.BusinessLogicException;
+import com.bookService.core.common.exception.checkout.CheckoutErrorCode;
 import com.bookService.core.common.exception.checkout.CheckoutException;
 import com.bookService.core.common.exception.checkout.DataConflictWithDataException;
 import com.bookService.core.common.util.IdempotencyCreator;
@@ -13,7 +14,6 @@ import com.bookService.core.domain.checkout.dto.CheckoutRequest;
 import com.bookService.core.domain.checkout.dto.CheckoutResult;
 import com.bookService.core.domain.login.entity.AccountEntity;
 import com.bookService.core.facade.OptimisticLockStockFacade;
-import com.bookService.core.test.cart.exception.CartItemNotExistException;
 import com.bookService.core.test.checkout.repository.CheckoutTransactionRepository;
 import com.bookService.core.domain.payment.dto.PaymentCheckoutOptDtoForQueryProjection;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
@@ -21,16 +21,21 @@ import com.bookService.core.domain.payment.entity.PaymentEvent;
 import com.bookService.core.domain.payment.entity.PaymentOrder;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentEventRepository;
 import com.bookService.core.domain.payment.usecase.CheckoutFindExistingOrderUseCase;
+import com.bookService.core.test.item.PessimisticLockItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -46,6 +51,7 @@ public class CheckoutServiceForDev  {
 
     private final OptimisticLockStockFacade optimisticLockStockFacade;
 
+    private final PessimisticLockItemService pessimisticLockItemService;
     /** //==Ver1. Origin==// */
     @Transactional
     public CheckoutResult checkout1(String userId, CheckoutRequest request) {
@@ -391,9 +397,7 @@ public class CheckoutServiceForDev  {
             // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
         }
     }
     /** createPaymentEvent */
@@ -424,9 +428,7 @@ public class CheckoutServiceForDev  {
             // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
         }
     }
     /** createPaymentEvent2 */
@@ -457,10 +459,7 @@ public class CheckoutServiceForDev  {
             // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
-        }
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);        }
     }
     /** createPaymentEvent3 */
     public CheckoutResult checkout9_4(String userId, CheckoutRequest request) {
@@ -490,21 +489,14 @@ public class CheckoutServiceForDev  {
             // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
         }
     }
 
     public CheckoutResult checkout9_5(String userId, CheckoutRequest request){
-
         CheckoutCommandForDev checkoutCommandForDev = getCheckoutCommand(userId, request);
         List<CheckoutItemForQueryProjection2> cartItems =
                 checkoutReadService.getCartItemsForEventCreation(checkoutCommandForDev.getCartItemIds());
-        
-        // 재고 확인
-
-
         PaymentEvent paymentEvent = createPaymentEvent4(checkoutCommandForDev,cartItems);
         try{
             paymentEventRepository.save(paymentEvent);
@@ -530,13 +522,58 @@ public class CheckoutServiceForDev  {
             // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
         }
     }
-    // Lock
-    public CheckoutResult checkout10_1(String userId, CheckoutRequest request){
+
+    // OptimisticLockVer
+    @Transactional
+    public CheckoutResult checkout10_OptimisticLock(String userId, CheckoutRequest request){
+        CheckoutCommandForDev checkoutCommandForDev = getCheckoutCommand(userId, request);
+        List<CheckoutItemForQueryProjection2> cartItems =
+                checkoutReadService.getCartItemsForEventCreation(checkoutCommandForDev.getCartItemIds());
+        for (CheckoutItemForQueryProjection2 cartItem: cartItems){
+            String isbn = cartItem.getIsbn();
+            int quantity = cartItem.getAmount();
+            if (isbn==null || isbn.isEmpty()){
+                throw new BusinessLogicException(CheckoutErrorCode.INVALID_CART_ITEM);
+            }
+            try {
+                optimisticLockStockFacade.decrease1(isbn,quantity);
+            } catch (InterruptedException e){
+                Thread.currentThread().interrupt();
+                throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, e);
+            } catch (RuntimeException e){
+                String errorMessage = e.getMessage() != null ? e.getMessage() : "";
+                if (errorMessage.contains("현재 서버 부하로 결제 실패")) {
+                    throw new BusinessLogicException(CheckoutErrorCode.CONCURRENCY_CONFLICT, e);
+                }
+                throw new BusinessLogicException(CheckoutErrorCode.STOCK_UNDERFLOW, e);
+            }
+        }
+        PaymentEvent paymentEvent = createPaymentEvent4(checkoutCommandForDev,cartItems);
+        try{
+            paymentEventRepository.save(paymentEvent);
+            return CheckoutResult.created(paymentEvent);
+        } catch (DataIntegrityViolationException ex) {
+            if (isDuplicateKeyError(ex)) {
+                Optional<PaymentCheckoutOptDtoForQueryProjection> exist =
+                        checkoutFindExistingOrderService.findExistingOrder(paymentEvent.getOrderId());
+                if (exist.isPresent()) {
+                    CheckoutResult existingResult = mapDtoToCheckoutResult(exist.get());
+                    throw new DataConflictWithDataException(CheckoutErrorCode.ALREADY_PROCESSED_ORDER.getMessage(), existingResult);
+                }
+            }
+            throw ex;
+        } catch (Exception ex) {
+            // 예상치 못한 오류, 500
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
+        }
+    }
+
+    //Pessimistic
+    @Transactional
+    public CheckoutResult checkout10_PessimisticLock(String userId, CheckoutRequest request){
 
         CheckoutCommandForDev checkoutCommandForDev = getCheckoutCommand(userId, request);
 
@@ -549,49 +586,37 @@ public class CheckoutServiceForDev  {
             int quantity = cartItem.getAmount();
 
             if (isbn==null || isbn.isEmpty()){
-                throw new CartItemNotExistException("장바구니 항목 ID[" + cartItem.getCartItemId() + "]에 연결된 Item ISBN이 누락되었습니다.");
+                throw new BusinessLogicException(CheckoutErrorCode.INVALID_CART_ITEM);
             }
             try {
-                optimisticLockStockFacade.decrease(isbn,quantity);
-            } catch (InterruptedException e){
-                Thread.currentThread().interrupt();
-                throw new CartItemNotExistException("재고 감소 중 오류 발생" + e);
+                pessimisticLockItemService.decrease(isbn,quantity);
+            } catch (PessimisticLockingFailureException e){
+                throw new BusinessLogicException(CheckoutErrorCode.CONCURRENCY_CONFLICT, e);
             } catch (RuntimeException e){
-                // 재고 부족 등의 RuntimeException 감지
-                throw new CartItemNotExistException("Item Quantity Error : " + e.getMessage());
+                throw new BusinessLogicException(CheckoutErrorCode.STOCK_UNDERFLOW, e);
             }
         }
-
         PaymentEvent paymentEvent = createPaymentEvent4(checkoutCommandForDev,cartItems);
         try{
             paymentEventRepository.save(paymentEvent);
-            // 성공 시, SUCCESS 상태의 CheckoutResult 반환
             return CheckoutResult.created(paymentEvent);
         } catch (DataIntegrityViolationException ex) {
-            // 중복 키 오류 (409 Conflict) 발생
             if (isDuplicateKeyError(ex)) {
-                // 기존 데이터 조회 성공 시, 데이터를 담아서 DataConflictWithDataException를 던진다.
                 Optional<PaymentCheckoutOptDtoForQueryProjection> exist =
                         checkoutFindExistingOrderService.findExistingOrder(paymentEvent.getOrderId());
-
                 if (exist.isPresent()) {
-                    // 2. CheckoutResult를 생성합니다.
                     CheckoutResult existingResult = mapDtoToCheckoutResult(exist.get());
-
-                    // 3. 데이터를 담아 Custom Exception을 던지면, GlobalExceptionHandler의
-                    //    handleDataConflictWithDataException 이 이를 409로 처리
-                    throw new DataConflictWithDataException("이미 처리된 주문입니다.", existingResult);
+                    throw new DataConflictWithDataException(CheckoutErrorCode.ALREADY_PROCESSED_ORDER.getMessage(), existingResult);
                 }
             }
-            // 중복 키가 아닌 다른 형태의 DataIntegrityViolationException이 발생하면
-            // GlobalExceptionHandler의 DataIntegrityViolationException 핸들러(500)로 던진다.
             throw ex;
         } catch (Exception ex) {
-            // 낙관적 락킹 실패, 기타 예상치 못한 오류 등을 Custom Exception으로 감싸 던진다..
-            // 낙관적 락킹 실패는 throw new DataConflictException("동시성 충돌"); 와 같이 처리
-            throw new BusinessLogicException("결제 처리 중 서버 오류", ex);
+
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
         }
     }
+
+
 
     private boolean isDuplicateKeyError(DataIntegrityViolationException ex) {
         Throwable cause = ex.getRootCause();
@@ -601,7 +626,6 @@ public class CheckoutServiceForDev  {
     private CheckoutResult mapDtoToCheckoutResult(PaymentCheckoutOptDtoForQueryProjection dto) {
         // 기존 로직을 참고하여 CheckoutResult를 반환하도록 구현
         return CheckoutResult.alreadyExists2(dto);
-
     }
 
 
@@ -775,7 +799,6 @@ public class CheckoutServiceForDev  {
             List<CheckoutItemForQueryProjection2> cartItems
             )  {
         List<Long> cartItemIds = command.getCartItemIds();
-//        List<CheckoutItemForQueryProjection2> cartItems = cartItemRepository.customCartItemProjection2(cartItemIds);
 
         AccountEntity account = cartItems.getFirst().getAccountEntity();
 
@@ -810,4 +833,122 @@ public class CheckoutServiceForDev  {
         return build;
     }
 
+    /** ===================================@Async=================================*/
+    @Transactional
+    public CheckoutResult checkout10_OptimisticLock_Async(String userId, CheckoutRequest request) {
+        CheckoutCommandForDev checkoutCommandForDev = getCheckoutCommand(userId, request);
+        List<CheckoutItemForQueryProjection2> cartItems =
+                checkoutReadService.getCartItemsForEventCreation(checkoutCommandForDev.getCartItemIds());
+
+        // 1. 비동기 작업들을 담을 리스트 선언
+        List<CompletableFuture<Void>> stockFutures = new ArrayList<>();
+
+        // 복구 시 사용할 품목 정보 저장
+        List<CheckoutItemForQueryProjection2> itemsToCompensate = new ArrayList<>();
+
+        for (CheckoutItemForQueryProjection2 cartItem : cartItems) {
+            String isbn = cartItem.getIsbn();
+            int quantity = cartItem.getAmount();
+            if (isbn == null || isbn.isEmpty()) {
+                throw new BusinessLogicException(CheckoutErrorCode.INVALID_CART_ITEM);
+            }
+
+            // 2. @Async 재고 감소 메서드를 호출하여 Future를 리스트에 수집
+            stockFutures.add(optimisticLockStockFacade.decreaseAsync(isbn, quantity));
+            // 보상 목록에 추가 (재고 감소 시도 대상 목록)
+            itemsToCompensate.add(cartItem);
+        }
+
+        // 결제 이벤트는 재고 감소 로직 완료 후에 생성되어야 함
+        PaymentEvent paymentEvent = createPaymentEvent4(checkoutCommandForDev, cartItems);
+
+        try {
+            // A. 재고 감소 완료 대기 및 비동기 예외 처리
+            CompletableFuture.allOf(stockFutures.toArray(new CompletableFuture[0])).join();
+
+            // B. 결제 이벤트 저장 (메인 트랜잭션의 핵심 커밋)
+            paymentEventRepository.save(paymentEvent);
+            return CheckoutResult.created(paymentEvent);
+
+        } catch (CompletionException e) {
+            // 🚨 CASE 1: 비동기 재고 감소 중 실패 (Optimistic Lock 충돌, InterruptedException 등)
+
+            // 🟢 보상 트랜잭션 실행: 재고 복구 시도
+            compensateStock(itemsToCompensate, "Async Stock Decrease Failed");
+
+            Throwable actualException = e.getCause();
+            String errorMessage = actualException.getMessage() != null ? actualException.getMessage() : "";
+
+            if (errorMessage.contains("Interrupted")) {
+                Thread.currentThread().interrupt();
+                throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, actualException);
+            } else if (errorMessage.contains("현재 서버 부하로 결제 실패")) {
+                // Optimistic Lock 재시도 실패 -> CONCURRENCY_CONFLICT 반환
+                throw new BusinessLogicException(CheckoutErrorCode.CONCURRENCY_CONFLICT, actualException);
+            } else if (errorMessage.contains("재고 감소 작업 중 복구 불가능한 비즈니스 실패")) {
+                // 재고 부족 등 -> STOCK_UNDERFLOW 반환
+                throw new BusinessLogicException(CheckoutErrorCode.STOCK_UNDERFLOW, actualException);
+            }
+
+            // 그 외 예상치 못한 오류
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, actualException);
+
+        } catch (DataIntegrityViolationException ex) {
+            // 🚨 CASE 2: PaymentEvent 저장 중 실패 (Duplicate order_id 충돌 등)
+
+            // 🟢 보상 트랜잭션 실행: 재고 복구 시도
+            compensateStock(itemsToCompensate, "Duplicate Order ID Conflict");
+
+            if (isDuplicateKeyError(ex)) {
+                Optional<PaymentCheckoutOptDtoForQueryProjection> exist =
+                        checkoutFindExistingOrderService.findExistingOrder(paymentEvent.getOrderId());
+                if (exist.isPresent()) {
+                    CheckoutResult existingResult = mapDtoToCheckoutResult(exist.get());
+                    // 이미 처리된 주문이므로 DataConflictWithDataException 발생
+                    throw new DataConflictWithDataException(CheckoutErrorCode.ALREADY_PROCESSED_ORDER.getMessage(), existingResult);
+                }
+            }
+            // DuplicateKeyError가 아니거나, 기존 주문을 찾지 못했을 경우
+            throw ex;
+        } catch (Exception ex) {
+            // 🚨 CASE 3: 기타 예상치 못한 오류 (예: DB 연결 오류 등)
+
+            // 🟢 보상 트랜잭션 실행: 재고 복구 시도
+            compensateStock(itemsToCompensate, "Unexpected Checkout Error");
+
+            throw new BusinessLogicException(CheckoutErrorCode.UNEXPECTED_BUSINESS_ERROR, ex);
+        }
+    }
+
+// -------------------------------------------------------------------------------------------------
+
+    /**
+     * 재고 복구를 위한 보상 트랜잭션 실행 메서드.
+     * @param items 복구 대상 품목 리스트
+     * @param reason 보상 실행 이유 (로깅용)
+     */
+    private void compensateStock(List<CheckoutItemForQueryProjection2> items, String reason) {
+        List<CompletableFuture<Void>> compensationFutures = new ArrayList<>();
+
+        // 로그 기록 (보상 트랜잭션 시작)
+        System.out.println("⚠️ Starting Stock Compensation (Reason: " + reason + ") for " + items.size() + " items.");
+
+        for (CheckoutItemForQueryProjection2 item : items) {
+            String isbn = item.getIsbn();
+            int quantity = item.getAmount();
+
+            // optimisticLockStockFacade.increaseAsync 호출 (비동기 및 REQUIRES_NEW로 구현되어야 함)
+            compensationFutures.add(optimisticLockStockFacade.increaseAsync(isbn, quantity));
+        }
+
+        try {
+            // 보상 작업이 완료될 때까지 대기
+            CompletableFuture.allOf(compensationFutures.toArray(new CompletableFuture[0])).join();
+            System.out.println("✅ Stock Compensation Completed Successfully.");
+        } catch (Exception e) {
+            // 보상 실패는 치명적이므로, 반드시 시스템 관리자에게 알림이 가도록 처리해야 합니다.
+            System.err.println("🚨 CRITICAL FAILURE: Stock Compensation Failed. Manual intervention required. Items: " + items.toString() + ". Error: " + e.getMessage());
+            // 이 시점에서는 예외를 다시 던지지 않고, 로그를 남기고 시스템 에러 알림을 발생시키는 것이 일반적입니다.
+        }
+    }
 }

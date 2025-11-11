@@ -22,10 +22,9 @@ public class Item {
     private int price;          //가격
     private int stockQuantity;  //재고
     private Long sellerId; // 판매자 Id
-    
+
     // Lock을 위한 버전 필드
-    @Version
-    private Long version;
+    @Version private Long version;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
@@ -38,15 +37,15 @@ public class Item {
     }
 
     //재고 추가
-    public void addStock(int quantity){
+    public void increaseStock(int quantity){
         this.stockQuantity += quantity;
     }
 
     //재고 감소
     public void removeStock(int quantity) {
         if (this.stockQuantity - quantity < 0) {
-            // TODO :: 재고 부족 명확한 예외 만들어야 함
-            throw new RuntimeException("재고는 0개 미만이 될 수 없습니다.");
+            // 재고 부족에 대한 명확한 예외를 사용하는 것이 좋습니다.
+            throw new RuntimeException("재고가 부족합니다. (요청 수량: " + quantity + ", 현재 재고: " + this.stockQuantity + ")");
         }
         this.stockQuantity -= quantity;
     }

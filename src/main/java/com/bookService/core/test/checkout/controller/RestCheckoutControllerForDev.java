@@ -10,6 +10,7 @@ import com.bookService.core.domain.checkout.enumType.CheckoutStatus;
 import com.bookService.core.test.checkout.service.CheckoutFindExistingOrderServiceForDev;
 import com.bookService.core.test.checkout.service.CheckoutServiceForDev;
 import com.bookService.core.domain.payment.dto.PaymentCheckoutOptDtoForQueryProjection;
+import com.bookService.core.test.checkout.service.CheckoutServiceForDev2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +32,8 @@ import java.util.Optional;
 public class RestCheckoutControllerForDev {
 
     private final CheckoutServiceForDev checkoutService;
+    private final CheckoutServiceForDev2 checkoutServiceForDev2;
+
     private final CheckoutFindExistingOrderServiceForDev existingOrderService;
 
     @PostMapping("/1")
@@ -345,7 +348,7 @@ public class RestCheckoutControllerForDev {
             @RequestBody CheckoutRequest request
     ) {
         // 예외 처리는 모두 GlobalExceptionHandler에게 위임
-        CheckoutResult result = checkoutService.checkout9_5(userId, request);
+        CheckoutResult result = checkoutService.checkout10_OptimisticLock(userId, request);
 
         // 성공 응답 (200 OK)
         ResponseDTO<CheckoutResult> responseDTO =
@@ -356,4 +359,55 @@ public class RestCheckoutControllerForDev {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PostMapping("15")
+    public ResponseEntity<?> checkout15(
+            @AuthenticationPrincipal String userId,
+            @RequestBody CheckoutRequest request
+    ) {
+        // 예외 처리는 모두 GlobalExceptionHandler에게 위임
+        CheckoutResult result = checkoutService.checkout10_PessimisticLock(userId, request);
+
+        // 성공 응답 (200 OK)
+        ResponseDTO<CheckoutResult> responseDTO =
+                ResponseDTO.<CheckoutResult>builder()
+                        .data(List.of(result))
+                        .build();
+
+        return ResponseEntity.ok(responseDTO);
+    }
+    @PostMapping("16")
+    public ResponseEntity<?> checkout16_async(
+            @AuthenticationPrincipal String userId,
+            @RequestBody CheckoutRequest request
+    ) {
+        // 예외 처리는 모두 GlobalExceptionHandler에게 위임
+        CheckoutResult result = checkoutService.checkout10_OptimisticLock_Async(userId, request);
+
+        // 성공 응답 (200 OK)
+        ResponseDTO<CheckoutResult> responseDTO =
+                ResponseDTO.<CheckoutResult>builder()
+                        .data(List.of(result))
+                        .build();
+
+        return ResponseEntity.ok(responseDTO);
+    }
+    /*
+    // 트랜잭션 분리 낙관적 Lock 성능 비교용
+    @PostMapping("16")
+    public ResponseEntity<?> checkout16(
+            @AuthenticationPrincipal String userId,
+            @RequestBody CheckoutRequest request
+    ) {
+
+        CheckoutResult result = checkoutServiceForDev2.checkoutOptimisticLock_2(userId, request);
+
+        // 성공 응답 (200 OK)
+        ResponseDTO<CheckoutResult> responseDTO =
+                ResponseDTO.<CheckoutResult>builder()
+                        .data(List.of(result))
+                        .build();
+
+        return ResponseEntity.ok(responseDTO);
+    }*/
 }
+// 오류 발생

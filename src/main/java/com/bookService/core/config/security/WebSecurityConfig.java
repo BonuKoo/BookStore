@@ -1,13 +1,11 @@
-package com.bookService.core.config;
+package com.bookService.core.config.security;
 
 import com.bookService.core.security.jwt.JwtAuthenticationFilter;
 import com.bookService.core.security.jwt.OAuthSuccessHandler;
 import com.bookService.core.security.jwt.RedirectUrlCookieFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;

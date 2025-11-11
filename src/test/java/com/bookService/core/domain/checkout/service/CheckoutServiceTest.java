@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 //@SpringBootTest
 //@TestPropertySource(properties = {"jwt.secret=FlRpX30pMqDbiAkmlfArbrmVkDD4RqISskGZmBFax5oGVxzXXWUzTR5JyskiHMIV9M1Oicegkpi46AdvrcX1E6CmTUBc6IFbTPiD"})
 //@Import(JwtConfig.class)
-class CheckoutServiceConcurrencyTest {
+public class CheckoutServiceTest {
 
     /**
      * 검증 포인트
