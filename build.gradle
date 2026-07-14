@@ -90,9 +90,9 @@ dependencies {
 
 	implementation 'io.micrometer:micrometer-registry-prometheus'  // Prometheus와의 연동
 
-//	// RabbitMQ
-//	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-//	// Slack API
+	// RabbitMQ
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	// Slack API는 notification-worker(PC3) 프로젝트에서 사용 — core-spa는 프로듀서라 불필요
 //	implementation 'com.slack.api:slack-api-client:1.28.0'
 	// WebFlux
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'

@@ -1,6 +1,8 @@
 package com.bookService.core.domain.payment.persistent;
 
 import com.bookService.core.common.exception.checkout.PaymentAlreadyProcessedException;
+import com.bookService.core.domain.payment.PaymentEventMessage;
+import com.bookService.core.domain.payment.enumtype.PaymentEventMessageType;
 import com.bookService.core.domain.payment.enumtype.PaymentMethod;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
 import com.bookService.core.domain.payment.dto.PaymentExtraDetails;
@@ -13,11 +15,14 @@ import com.bookService.core.domain.payment.persistent.repository.PaymentOrderHis
 import com.bookService.core.domain.payment.persistent.repository.PaymentOrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,10 +36,9 @@ public class PaymentStatusUpdateRepository {
     private final PaymentEventRepository paymentEventRepository;
     private final PaymentOrderRepository paymentOrderRepository;
     private final PaymentOrderHistoryRepository paymentOrderHistoryRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     //private final PaymentOutboxService paymentOutboxService;
-
-    //private final PaymentEventMessagePublisher messagePublisher;
 
     @Transactional // 하나의 트랜잭션으로 묶어야 한다.
     public boolean updatePaymentStatusToExecuting(String orderId, String paymentKey){
@@ -113,15 +117,11 @@ public class PaymentStatusUpdateRepository {
         List<PaymentOrder> orders = paymentOrderRepository.findListPaymentOrderByIdempotencyKey(command.getOrderId());
         insertPaymentHistory(orders, command.getStatus(),"PAYMENT_CONFIRMATION_DONE");
         updatePaymentOrderStatus(orders, command.getStatus());
-        updatePaymentEventExtraDetails(command);
+        PaymentEvent event = updatePaymentEventExtraDetails(command);
 
-        /*
-        메시지 이벤트 TODO
-        // Outbox 저장
-        PaymentEventMessage message = paymentOutboxService.insertOutbox(command);
-        // 이벤트 발생
-        messagePublisher.publish(message);
-        */
+        // 트랜잭션 커밋 전이므로 실제 브로커 전송은 하지 않는다.
+        // PaymentEventMessagePublishListener가 AFTER_COMMIT 시점에 dispatch 한다.
+        applicationEventPublisher.publishEvent(buildSuccessMessage(event, orders));
         return true;
     }
 
@@ -129,6 +129,10 @@ public class PaymentStatusUpdateRepository {
         List<PaymentOrder> orders = paymentOrderRepository.findListPaymentOrderByIdempotencyKey(command.getOrderId());
         insertPaymentHistory(orders, command.getStatus(), command.getFailure().toString());
         updatePaymentOrderStatus(orders, command.getStatus());
+
+        PaymentEvent event = paymentEventRepository.findByOrderId(command.getOrderId())
+                .orElseThrow(() -> new EntityNotFoundException("결제 이벤트 없음"));
+        applicationEventPublisher.publishEvent(buildFailureMessage(event, command));
         return true;
     }
     private  boolean updatePaymentStatusToUnknown(PaymentStatusUpdateCommand command){
@@ -139,7 +143,7 @@ public class PaymentStatusUpdateRepository {
         return true;
     }
 
-    private void updatePaymentEventExtraDetails(PaymentStatusUpdateCommand command){
+    private PaymentEvent updatePaymentEventExtraDetails(PaymentStatusUpdateCommand command){
         Optional<PaymentEvent> paymentEventOptional = paymentEventRepository.findByOrderId(command.getOrderId());
         PaymentEvent event = paymentEventOptional.orElseThrow(() -> new EntityNotFoundException("결제 이벤트 없음"));
 
@@ -150,6 +154,56 @@ public class PaymentStatusUpdateRepository {
         event.setPaymentType(details.getType());
         event.setPspRawData(details.getPspRawData());
         event.setUpdatedAt(LocalDateTime.now());
+        return event;
+    }
+
+    // AFTER_COMMIT 리스너는 트랜잭션이 끝난 뒤 실행되어 지연 로딩이 불가능하므로,
+    // 엔티티 참조가 아닌 값이 모두 채워진 순수 데이터로 메시지를 구성해 여기서 넘긴다.
+    // (buyer 이름은 AccountEntity의 지연 로딩 필드라 트랜잭션이 열려 있는 지금 시점에만 접근 가능하다)
+    private PaymentEventMessage buildSuccessMessage(PaymentEvent event, List<PaymentOrder> orders) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("orderId", event.getOrderId());
+        payload.put("paymentKey", event.getPaymentKey());
+        payload.put("buyerId", event.getBuyerId());
+        payload.put("buyerName", event.getAccountEntity().getUsername());
+        payload.put("orderName", event.getOrderName());
+        payload.put("totalAmount", event.totalAmount());
+        payload.put("method", event.getMethod() != null ? event.getMethod().name() : null);
+        payload.put("type", event.getPaymentType() != null ? event.getPaymentType().name() : null);
+        payload.put("approvedAt", event.getApprovedAt());
+        payload.put("items", orders.stream()
+                .map(order -> {
+                    // sellerId는 엔티티상 nullable이라 Map.of() 사용 시 NPE 위험이 있어 HashMap을 쓴다.
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("sellerId", order.getSellerId());
+                    item.put("productId", order.getProductId());
+                    item.put("amount", order.getAmount());
+                    return item;
+                })
+                .collect(Collectors.toList()));
+
+        return new PaymentEventMessage(PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS, payload, buildMetadata());
+    }
+
+    private PaymentEventMessage buildFailureMessage(PaymentEvent event, PaymentStatusUpdateCommand command) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("orderId", event.getOrderId());
+        payload.put("paymentKey", command.getPaymentKey());
+        payload.put("buyerId", event.getBuyerId());
+        payload.put("buyerName", event.getAccountEntity().getUsername());
+        payload.put("errorCode", command.getFailure().getErrorCode());
+        payload.put("errorMessage", command.getFailure().getMessage());
+        payload.put("failedAt", LocalDateTime.now());
+
+        return new PaymentEventMessage(PaymentEventMessageType.PAYMENT_CONFIRMATION_FAILURE, payload, buildMetadata());
+    }
+
+    private Map<String, Object> buildMetadata() {
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("source", "core-spa");
+        metadata.put("occurredAt", LocalDateTime.now());
+        metadata.put("schemaVersion", 1);
+        return metadata;
     }
 
     private void incrementFailedCount(String orderId) {
