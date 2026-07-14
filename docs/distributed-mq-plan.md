@@ -39,11 +39,12 @@ core-spa는 Toss 결제 흐름까지 구현된 북서비스 커머스 백엔드�
 3. **데드레터링은 자동으로**: 컨슈머는 예외를 삼키지 않는다.
    manual ack + `basicReject(requeue=false)` → 큐의 `x-dead-letter-exchange`로 자동 이동.
    (step11의 수동 DLX 발행 방식 폐기)
-4. **토폴로지**:
-   - exchange: `payment.events` (topic, durable)
+4. **토폴로지** (2026-07-14 Phase 2 구현 시 확정, 6절 진행 기록 참고):
+   - vhost: `core_vhost` (전용, 기본 `/` 대신 분리)
+   - exchange: `payment.exchange` (topic, durable)
    - routing key: `payment.confirmed`, `payment.failed`
-   - queue: `q.notification.payment` (durable, x-dead-letter-exchange=`dlx.payment`)
-   - DLX: `dlx.payment` → `q.dead.payment` → Slack 경보
+   - queue: `payment.confirmed.queue`, `payment.failed.queue` (durable)
+   - DLX(Phase 4에서 구현 예정): `payment.dlx` → `payment.confirmed.dlq`/`payment.failed.dlq` → Slack 경보
 5. **보안**: guest 계정은 localhost 전용이므로 사용 불가. 전용 계정 `coreapp` 생성.
    접속 정보·Slack 토큰은 환경변수로만 주입, 커밋 금지.
 6. **직렬화**: Jackson JSON (`Jackson2JsonMessageConverter`), 메시지에 `eventId`, `occurredAt`, `orderId` 필수 포함.
@@ -59,12 +60,13 @@ core-spa는 Toss 결제 흐름까지 구현된 북서비스 커머스 백엔드�
 ### Phase 1 — PC2 브로커 구축
 - Erlang → RabbitMQ 네이티브 설치, `rabbitmq_management` 플러그인 활성화
 - `coreapp` 계정 생성 + 권한/administrator 태그, Windows 서비스 자동 시작 확인
-- **DoD**: PC1 브라우저에서 `http://<PC2_IP>:15672` 로그인 성공
+- 전용 vhost `core_vhost` 생성 + `coreapp` 권한 부여 (기본 `/` vhost 대신 분리, 2026-07-14 결정)
+- **DoD**: PC1 브라우저에서 `http://<PC2_IP>:15672` 로그인 성공, `core_vhost` 노출 확인
 
 ### Phase 2 — core-spa 프로듀서 (PC1)
 - `spring-boot-starter-amqp` 추가, 토폴로지 선언(@Configuration), 접속정보 환경변수화
 - `PaymentConfirmService` SUCCESS 전이 후 `payment.confirmed` 발행 (트랜잭션 커밋 후 발행 시점 주의 — `@TransactionalEventListener(AFTER_COMMIT)` 경유 권장)
-- **DoD**: 결제 confirm 호출 → 관리 UI에서 `q.notification.payment`에 메시지 1건 적재 확인
+- **DoD**: 결제 confirm 호출 → 관리 UI(`core_vhost`)에서 `payment.confirmed.queue`에 메시지 1건 적재 확인
 
 ### Phase 3 — PC3 워커 구축
 - 신규 프로젝트 `notification-worker` (Boot 3.x, amqp + slack), PC1에서 개발 → `bootJar` 산출물만 PC3로 배포
@@ -74,7 +76,7 @@ core-spa는 Toss 결제 흐름까지 구현된 북서비스 커머스 백엔드�
 ### Phase 4 — 신뢰성 강화
 - publisher confirms + returns 콜백, 컨슈머 manual ack, 자동 DLQ 배선 검증
 - 워커에 `processed_event(event_id unique)` 테이블로 멱등 처리
-- **DoD**: 워커에서 강제 예외 발생 시 재시도 후 `q.dead.payment` 적재 + Slack 경보. 같은 메시지 2회 전달 시 부수효과 1회만 발생
+- **DoD**: 워커에서 강제 예외 발생 시 재시도 후 `payment.confirmed.dlq` 적재 + Slack 경보. 같은 메시지 2회 전달 시 부수효과 1회만 발생
 
 ### Phase 5 — 장애 주입 실험 (본 프로젝트의 학습 핵심)
 - 실험 A: 발행 중 PC2 전원 차단 → confirms 실패 처리 관찰
@@ -102,3 +104,7 @@ core-spa는 Toss 결제 흐름까지 구현된 북서비스 커머스 백엔드�
 ## 6. 진행 기록
 
 - 2026-07-14: 기획안 작성. Phase 0 착수 전.
+- 2026-07-14: Phase 0/1 완료. Phase 2 착수 전 core-spa master 코드 점검·정리(3건 수정, `docs/codebase-state.md` 작성).
+- 2026-07-14: Phase 2 구현. vhost는 기본 `/` 대신 전용 `core_vhost`로, 토폴로지 네이밍은 `payment.events`/`q.notification.payment` 대신 `payment.exchange`/`payment.confirmed.queue`·`payment.failed.queue`로 확정(원안 대비 변경, 3.4절 반영). PC2에는 vhost·권한 설정만 추가로 필요.
+- 2026-07-14: Phase 2 연결/토폴로지 검증 완료. PC1에서 core-spa 기동 → PC2(`core_vhost`)에 `payment.exchange`, `payment.confirmed.queue`, `payment.failed.queue` 자동 선언 확인(관리 API로 직접 조회). 단, RabbitAdmin의 선언은 **앱 기동 시 즉시가 아니라 첫 실제 AMQP 연결 시점(lazy)** 에 일어남 — 즉 실제로는 첫 결제 confirm(또는 admin 호출) 시 처음 나타남. 실제 결제 confirm 흐름(OAuth 로그인 → 장바구니 → checkout → confirm)을 통한 end-to-end 메시지 도착 확인은 아직 미실시(수동 테스트 필요).
+- 2026-07-14: (환경 메모, 코드 변경 아님) 로컬 MySQL 8 연결 시 `Public Key Retrieval is not allowed` 에러 발생 — `application.yml`(git 미추적) datasource url에 `allowPublicKeyRetrieval=true` 추가로 해결. 이 파일은 커밋되지 않으므로 PC1을 새로 세팅할 경우 동일 조치 필요.
