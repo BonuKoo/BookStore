@@ -2,7 +2,7 @@ package com.bookService.core.domain.checkout.service;
 
 import com.bookService.core.common.exception.checkout.CheckoutException;
 import com.bookService.core.common.util.IdempotencyCreator;
-import com.bookService.core.domain.cartitem.dto.CheckoutItemForQueryProjection;
+import com.bookService.core.domain.cartitem.dto.CheckoutItemForQueryProjection2;
 import com.bookService.core.domain.cartitem.repository.CartItemRepository;
 import com.bookService.core.domain.checkout.dto.CheckoutCommandForDev;
 import com.bookService.core.domain.checkout.dto.CheckoutRequest;
@@ -76,14 +76,15 @@ public class CheckoutService implements CheckoutUseCase {
 
         List<Long> cartItemIds = command.getCartItemIds();
 
-        List<CheckoutItemForQueryProjection> cartItems = cartItemRepository.customCartItemProjection(cartItemIds);
+        // payment_event.buyer 컬럼이 NOT NULL이므로 AccountEntity까지 함께 조회해서 세팅해야 insert가 성공한다
+        List<CheckoutItemForQueryProjection2> cartItems = cartItemRepository.customCartItemProjection2(cartItemIds);
 
         PaymentEvent build = getPaymentEventAndOrder(command, cartItems);
 
         return build;
     }
 
-    private static PaymentEvent getPaymentEventAndOrder(CheckoutCommandForDev command, List<CheckoutItemForQueryProjection> cartItems) {
+    private static PaymentEvent getPaymentEventAndOrder(CheckoutCommandForDev command, List<CheckoutItemForQueryProjection2> cartItems) {
         List<PaymentOrder> paymentOrders = cartItems.stream()
                 .map(cartItem -> PaymentOrder.builder()
                         .sellerId(cartItem.getSellerId())
@@ -101,6 +102,7 @@ public class CheckoutService implements CheckoutUseCase {
 
         PaymentEvent build = PaymentEvent.builder()
                 .buyerId(command.getBuyerId())
+                .accountEntity(cartItems.getFirst().getAccountEntity())
                 .orderId(command.getIdempotencyKey())
                 .orderName(orderName)
                 .paymentOrders(paymentOrders)
