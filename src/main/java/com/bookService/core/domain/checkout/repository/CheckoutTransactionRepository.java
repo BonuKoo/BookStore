@@ -1,10 +1,10 @@
-package com.bookService.core.test.checkout.repository;
+package com.bookService.core.domain.checkout.repository;
 
 import com.bookService.core.domain.payment.dto.PaymentCheckoutOptDtoForQueryProjection;
 import com.bookService.core.domain.payment.entity.PaymentEvent;
 import com.bookService.core.domain.payment.entity.QPaymentEvent;
 import com.bookService.core.domain.payment.entity.QPaymentOrder;
-import com.bookService.core.test.checkout.service.CheckoutFindExistingOrderServiceForDev;
+import com.bookService.core.domain.payment.usecase.CheckoutFindExistingOrderUseCase;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class CheckoutTransactionRepository {
-    private final CheckoutFindExistingOrderServiceForDev existingOrderService;
+    private final CheckoutFindExistingOrderUseCase existingOrderService;
 
     private final PlatformTransactionManager txManager;
 

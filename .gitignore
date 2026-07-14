@@ -7,18 +7,6 @@ prometheus.yml
 application.yml
 application-aws.yml
 
-#Mongo 관련
-/src/main/java/com/bookService/core/test/cart/mongo/
-# Controller
-CartMongoController.java
-
-# Service
-CartMongoService.java
-# Document
-CartDocument.java
-CartItemDocument.java
-
-
 HELP.md
 .gradle
 build/

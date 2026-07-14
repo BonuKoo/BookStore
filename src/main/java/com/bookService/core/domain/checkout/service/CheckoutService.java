@@ -7,7 +7,7 @@ import com.bookService.core.domain.cartitem.repository.CartItemRepository;
 import com.bookService.core.domain.checkout.dto.CheckoutCommandForDev;
 import com.bookService.core.domain.checkout.dto.CheckoutRequest;
 import com.bookService.core.domain.checkout.dto.CheckoutResult;
-import com.bookService.core.test.checkout.repository.CheckoutTransactionRepository;
+import com.bookService.core.domain.checkout.repository.CheckoutTransactionRepository;
 import com.bookService.core.domain.payment.dto.PaymentCheckoutOptDtoForQueryProjection;
 import com.bookService.core.domain.payment.entity.PaymentEvent;
 import com.bookService.core.domain.payment.entity.PaymentOrder;
