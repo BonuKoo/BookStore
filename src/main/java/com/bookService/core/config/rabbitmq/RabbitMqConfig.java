@@ -7,6 +7,7 @@ import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -48,9 +49,13 @@ public class RabbitMqConfig {
         return BindingBuilder.bind(paymentFailedQueue).to(paymentExchange).with(PAYMENT_FAILED_ROUTING_KEY);
     }
 
+    // Spring Boot가 자동구성한 ObjectMapper(JavaTimeModule 등록, 날짜를 배열이 아닌
+    // ISO-8601 문자열로 직렬화)를 그대로 재사용한다. 기본 생성자로 만들면 별도의
+    // ObjectMapper가 생성되어 LocalDateTime이 [2026,7,14,...] 배열로 직렬화되는데,
+    // 컨슈머(notification-worker)는 다른 코드베이스라 이 포맷을 파싱하기 번거롭다.
     @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+    public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
+        return new Jackson2JsonMessageConverter(objectMapper);
     }
 
     @Bean
