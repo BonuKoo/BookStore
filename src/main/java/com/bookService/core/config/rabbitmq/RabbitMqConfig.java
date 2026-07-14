@@ -24,6 +24,11 @@ public class RabbitMqConfig {
     public static final String PAYMENT_FAILED_QUEUE = "payment.failed.queue";
     public static final String PAYMENT_FAILED_ROUTING_KEY = "payment.failed";
 
+    // 재고 차감 전용 큐. 알림 큐(payment.confirmed.queue)와 같은 routing key에 바인딩되어
+    // 하나의 payment.confirmed 이벤트를 두 컨슈머(PC3 알림 워커 / core-spa 재고 차감)가
+    // 각자 독립적으로 소비한다 — topic exchange 팬아웃.
+    public static final String STOCK_DEDUCTION_QUEUE = "stock.deduction.queue";
+
     @Bean
     public TopicExchange paymentExchange() {
         return new TopicExchange(PAYMENT_EXCHANGE);
@@ -47,6 +52,16 @@ public class RabbitMqConfig {
     @Bean
     public Binding paymentFailedBinding(Queue paymentFailedQueue, TopicExchange paymentExchange) {
         return BindingBuilder.bind(paymentFailedQueue).to(paymentExchange).with(PAYMENT_FAILED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue stockDeductionQueue() {
+        return QueueBuilder.durable(STOCK_DEDUCTION_QUEUE).build();
+    }
+
+    @Bean
+    public Binding stockDeductionBinding(Queue stockDeductionQueue, TopicExchange paymentExchange) {
+        return BindingBuilder.bind(stockDeductionQueue).to(paymentExchange).with(PAYMENT_CONFIRMED_ROUTING_KEY);
     }
 
     // Spring Boot가 자동구성한 ObjectMapper(JavaTimeModule 등록, 날짜를 배열이 아닌

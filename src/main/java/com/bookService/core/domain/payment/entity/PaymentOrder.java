@@ -70,6 +70,11 @@ public class PaymentOrder {
     @Column(nullable = false)
     private int amount; // 결제 금액
 
+    // 주문 수량. 재고 차감 컨슈머(payment.confirmed → stock.deduction.queue)가
+    // 차감량을 알 수 있도록 주문 스냅샷에 보존한다. (금액만 있으면 수량 복원 불가)
+    @Column(nullable = false)
+    private int quantity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus paymentStatus;

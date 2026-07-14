@@ -178,6 +178,7 @@ public class PaymentStatusUpdateRepository {
                     item.put("sellerId", order.getSellerId());
                     item.put("productId", order.getProductId());
                     item.put("amount", order.getAmount());
+                    item.put("quantity", order.getQuantity());
                     return item;
                 })
                 .collect(Collectors.toList()));

@@ -91,6 +91,7 @@ public class CheckoutService implements CheckoutUseCase {
                         .orderId(command.getIdempotencyKey())
                         .productId(cartItem.getIsbn())
                         .amount(cartItem.getPrice() * cartItem.getAmount())
+                        .quantity(cartItem.getAmount())
                         .paymentStatus(PaymentStatus.NOT_STARTED)
                         .build()
                 )
