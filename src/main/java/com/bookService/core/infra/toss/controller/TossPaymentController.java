@@ -30,19 +30,12 @@ public class TossPaymentController {
                 .amount(request.getAmount())
                 .build();
 
-        try {
-            log.info("Calling confirm use case with command: {}", command);
-            PaymentConfirmationResult result = paymentConfirmUseCase.confirm(command);
-            log.info("Payment confirmation result: {}", result);
-            return ResponseEntity.ok(ApiResponse.with(HttpStatus.OK, "", result));
-        } catch (Exception e) {
-
-            log.error("Payment confirmation error", e);
-            // 에러 핸들링 방식에 따라 수정 필요
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.with(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null));
-        }
+        // 예외는 GlobalExceptionHandler(@RestControllerAdvice)에 위임한다.
+        // (중복 결제 등 도메인 예외를 컨트롤러가 500으로 뭉개지 않도록 자체 try/catch 제거)
+        log.info("Calling confirm use case with command: {}", command);
+        PaymentConfirmationResult result = paymentConfirmUseCase.confirm(command);
+        log.info("Payment confirmation result: {}", result);
+        return ResponseEntity.ok(ApiResponse.with(HttpStatus.OK, "", result));
     }
 
 }

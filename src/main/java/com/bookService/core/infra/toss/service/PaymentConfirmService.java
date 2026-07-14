@@ -6,7 +6,7 @@ import com.bookService.core.domain.payment.persistent.PaymentStatusUpdateReposit
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentOrderRepository;
 import com.bookService.core.infra.toss.executor.TossPaymentExecutor;
 import com.bookService.core.infra.toss.usecase.PaymentConfirmUseCase;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

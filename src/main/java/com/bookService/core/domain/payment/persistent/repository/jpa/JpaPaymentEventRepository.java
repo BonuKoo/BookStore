@@ -8,7 +8,7 @@ import com.bookService.core.domain.payment.dto.PendingPaymentRowDto;
 import com.bookService.core.domain.payment.entity.PaymentEvent;
 import com.bookService.core.domain.payment.persistent.repository.PaymentEventRepository;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentEventRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -107,7 +107,8 @@ public class PaymentStatusUpdateRepository {
         paymentEventRepository.save(paymentEvent);
     }
 
-    @Transactional
+    // 트랜잭션 경계는 public updatePaymentStatus()가 잡는다. private 메서드의 @Transactional은
+    // 프록시 AOP가 적용되지 않아 무효이므로 제거한다.
     private boolean updatePaymentStatusToSuccess(PaymentStatusUpdateCommand command){
         List<PaymentOrder> orders = paymentOrderRepository.findListPaymentOrderByIdempotencyKey(command.getOrderId());
         insertPaymentHistory(orders, command.getStatus(),"PAYMENT_CONFIRMATION_DONE");
@@ -152,10 +153,9 @@ public class PaymentStatusUpdateRepository {
     }
 
     private void incrementFailedCount(String orderId) {
-        List<PaymentOrder> orders = paymentOrderRepository.findListPaymentOrderByIdempotencyKey(orderId);
-        for (PaymentOrder order : orders){
-            paymentOrderRepository.incrementFailedCountByOrderId(orderId);
-        }
+        // orderId에 매칭되는 모든 payment_order 행을 한 번의 UPDATE로 +1 처리한다.
+        // (과거: orders 개수만큼 루프를 돌아 다중 항목 주문에서 failed_count가 부풀려지던 버그)
+        paymentOrderRepository.incrementFailedCountByOrderId(orderId);
     }
 
 }
