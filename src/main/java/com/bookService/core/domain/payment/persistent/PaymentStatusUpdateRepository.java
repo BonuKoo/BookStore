@@ -3,6 +3,7 @@ package com.bookService.core.domain.payment.persistent;
 import com.bookService.core.common.exception.checkout.PaymentAlreadyProcessedException;
 import com.bookService.core.domain.payment.PaymentEventMessage;
 import com.bookService.core.domain.payment.enumtype.PaymentEventMessageType;
+import com.bookService.core.domain.payment.outbox.PaymentOutboxService;
 import com.bookService.core.domain.payment.enumtype.PaymentMethod;
 import com.bookService.core.domain.payment.enumtype.PaymentStatus;
 import com.bookService.core.domain.payment.dto.PaymentExtraDetails;
@@ -37,8 +38,7 @@ public class PaymentStatusUpdateRepository {
     private final PaymentOrderRepository paymentOrderRepository;
     private final PaymentOrderHistoryRepository paymentOrderHistoryRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    //private final PaymentOutboxService paymentOutboxService;
+    private final PaymentOutboxService paymentOutboxService;
 
     @Transactional // 하나의 트랜잭션으로 묶어야 한다.
     public boolean updatePaymentStatusToExecuting(String orderId, String paymentKey){
@@ -119,9 +119,11 @@ public class PaymentStatusUpdateRepository {
         updatePaymentOrderStatus(orders, command.getStatus());
         PaymentEvent event = updatePaymentEventExtraDetails(command);
 
-        // 트랜잭션 커밋 전이므로 실제 브로커 전송은 하지 않는다.
-        // PaymentEventMessagePublishListener가 AFTER_COMMIT 시점에 dispatch 한다.
-        applicationEventPublisher.publishEvent(buildSuccessMessage(event, orders));
+        // Transactional Outbox: 발행할 메시지를 같은 트랜잭션에서 outbox에 INIT으로 저장한다.
+        // 이후 AFTER_COMMIT 리스너가 즉시 발행하고, 실패하면 릴레이 스케줄러가 재발행한다.
+        PaymentEventMessage message = buildSuccessMessage(event, orders);
+        paymentOutboxService.insertOutbox(message);
+        applicationEventPublisher.publishEvent(message);
         return true;
     }
 
@@ -132,7 +134,9 @@ public class PaymentStatusUpdateRepository {
 
         PaymentEvent event = paymentEventRepository.findByOrderId(command.getOrderId())
                 .orElseThrow(() -> new EntityNotFoundException("결제 이벤트 없음"));
-        applicationEventPublisher.publishEvent(buildFailureMessage(event, command));
+        PaymentEventMessage message = buildFailureMessage(event, command);
+        paymentOutboxService.insertOutbox(message);
+        applicationEventPublisher.publishEvent(message);
         return true;
     }
     private  boolean updatePaymentStatusToUnknown(PaymentStatusUpdateCommand command){

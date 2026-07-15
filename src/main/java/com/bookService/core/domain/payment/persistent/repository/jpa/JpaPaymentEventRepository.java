@@ -85,14 +85,23 @@ public class JpaPaymentEventRepository implements PaymentEventRepository {
         if (paymentEventDto.isPaymentDone()) {
             // 모든 업데이트 및 완료 처리 포함
             springDataJpaPaymentEventRepository.handlePaymentCompletion(paymentEventDto);
-        } /*
-        else if (paymentEventDto.isWalletUpdateDone()) {
-            springDataJpaPaymentEventRepository.handleWalletUpdate(paymentEventDto);
-        } else if (paymentEventDto.isLedgerUpdateDone()) {
-            springDataJpaPaymentEventRepository.handleLedgerUpdate(paymentEventDto);
-        } */else {
+        } else {
             throw new IllegalStateException("Incorrect state for PaymentEvent id: " + paymentEventDto.getId());
         }
     }
-    ;
+
+    // M4: wallet/ledger 완결 통지를 받을 때마다 각각의 플래그만 별도로 반영한다.
+    // 완료 여부(complete())와는 별개 — 호출측(PaymentCompletionService)이
+    // completeIfDone() 판단 후 필요할 때만 complete()를 호출한다.
+    @Override
+    @Transactional
+    public void handleWalletUpdate(PaymentEventDto paymentEventDto) {
+        springDataJpaPaymentEventRepository.handleWalletUpdate(paymentEventDto);
+    }
+
+    @Override
+    @Transactional
+    public void handleLedgerUpdate(PaymentEventDto paymentEventDto) {
+        springDataJpaPaymentEventRepository.handleLedgerUpdate(paymentEventDto);
+    }
 }

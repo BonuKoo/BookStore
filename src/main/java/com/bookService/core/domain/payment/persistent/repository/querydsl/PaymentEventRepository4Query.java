@@ -17,9 +17,7 @@ public interface PaymentEventRepository4Query {
 
     Optional<PaymentCheckoutOptDtoForQueryProjection> findPaymentOptByOrderID(String orderId);
 
-    /*
-    메시지 큐 연동 - Kafka/RabbitMQ/Redis
+    // M4: 메시지 큐 연동 (settlement-worker/ledger-worker의 완결 통지 수신)
     void handleWalletUpdate(PaymentEventDto paymentEventDto);
     void handleLedgerUpdate(PaymentEventDto paymentEventDto);
-    */
 }

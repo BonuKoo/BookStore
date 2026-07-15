@@ -69,7 +69,17 @@ public class PaymentPersistentAdapter implements SavePaymentPort, PaymentStatusU
 
     @Override
     public void complete(PaymentEventDto paymentEvent) {
-        return;
+        paymentEventRepository.complete(paymentEvent);
+    }
+
+    @Override
+    public void handleWalletUpdate(PaymentEventDto paymentEvent) {
+        paymentEventRepository.handleWalletUpdate(paymentEvent);
+    }
+
+    @Override
+    public void handleLedgerUpdate(PaymentEventDto paymentEvent) {
+        paymentEventRepository.handleLedgerUpdate(paymentEvent);
     }
 
 }

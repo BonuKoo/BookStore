@@ -68,6 +68,9 @@ public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4
                 .from(paymentEvent)
                 .where(paymentEvent.orderId.eq(orderId))
                 .fetchOne();
+        if (paymentEventDto == null) {
+            return null;
+        }
         List<PaymentOrderDto> orders = queryFactory
                 .select(Projections.constructor(PaymentOrderDto.class,
                         paymentOrder.id,
@@ -115,17 +118,13 @@ public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4
 
         return Optional.ofNullable(projectionOpt);
     }
-    /*
 
     @Override
     public void handleWalletUpdate(PaymentEventDto paymentEventDto) {
-
-
-
         List<Long> paymentOrderIds = paymentEventDto.getPaymentOrders().stream()
                 .map(PaymentOrderDto::getId)
                 .toList();
-        if(!paymentOrderIds.isEmpty()){
+        if (!paymentOrderIds.isEmpty()) {
             queryFactory.update(paymentOrder)
                     .set(paymentOrder.isWalletUpdated, true)
                     .where(paymentOrder.id.in(paymentOrderIds))
@@ -135,16 +134,14 @@ public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4
 
     @Override
     public void handleLedgerUpdate(PaymentEventDto paymentEventDto) {
-
         List<Long> paymentOrderIds = paymentEventDto.getPaymentOrders().stream()
                 .map(PaymentOrderDto::getId)
                 .toList();
-        if(!paymentOrderIds.isEmpty()){
+        if (!paymentOrderIds.isEmpty()) {
             queryFactory.update(paymentOrder)
                     .set(paymentOrder.isLedgerUpdated, true)
                     .where(paymentOrder.id.in(paymentOrderIds))
                     .execute();
         }
     }
-    */
 }

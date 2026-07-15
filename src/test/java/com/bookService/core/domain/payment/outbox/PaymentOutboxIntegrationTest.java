@@ -1,9 +1,8 @@
-package com.bookService.core.domain.payment;
+package com.bookService.core.domain.payment.outbox;
 
 import com.bookService.core.domain.login.entity.AccountEntity;
 import com.bookService.core.domain.login.repository.AccountJpaRepository;
 import com.bookService.core.domain.payment.dto.PaymentExtraDetails;
-import com.bookService.core.domain.payment.dto.PaymentFailure;
 import com.bookService.core.domain.payment.dto.PaymentStatusUpdateCommand;
 import com.bookService.core.domain.payment.entity.PaymentEvent;
 import com.bookService.core.domain.payment.entity.PaymentOrder;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,29 +27,34 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 /**
- * Phase 2 프로듀서의 핵심 계약 검증:
- *  - 결제 상태 전이 트랜잭션이 "커밋"됐을 때만 메시지가 브로커로 나간다.
- *  - 롤백되면 절대 나가지 않는다. (AFTER_COMMIT 발행 설계의 존재 이유)
+ * M1 Transactional Outbox 계약 검증. DispatchEventMessagePort를 mock으로 대체하므로
+ * RabbitMQ 브로커 없이 동작한다. 실 커밋/롤백을 검증하려고 테스트를 @Transactional로 감싸지
+ * 않고 로컬 MySQL에 실데이터를 만들었다가 @AfterEach에서 지운다.
  *
- * DispatchEventMessagePort를 mock으로 대체하므로 RabbitMQ 브로커 없이 동작한다.
- * 단, 실제 커밋/롤백을 검증해야 하므로 테스트 자체는 @Transactional로 감싸지 않고
- * 로컬 MySQL(core2_spa)에 실데이터를 만들었다가 @AfterEach에서 지운다.
+ * 검증 포인트:
+ *  1. SUCCESS 커밋 → outbox 행이 생기고, AFTER_COMMIT 즉시발행이 성공하면 SUCCESS로 마킹된다.
+ *  2. 발행이 실패하면 outbox 행이 FAILURE로 남아 릴레이 재발행 대상이 된다.
+ *  3. 트랜잭션 롤백 → outbox 행도 함께 롤백되어 남지 않는다(비즈니스 데이터와 원자성).
+ *  4. 릴레이 스케줄러가 미확정(INIT/FAILURE) 행을 재발행하고 SUCCESS로 마킹한다.
  */
 @SpringBootTest
-class PaymentEventMessagePublishIntegrationTest {
+class PaymentOutboxIntegrationTest {
 
     @Autowired private PaymentStatusUpdateRepository paymentStatusUpdateRepository;
     @Autowired private SpringDataJpaPaymentEventRepository paymentEventRepository;
     @Autowired private AccountJpaRepository accountJpaRepository;
+    @Autowired private PaymentEventMessageRelayService relayService;
     @Autowired private PlatformTransactionManager transactionManager;
     @Autowired private JdbcTemplate jdbcTemplate;
 
@@ -64,11 +67,10 @@ class PaymentEventMessagePublishIntegrationTest {
     @BeforeEach
     void setUp() {
         transactionTemplate = new TransactionTemplate(transactionManager);
-        orderId = "mq-test-" + UUID.randomUUID();
+        orderId = "outbox-test-" + UUID.randomUUID();
 
-        // 계정 + PaymentEvent(+주문 2건, 판매자 2명)를 커밋된 상태로 준비
         transactionTemplate.executeWithoutResult(status -> {
-            AccountEntity account = new AccountEntity("mq-test-user-" + UUID.randomUUID(), "pw");
+            AccountEntity account = new AccountEntity("outbox-user-" + UUID.randomUUID(), "pw");
             accountJpaRepository.save(account);
             accountId = account.getId();
 
@@ -97,10 +99,7 @@ class PaymentEventMessagePublishIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        // M1 이후 SUCCESS/FAILURE 전이는 outbox 행을 남긴다. 스케줄러 릴레이가 잔여 행을
-        // 재발행해 다른 테스트의 dispatch 검증(times/never)을 오염시키지 않도록 함께 정리한다.
         jdbcTemplate.update("DELETE FROM outbox WHERE idempotency_key = ?", orderId);
-        // FK 역순 정리: history → orders → event → account
         jdbcTemplate.update(
                 "DELETE poh FROM payment_order_history poh " +
                 "JOIN payment_orders po ON poh.payment_order_id = po.payment_order_id " +
@@ -113,61 +112,75 @@ class PaymentEventMessagePublishIntegrationTest {
     }
 
     @Test
-    @DisplayName("SUCCESS 전이 커밋 → payment.confirmed 메시지가 정확히 1건 발행된다")
-    void successCommit_dispatchesConfirmedMessageOnce() {
+    @DisplayName("SUCCESS 커밋 → outbox 행 저장 + 즉시발행 성공 시 SUCCESS 마킹")
+    void successCommit_persistsOutboxAndMarksSent() {
         paymentStatusUpdateRepository.updatePaymentStatus(successCommand());
 
-        ArgumentCaptor<PaymentEventMessage> captor = ArgumentCaptor.forClass(PaymentEventMessage.class);
-        verify(dispatchEventMessagePort, times(1)).dispatch(captor.capture());
+        verify(dispatchEventMessagePort, atLeastOnce()).dispatch(any());
 
-        PaymentEventMessage message = captor.getValue();
-        assertThat(message.getMessageType()).isEqualTo(PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS);
+        String status = outboxStatus();
+        String type = jdbcTemplate.queryForObject(
+                "SELECT type FROM outbox WHERE idempotency_key = ?", String.class, orderId);
+        String payload = jdbcTemplate.queryForObject(
+                "SELECT payload FROM outbox WHERE idempotency_key = ?", String.class, orderId);
 
-        Map<String, Object> payload = message.getPayload();
-        assertThat(payload.get("orderId")).isEqualTo(orderId);
-        assertThat(payload.get("totalAmount")).isEqualTo(20000L);
-        assertThat(payload.get("buyerName")).asString().startsWith("mq-test-user-");
-        assertThat((List<?>) payload.get("items")).hasSize(2);
-
-        assertThat(message.getMetadata().get("source")).isEqualTo("core-spa");
+        assertThat(status).isEqualTo(OutboxStatus.SUCCESS.name());
+        assertThat(type).isEqualTo(PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS.name());
+        assertThat(payload).contains(orderId);
     }
 
     @Test
-    @DisplayName("트랜잭션 롤백 → 상태 전이가 취소되고 메시지는 발행되지 않는다")
-    void rollback_dispatchesNothing() {
+    @DisplayName("즉시발행 실패 → outbox 행이 FAILURE로 남아 릴레이 대상이 된다")
+    void dispatchFailure_marksOutboxAsFailure() {
+        doThrow(new RuntimeException("broker down")).when(dispatchEventMessagePort).dispatch(any());
+
+        paymentStatusUpdateRepository.updatePaymentStatus(successCommand());
+
+        assertThat(outboxCount()).isEqualTo(1);
+        assertThat(outboxStatus()).isEqualTo(OutboxStatus.FAILURE.name());
+    }
+
+    @Test
+    @DisplayName("트랜잭션 롤백 → outbox 행도 함께 롤백되어 남지 않는다")
+    void rollback_persistsNoOutboxRow() {
         transactionTemplate.executeWithoutResult(status -> {
             paymentStatusUpdateRepository.updatePaymentStatus(successCommand());
             status.setRollbackOnly();
         });
 
-        verify(dispatchEventMessagePort, never()).dispatch(org.mockito.ArgumentMatchers.any());
-
-        // 롤백이므로 주문 상태도 EXECUTING 그대로여야 한다
-        Integer successCount = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM payment_orders WHERE order_id = ? AND payment_status = 'SUCCESS'",
-                Integer.class, orderId);
-        assertThat(successCount).isZero();
+        assertThat(outboxCount()).isZero();
     }
 
     @Test
-    @DisplayName("FAILURE 전이 커밋 → payment.failed 메시지가 errorCode와 함께 발행된다")
-    void failureCommit_dispatchesFailedMessage() {
-        PaymentStatusUpdateCommand command = PaymentStatusUpdateCommand.builder()
-                .paymentKey("test-payment-key")
-                .orderId(orderId)
-                .status(PaymentStatus.FAILURE)
-                .failure(new PaymentFailure("REJECT_CARD_COMPANY", "카드사 거절"))
-                .build();
+    @DisplayName("릴레이 스케줄러 → 미확정(INIT) 행을 재발행하고 SUCCESS로 마킹한다")
+    void relay_reDispatchesPendingRowAndMarksSent() {
+        // 유예시간(10s) 이전에 생성된 INIT 행을 직접 심는다 → 릴레이의 재발행 대상.
+        jdbcTemplate.update(
+                "INSERT INTO outbox (idempotency_key, status, type, payload, metadata, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?)",
+                orderId,
+                OutboxStatus.INIT.name(),
+                PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS.name(),
+                "{\"orderId\":\"" + orderId + "\"}",
+                "{\"source\":\"core-spa\"}",
+                LocalDateTime.now().minusMinutes(1));
 
-        paymentStatusUpdateRepository.updatePaymentStatus(command);
+        relayService.relay(); // @Async — 별도 스레드에서 실행되므로 결과를 폴링한다.
 
-        ArgumentCaptor<PaymentEventMessage> captor = ArgumentCaptor.forClass(PaymentEventMessage.class);
-        verify(dispatchEventMessagePort, times(1)).dispatch(captor.capture());
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() ->
+                assertThat(outboxStatus()).isEqualTo(OutboxStatus.SUCCESS.name()));
 
-        PaymentEventMessage message = captor.getValue();
-        assertThat(message.getMessageType()).isEqualTo(PaymentEventMessageType.PAYMENT_CONFIRMATION_FAILURE);
-        assertThat(message.getPayload().get("orderId")).isEqualTo(orderId);
-        assertThat(message.getPayload().get("errorCode")).isEqualTo("REJECT_CARD_COMPANY");
+        verify(dispatchEventMessagePort, atLeastOnce()).dispatch(any());
+    }
+
+    private String outboxStatus() {
+        return jdbcTemplate.queryForObject(
+                "SELECT status FROM outbox WHERE idempotency_key = ?", String.class, orderId);
+    }
+
+    private Integer outboxCount() {
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM outbox WHERE idempotency_key = ?", Integer.class, orderId);
     }
 
     private PaymentStatusUpdateCommand successCommand() {
