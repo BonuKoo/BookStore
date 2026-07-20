@@ -16,6 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class Item {
 
+    // 판매자가 지정되지 않은 상품(네이버 검색 결과 등)의 기본 판매자 — "미지정/플랫폼" 취급.
+    // 결제 확정 이벤트가 이 값을 그대로 들고 워커까지 가므로, sellerId를 null로 남기면
+    // ledger-worker/settlement-worker가 언박싱 시 NPE를 낸다. 항상 값이 있도록 보장한다.
+    public static final Long UNASSIGNED_SELLER_ID = 0L;
+
     @Id @Column(name = "isbn",unique = true)
     private String isbn;        //ISBN 번호
     private String title;
@@ -34,6 +39,7 @@ public class Item {
         this.title = title;
         this.price = price;
         this.stockQuantity = stockQuantity;
+        this.sellerId = UNASSIGNED_SELLER_ID;
     }
 
     //재고 추가
