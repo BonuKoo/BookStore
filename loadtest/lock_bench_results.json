@@ -1,0 +1,231 @@
+{
+ "ops": 200,
+ "threads": 40,
+ "rounds": 3,
+ "results": {
+  "pessimistic": {
+   "rounds": [
+    {
+     "total_ms": 2255.8,
+     "ops_per_s": 88.7,
+     "mean_ms": 204.99,
+     "p95_ms": 799.16,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 2173.5,
+     "ops_per_s": 92.0,
+     "mean_ms": 191.26,
+     "p95_ms": 742.78,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 2137.8,
+     "ops_per_s": 93.6,
+     "mean_ms": 175.04,
+     "p95_ms": 716.97,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    }
+   ],
+   "median": {
+    "total_ms": 2173.5,
+    "ops_per_s": 92.0,
+    "mean_ms": 191.26,
+    "p95_ms": 742.78,
+    "success": 200,
+    "underflow": 0,
+    "retries": 0,
+    "retry_exhausted": 0,
+    "errors": 0,
+    "final_stock": 0,
+    "consistent": true
+   }
+  },
+  "optimistic": {
+   "rounds": [
+    {
+     "total_ms": 2676.5,
+     "ops_per_s": 71.7,
+     "mean_ms": 294.34,
+     "p95_ms": 987.04,
+     "success": 192,
+     "underflow": 0,
+     "retries": 2733,
+     "retry_exhausted": 8,
+     "errors": 0,
+     "final_stock": 8,
+     "consistent": true
+    },
+    {
+     "total_ms": 2706.9,
+     "ops_per_s": 72.4,
+     "mean_ms": 293.41,
+     "p95_ms": 899.0,
+     "success": 196,
+     "underflow": 0,
+     "retries": 2873,
+     "retry_exhausted": 4,
+     "errors": 0,
+     "final_stock": 4,
+     "consistent": true
+    },
+    {
+     "total_ms": 2666.2,
+     "ops_per_s": 73.9,
+     "mean_ms": 298.2,
+     "p95_ms": 939.41,
+     "success": 197,
+     "underflow": 0,
+     "retries": 2712,
+     "retry_exhausted": 3,
+     "errors": 0,
+     "final_stock": 3,
+     "consistent": true
+    }
+   ],
+   "median": {
+    "total_ms": 2676.5,
+    "ops_per_s": 71.7,
+    "mean_ms": 294.34,
+    "p95_ms": 987.04,
+    "success": 192,
+    "underflow": 0,
+    "retries": 2733,
+    "retry_exhausted": 8,
+    "errors": 0,
+    "final_stock": 8,
+    "consistent": true
+   }
+  },
+  "atomic": {
+   "rounds": [
+    {
+     "total_ms": 1639.3,
+     "ops_per_s": 122.0,
+     "mean_ms": 64.86,
+     "p95_ms": 159.87,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 8526.2,
+     "ops_per_s": 23.5,
+     "mean_ms": 1484.81,
+     "p95_ms": 3706.05,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 1638.3,
+     "ops_per_s": 122.1,
+     "mean_ms": 56.26,
+     "p95_ms": 119.75,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    }
+   ],
+   "median": {
+    "total_ms": 1639.3,
+    "ops_per_s": 122.0,
+    "mean_ms": 64.86,
+    "p95_ms": 159.87,
+    "success": 200,
+    "underflow": 0,
+    "retries": 0,
+    "retry_exhausted": 0,
+    "errors": 0,
+    "final_stock": 0,
+    "consistent": true
+   }
+  },
+  "queue_serial": {
+   "rounds": [
+    {
+     "total_ms": 449.8,
+     "ops_per_s": 444.6,
+     "mean_ms": 2.25,
+     "p95_ms": 2.85,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 425.2,
+     "ops_per_s": 470.3,
+     "mean_ms": 2.13,
+     "p95_ms": 2.77,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    },
+    {
+     "total_ms": 414.7,
+     "ops_per_s": 482.3,
+     "mean_ms": 2.07,
+     "p95_ms": 2.73,
+     "success": 200,
+     "underflow": 0,
+     "retries": 0,
+     "retry_exhausted": 0,
+     "errors": 0,
+     "final_stock": 0,
+     "consistent": true
+    }
+   ],
+   "median": {
+    "total_ms": 425.2,
+    "ops_per_s": 470.3,
+    "mean_ms": 2.13,
+    "p95_ms": 2.77,
+    "success": 200,
+    "underflow": 0,
+    "retries": 0,
+    "retry_exhausted": 0,
+    "errors": 0,
+    "final_stock": 0,
+    "consistent": true
+   }
+  }
+ }
+}

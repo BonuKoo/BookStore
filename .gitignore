@@ -44,3 +44,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Python 벤치/검증 스크립트 캐시
+__pycache__/
