@@ -4,7 +4,7 @@ import com.bookService.core.common.exception.PSPConfirmationException;
 import com.bookService.core.domain.payment.dto.*;
 import com.bookService.core.domain.payment.persistent.PaymentStatusUpdateRepository;
 import com.bookService.core.domain.payment.persistent.repository.springdata.SpringDataJpaPaymentOrderRepository;
-import com.bookService.core.infra.toss.executor.TossPaymentExecutor;
+import com.bookService.core.domain.payment.port.PaymentExecutorPort;
 import com.bookService.core.infra.toss.usecase.PaymentConfirmUseCase;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,9 @@ public class PaymentConfirmService implements PaymentConfirmUseCase {
 
     private final PaymentStatusUpdateRepository paymentStatusUpdateRepository;
     private final SpringDataJpaPaymentOrderRepository springDataJpaPaymentOrderRepository;
-    private final TossPaymentExecutor tossPaymentExecutor;
+    // 헥사고날 포트로 주입. 평상시엔 TossPaymentExecutor(실 PSP 호출)가 유일한 구현체이고,
+    // loadtest 프로파일에선 LoadTestPaymentExecutorStub이 @Primary로 대체한다.
+    private final PaymentExecutorPort tossPaymentExecutor;
 
     @Override
     @Transactional

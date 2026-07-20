@@ -1,0 +1,31 @@
+# k6 부하 테스트 전용 프로파일 (Phase 6).
+#
+# LoadTestPaymentExecutorStub(@Primary @Profile("loadtest"))를 활성화해
+# Toss 실호출 없이 confirm SUCCESS 경로를 대량으로 구동한다. confirm 이후의 전 경로
+# (상태 전이 → Outbox → AFTER_COMMIT 발행 → 브로커 → 워커 4종 → 완결 수신)는 실제 코드가 그대로 돈다.
+#
+# 실행: SPRING_PROFILES_ACTIVE=loadtest 로 기동 (또는 --spring.profiles.active=loadtest)
+# 이 파일은 application.yml 위에 덧붙여 로드되므로 DB/RabbitMQ 접속 정보는 그대로 상속한다.
+
+# HikariCP 풀 튜닝. 주의: 기본 application.yml의 hikari 블록은 spring.datasource.hikari가
+# 아니라 spring.hikari 위치(잘못된 들여쓰기)라 무시되고 기본 풀 10이 적용된다. 여기서
+# 올바른 경로(spring.datasource.hikari)로 재지정해 오버셀링 실험의 동시 confirm(VU 20)이
+# 풀 고갈로 타임아웃나지 않게 한다.
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 64
+      connection-timeout: 10000
+
+# 부하 중 로그/SQL IO가 처리량 측정을 왜곡하지 않도록 로깅을 최소화한다.
+# (기본 application.yml은 coyote TRACE + security DEBUG + p6spy SQL 로깅이 켜져 있어 부하에 부적합)
+logging:
+  level:
+    root: WARN
+    com.bookService.core: WARN
+    org.apache.coyote.http11: WARN
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+
+p6spy:
+  enable-logging: false

@@ -1,0 +1,3 @@
+# 실행마다 재생성되는 시더 산출물 (k6가 읽는 입력)
+orders.json
+oversell_orders.json
