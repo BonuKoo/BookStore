@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 
@@ -61,7 +62,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500
     }
 
-    // 3. 모든 처리되지 않은 예외 (최종 500)
+    // 3. 매핑되지 않은 경로 (예: 브라우저로 API 서버 루트를 직접 여는 경우) — 404로 정확히 응답
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ResponseDTO<?>> handleNoResourceFound(NoResourceFoundException ex) {
+        ResponseDTO<?> response = ResponseDTO.builder()
+                .error("요청한 경로를 찾을 수 없습니다.")
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response); // 404
+    }
+
+    // 4. 모든 처리되지 않은 예외 (최종 500)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<?>> handleAllExceptions(Exception ex) {
         // 최종 Fallback 500 처리 (Enum 사용)
