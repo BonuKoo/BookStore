@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>장바구니 · core 북스토어 (vanilla)</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header" id="app-header"></header>
+<main class="main" id="content">
+  <p class="muted">장바구니 불러오는 중…</p>
+</main>
+
+<script type="module">
+  import { mountHeader, requireAuth, formatWon } from './js/layout.js';
+  import { fetchCart, setCartItemAmount, removeCartItem, createCheckout } from './js/domain.js';
+
+  mountHeader('cart');
+  if (!requireAuth('cart.html')) throw new Error('redirecting to login');
+
+  const content = document.getElementById('content');
+  let busy = false;
+
+  function setBusy(next) {
+    busy = next;
+    content.querySelectorAll('button').forEach((b) => (b.disabled = busy));
+  }
+
+  async function reload() {
+    try {
+      const cart = await fetchCart();
+      render(cart);
+    } catch {
+      content.innerHTML = `<p class="error">장바구니를 불러오지 못했습니다.</p>`;
+    }
+  }
+
+  function render(cart) {
+    const lines = cart?.cartList ?? [];
+    const total = cart?.totalPrice?.cartTotPrice ?? 0;
+
+    if (lines.length === 0) {
+      content.innerHTML = `
+        <div class="center">
+          <h1>장바구니</h1>
+          <p class="muted">장바구니가 비어 있습니다.</p>
+          <a class="btn btn-primary" href="books.html">도서 보러 가기</a>
+        </div>`;
+      return;
+    }
+
+    content.innerHTML = `
+      <h1>장바구니</h1>
+      <table class="cart-table">
+        <thead><tr><th>도서</th><th>단가</th><th>수량</th><th>합계</th><th></th></tr></thead>
+        <tbody>
+          ${lines
+            .map(
+              (line) => `
+            <tr data-isbn="${line.isbn}">
+              <td><a href="book-detail.html?isbn=${encodeURIComponent(line.isbn)}">${line.name}</a></td>
+              <td>${formatWon(line.price)}</td>
+              <td>
+                <div class="stepper">
+                  <button class="btn btn-sm dec" aria-label="수량 감소">−</button>
+                  <span class="stepper-value">${line.amount}</span>
+                  <button class="btn btn-sm inc" aria-label="수량 증가">+</button>
+                </div>
+              </td>
+              <td>${formatWon(line.totPrice)}</td>
+              <td><button class="btn btn-sm btn-danger remove">삭제</button></td>
+            </tr>`
+            )
+            .join('')}
+        </tbody>
+      </table>
+      <div class="cart-footer">
+        <strong class="price big">총 ${formatWon(total)}</strong>
+        <button class="btn btn-primary btn-lg" id="checkout-btn">주문하기</button>
+      </div>
+      <p class="error" id="checkout-error" hidden></p>
+    `;
+
+    content.querySelectorAll('tr[data-isbn]').forEach((row) => {
+      const isbn = row.dataset.isbn;
+      const line = lines.find((l) => l.isbn === isbn);
+      row.querySelector('.inc').addEventListener('click', async () => {
+        if (busy) return;
+        setBusy(true);
+        try { await setCartItemAmount(isbn, line.amount + 1); await reload(); }
+        finally { setBusy(false); }
+      });
+      row.querySelector('.dec').addEventListener('click', async () => {
+        if (busy || line.amount <= 1) return;
+        setBusy(true);
+        try { await setCartItemAmount(isbn, line.amount - 1); await reload(); }
+        finally { setBusy(false); }
+      });
+      row.querySelector('.remove').addEventListener('click', async () => {
+        if (busy) return;
+        setBusy(true);
+        try { await removeCartItem(isbn); await reload(); }
+        finally { setBusy(false); }
+      });
+    });
+
+    document.getElementById('checkout-btn').addEventListener('click', async () => {
+      if (busy) return;
+      const btn = document.getElementById('checkout-btn');
+      const errEl = document.getElementById('checkout-error');
+      setBusy(true);
+      btn.textContent = '주문 생성 중…';
+      errEl.hidden = true;
+      try {
+        const order = await createCheckout(lines.map((l) => l.cartItemId));
+        sessionStorage.setItem('pendingOrder', JSON.stringify(order));
+        location.href = 'checkout.html';
+      } catch (err) {
+        errEl.textContent = err.message || '주문 생성에 실패했습니다.';
+        errEl.hidden = false;
+        setBusy(false);
+        btn.textContent = '주문하기';
+      }
+    });
+  }
+
+  reload();
+</script>
+</body>
+</html>

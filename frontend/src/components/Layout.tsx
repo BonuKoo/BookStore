@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import Button from './Button';
 
 export default function Layout() {
   const { isAuthenticated, username, logout } = useAuth();
@@ -14,7 +15,7 @@ export default function Layout() {
     <div className="app">
       <header className="header">
         <Link to="/" className="brand">
-          📚 core 북스토어
+          Core Bookstore
         </Link>
         <nav className="nav">
           <NavLink to="/books">도서 검색</NavLink>
@@ -24,9 +25,9 @@ export default function Layout() {
           {isAuthenticated ? (
             <>
               <span className="username">{username ?? '로그인됨'}</span>
-              <button className="btn btn-ghost" onClick={handleLogout}>
+              <Button variant="ghost" onClick={handleLogout}>
                 로그아웃
-              </button>
+              </Button>
             </>
           ) : (
             <Link to="/login" className="btn btn-ghost">
@@ -38,6 +39,13 @@ export default function Layout() {
       <main className="main">
         <Outlet />
       </main>
+      <footer className="footer">
+        <div className="footer-inner">
+          <span className="footer-brand">Core Bookstore</span>
+          <p className="footer-note">읽을 책을 고르는 일이 곧 취향이 되는 곳.</p>
+          <p className="footer-meta">© 2026 CORE BOOKSTORE</p>
+        </div>
+      </footer>
     </div>
   );
 }

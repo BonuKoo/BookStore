@@ -2,8 +2,12 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../api/auth';
+import { usePageTitle } from '../hooks/usePageTitle';
+import Button from '../components/Button';
+import Message from '../components/Message';
 
 export default function SignupPage() {
+  usePageTitle('회원가입');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +51,10 @@ export default function SignupPage() {
             required
           />
         </label>
-        {error && <p className="error">{error}</p>}
-        <button className="btn btn-primary" disabled={loading}>
+        {error && <Message variant="error">{error}</Message>}
+        <Button variant="primary" disabled={loading}>
           {loading ? '가입 중…' : '가입하기'}
-        </button>
+        </Button>
       </form>
       <p className="muted">
         이미 계정이 있으신가요? <Link to="/login">로그인</Link>

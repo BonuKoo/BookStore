@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>결제 실패 · core 북스토어 (vanilla)</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header" id="app-header"></header>
+<main class="main center">
+  <h1>결제에 실패했습니다</h1>
+  <p class="error" id="fail-message">알 수 없는 오류가 발생했습니다.</p>
+  <p class="muted" id="fail-code" hidden></p>
+  <a class="btn btn-primary" href="cart.html">장바구니로 돌아가기</a>
+</main>
+
+<script type="module">
+  // 토스 failUrl 콜백 — code/message 쿼리 파라미터로 실패 사유가 전달된다
+  import { mountHeader } from './js/layout.js';
+
+  mountHeader();
+
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+  const message = params.get('message');
+
+  if (message) document.getElementById('fail-message').textContent = message;
+  if (code) {
+    const codeEl = document.getElementById('fail-code');
+    codeEl.textContent = `오류 코드: ${code}`;
+    codeEl.hidden = false;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>소셜 로그인 처리 중 · core 북스토어 (vanilla)</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<header class="header" id="app-header"></header>
+<main class="main">
+  <p class="muted center">소셜 로그인 처리 중…</p>
+</main>
+
+<script type="module">
+  // OAuthSuccessHandler가 {origin}/sociallogin?token=... 으로 되돌려준다.
+  // 정적 서버가 확장자 없는 경로를 처리하도록 이 파일을 sociallogin/index.html(폴더 라우트)로 둔다.
+  // 토큰은 URL 쿼리로 오므로, 저장 즉시 replaceState로 히스토리에서 제거한다.
+  import { mountHeader } from '../js/layout.js';
+  import { setSession } from '../js/api.js';
+
+  mountHeader();
+
+  const params = new URLSearchParams(location.search);
+  const token = params.get('token');
+
+  if (token && token !== 'null') {
+    setSession(token);
+    history.replaceState(null, '', location.pathname);
+    location.href = '../books.html';
+  } else {
+    location.href = '../login.html';
+  }
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/* 14ISLANDS 스타일 시스템 — 모노크롬 에디토리얼 갤러리 (DESIGN.md 기준).
+/* 14ISLANDS 스타일 시스템 — 모노크롬 에디토리얼 갤러리 (React frontend/src/index.css와 동일 토큰).
    퓨어 화이트 캔버스 + 니어블랙 잉크 + 단 하나의 중간 회색(Stone)이 전부다.
    위계는 색이 아니라 '스케일'로 만든다 — 본문 16px 대비 디스플레이 세리프를 크게.
    섀도우 금지, 라디우스는 4px가 상한, 웨이트는 400 하나. CTA는 필 버튼이 아니라 텍스트 링크다. */
@@ -26,16 +26,26 @@
   /* Shape — 4px는 상한이자 유일한 라디우스. 섀도우/엘리베이션 토큰은 존재하지 않는다 */
   --radius: 4px;
   --page-max-width: 1400px;
-
-  font-family: var(--font-ui);
-  font-weight: 400;
-  color: var(--color-ink);
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--color-paper); font-size: var(--text-body); line-height: 1.4; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
 a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
 ::selection { background: var(--color-ink); color: var(--color-paper); }
+strong { font-weight: 400; } /* 강조는 굵기가 아니라 스케일과 대비로 */
+
 h1 {
   font-family: var(--font-display);
   font-size: var(--text-heading);
@@ -44,7 +54,14 @@ h1 {
   line-height: 1.05;
   margin: 0 0 48px;
 }
-strong { font-weight: 400; } /* 강조는 굵기가 아니라 스케일과 대비로 */
+.muted { color: var(--color-graphite); }
+.error { color: var(--color-ink); }
+.error::before { content: "! "; }
+.success { color: var(--color-ink); }
+.success::before { content: "— "; }
+.notice { color: var(--color-stone); }
+.price { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.price.big { font-family: var(--font-display); font-size: var(--text-subheading); letter-spacing: var(--tracking-display); }
 code {
   font-family: ui-monospace, Consolas, monospace;
   font-size: 0.85em;
@@ -52,9 +69,6 @@ code {
   padding: 2px 6px;
   border-radius: var(--radius);
 }
-
-.app { min-height: 100vh; display: flex; flex-direction: column; }
-.main { flex: 1; width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 60px 24px 140px; }
 
 /* header — 3존 레이아웃: 워드마크 좌측 / 내비 중앙 / 계정 우측.
    배경 필도, 보더도, 섀도우도 없다 — 위치만으로 위계를 만든다. */
@@ -81,6 +95,10 @@ code {
 .nav a:hover { color: var(--color-stone); }
 .header-right { grid-column: 3; grid-row: 1; display: flex; justify-content: flex-end; align-items: center; gap: 18px; }
 .username { color: var(--color-stone); font-size: var(--text-caption); letter-spacing: var(--tracking-caption); }
+
+.main { flex: 1; width: 100%; max-width: var(--page-max-width); margin: 0 auto; padding: 60px 24px 140px; }
+.center { text-align: center; padding: 80px 0; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+.auth-card h1, .center h1 { font-size: var(--text-subheading); line-height: 1.3; margin-bottom: 24px; }
 
 /* buttons — 이 시스템에 필 버튼은 없다. 링크가 곧 버튼이다.
    주 행동은 잉크 + 잉크 언더라인, 보조 행동은 그래파이트 + 헤어라인 언더라인. */
@@ -111,22 +129,10 @@ code {
 .btn-lg { font-size: 20px; padding: 8px 0; }
 .full { width: 100%; }
 
-/* forms & cards — 카드 표면은 Fog 하나로 조용히 구분한다. 보더도 섀도우도 없다 */
-.card {
-  background: var(--color-fog);
-  border: none;
-  border-radius: var(--radius);
-  padding: 25px;
-}
-.auth-card { max-width: 400px; margin: 80px auto; padding: 40px 32px; }
-.auth-card h1, .center h1 { font-size: var(--text-subheading); line-height: 1.3; margin-bottom: 24px; }
-.form { display: flex; flex-direction: column; gap: 18px; }
-.form label {
-  display: flex; flex-direction: column; gap: 8px;
-  font-size: var(--text-caption); color: var(--color-stone);
-  letter-spacing: var(--tracking-caption); text-transform: uppercase;
-}
-input {
+/* book list — 표지가 곧 카드다. 보더 없이 이미지가 표면 전체를 차지한다 */
+.search-bar { display: flex; gap: 20px; align-items: center; margin: 0 0 64px; }
+.search-bar input {
+  flex: 1;
   padding: 12px 14px;
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
@@ -137,8 +143,75 @@ input {
   color: var(--color-ink);
   transition: border-color 0.15s;
 }
-input::placeholder { color: var(--color-stone); }
-input:focus { outline: none; border-color: var(--color-ink); }
+.search-bar input::placeholder { color: var(--color-stone); }
+.search-bar input:focus { outline: none; border-color: var(--color-ink); }
+
+.book-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 64px 24px;
+}
+.book-card a { display: block; }
+.book-card img, .book-noimage {
+  width: 100%; aspect-ratio: 3/4; object-fit: cover;
+  border-radius: var(--radius); background: var(--color-fog);
+  transition: opacity 0.2s;
+}
+.book-card a:hover img { opacity: 0.85; }
+.book-noimage {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-stone); font-size: var(--text-caption); letter-spacing: var(--tracking-caption);
+}
+.book-info { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; font-size: var(--text-body); }
+.book-info strong {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.book-info .muted { font-size: var(--text-caption); color: var(--color-stone); letter-spacing: 0.04em; }
+
+.pager { display: flex; align-items: center; gap: 24px; justify-content: center; margin-top: 100px; }
+
+/* detail — 표지 한 장 + 에디토리얼 본문의 2단 스프레드 */
+.detail { display: grid; grid-template-columns: 320px 1fr; gap: 64px; align-items: start; }
+.detail-media img, .detail-media .book-noimage { border-radius: var(--radius); }
+.detail-body h1 { font-size: clamp(27px, 3.5vw, 44px); line-height: 1.2; margin-bottom: 20px; }
+.description { line-height: 1.7; color: var(--color-graphite); max-width: 62ch; }
+.detail-actions { display: flex; align-items: center; gap: 28px; margin: 40px 0; }
+@media (max-width: 640px) { .detail { grid-template-columns: 1fr; } .detail-media { width: 60%; } }
+
+.stepper { display: inline-flex; align-items: center; gap: 16px; }
+.stepper-value { min-width: 28px; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* cart — 잉크 톱룰 + 헤어라인 로우의 표. 카드 컨테이너 없음 */
+.cart-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--color-ink); margin-bottom: 32px; }
+.cart-table th, .cart-table td { text-align: left; padding: 18px 12px; border-bottom: 1px solid var(--hairline); }
+.cart-table th {
+  font-weight: 400; font-size: var(--text-caption); color: var(--color-stone);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+}
+.cart-table td a:hover { color: var(--color-stone); }
+.cart-footer { display: flex; align-items: center; justify-content: space-between; }
+
+/* forms & cards — 카드 표면은 Fog 하나로 조용히 구분한다. 보더도 섀도우도 없다 */
+.card { background: var(--color-fog); border: none; border-radius: var(--radius); padding: 25px; }
+.auth-card { max-width: 400px; margin: 80px auto; padding: 40px 32px; }
+.form { display: flex; flex-direction: column; gap: 18px; margin-top: 20px; }
+.form label {
+  display: flex; flex-direction: column; gap: 8px;
+  font-size: var(--text-caption); color: var(--color-stone);
+  letter-spacing: var(--tracking-caption); text-transform: uppercase;
+}
+.form input {
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--color-paper);
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--text-body);
+  color: var(--color-ink);
+  transition: border-color 0.15s;
+}
+.form input::placeholder { color: var(--color-stone); }
+.form input:focus { outline: none; border-color: var(--color-ink); }
 .divider {
   display: flex; align-items: center; gap: 14px;
   color: var(--color-stone); font-size: var(--text-caption);
@@ -147,78 +220,10 @@ input:focus { outline: none; border-color: var(--color-ink); }
 }
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
 .social-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
-.btn-social { justify-content: flex-start; }
-/* 브랜드 컬러를 UI에 들이지 않는다 — 소셜 링크도 모노크롬 텍스트 링크 */
-.btn-social.google, .btn-social.naver, .btn-social.kakao, .btn-social.github {
-  border-bottom-color: var(--hairline);
-}
+.btn-social { justify-content: flex-start; border-bottom-color: var(--hairline); }
 .btn-social:hover { border-bottom-color: var(--color-ink); }
 
-/* messages — 무채색 시스템: 강조는 색이 아니라 접두 기호와 잉크 대비로 */
-.error { color: var(--color-ink); font-size: var(--text-body); }
-.error::before { content: "! "; }
-.success { color: var(--color-ink); font-size: var(--text-body); }
-.success::before { content: "— "; }
-.notice { color: var(--color-stone); font-size: var(--text-body); }
-.muted { color: var(--color-graphite); }
-.center { text-align: center; padding: 80px 0; display: flex; flex-direction: column; gap: 18px; align-items: center; }
-
-/* book list — 표지가 곧 카드다. 보더 없이 이미지가 표면 전체를 차지한다 */
-.search-bar { display: flex; gap: 20px; align-items: center; margin: 0 0 64px; }
-.search-bar input { flex: 1; }
-.book-grid {
-  list-style: none; padding: 0; margin: 0;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 64px 24px;
-}
-.book-card { background: var(--color-paper); }
-.book-card img {
-  width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
-  border-radius: var(--radius); background: var(--color-fog);
-  transition: opacity 0.2s;
-}
-.book-card a:hover img { opacity: 0.85; }
-.book-noimage {
-  width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center;
-  background: var(--color-fog); color: var(--color-stone); font-size: var(--text-caption);
-  letter-spacing: var(--tracking-caption);
-  border-radius: var(--radius);
-}
-.book-info { display: flex; flex-direction: column; gap: 6px; padding: 14px 0 0; font-size: var(--text-body); }
-.book-info strong {
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.book-info .muted { font-size: var(--text-caption); color: var(--color-stone); letter-spacing: 0.04em; }
-.price { color: var(--color-ink); font-variant-numeric: tabular-nums; }
-.price.big { font-family: var(--font-display); font-size: var(--text-subheading); letter-spacing: var(--tracking-display); }
-.pager { display: flex; justify-content: center; align-items: center; gap: 24px; margin-top: 100px; }
-
-/* detail — 표지 한 장 + 에디토리얼 본문의 2단 스프레드 */
-.detail { display: flex; gap: 64px; align-items: flex-start; }
-.detail-media { flex: 0 0 320px; }
-.detail-media img { width: 100%; border-radius: var(--radius); }
-.detail-body { flex: 1; }
-.detail-body h1 { font-size: clamp(27px, 3.5vw, 44px); line-height: 1.2; margin-bottom: 20px; }
-.description { line-height: 1.7; color: var(--color-graphite); max-width: 62ch; }
-.detail-actions { display: flex; gap: 28px; align-items: center; margin-top: 40px; }
-@media (max-width: 640px) { .detail { flex-direction: column; } .detail-media { flex: none; width: 60%; } }
-
-/* stepper */
-.stepper { display: inline-flex; align-items: center; gap: 16px; }
-.stepper-value { min-width: 28px; text-align: center; font-variant-numeric: tabular-nums; }
-
-/* cart — 잉크 톱룰 + 헤어라인 로우의 표. 카드 컨테이너 없음 */
-.cart-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--color-ink); }
-.cart-table th, .cart-table td { padding: 18px 12px; border-bottom: 1px solid var(--hairline); text-align: left; }
-.cart-table th {
-  font-weight: 400; font-size: var(--text-caption); color: var(--color-stone);
-  letter-spacing: var(--tracking-caption); text-transform: uppercase;
-}
-.cart-table td a:hover { color: var(--color-stone); }
-.cart-footer { display: flex; justify-content: flex-end; align-items: center; gap: 48px; margin-top: 32px; }
-
-/* checkout */
-.checkout { max-width: 560px; margin: 0 auto; }
-.order-summary { margin-bottom: 30px; }
+.order-summary p { margin: 6px 0; }
 .order-summary .muted { display: inline-block; width: 72px; font-size: var(--text-caption); color: var(--color-stone); letter-spacing: var(--tracking-caption); }
 
 /* footer — 유일한 잉크 인버전 블록. 세리프 워드마크가 갤러리의 마침표 역할을 한다 */

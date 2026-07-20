@@ -17,12 +17,29 @@ npm run dev      # http://localhost:5173 (백엔드 CORS 허용 포트)
 ```
 src/
  ├─ api/          axios 인스턴스(Bearer 인터셉터) + 도메인별 API 함수
- ├─ auth/         AuthContext(토큰 상태), ProtectedRoute
- ├─ components/   Layout(헤더/네비), QuantityStepper
+ ├─ auth/         AuthContext(토큰 상태·State/Dispatch 겸용), ProtectedRoute
+ ├─ hooks/        useCart(장바구니 쿼리+뮤테이션), useRunOnce(마운트 1회 부수효과),
+ │                usePageTitle(document.title 동기화)
+ ├─ util/         format(formatWon·extractIsbn13), constants(PAGE_SIZE·SOCIAL_PROVIDERS)
+ ├─ components/   Layout(헤더/네비), Button(variant), Message(피드백 문구),
+ │                BookCard, SocialButtons, QuantityStepper
  ├─ pages/        Login, Signup, SocialLoginCallback,
  │                BookList, BookDetail, Cart, Checkout, PaymentSuccess/Fail
  └─ types/        백엔드 DTO 대응 타입 (ResponseDTO<T> 등)
 ```
+
+REACT_GUIDELINE.md(onebite-react)의 4계층 분리를 따른다: **pages**(데이터 조립) /
+**components**(props-only 표현+재사용) / **hooks**(use* 공유 로직) / **util**(React 무관 순수 함수).
+
+### 재배치 노트 (가이드라인 적용)
+
+- **hooks/·util/ 신설**: 페이지에 흩어져 있던 순수 계산(원화 표기, isbn13 추출)은 `util/`로,
+  반복되던 로직(장바구니 쿼리/뮤테이션, StrictMode 1회 실행 가드, 타이틀 동기화)은 `hooks/`로 뺐다.
+- **props-only 컴포넌트 분리**: `Button`(variant prop), `Message`(error/muted/success/notice),
+  `BookCard`, `SocialButtons`를 추출해 페이지는 조립만 하도록 했다.
+- **CSS는 단일 `index.css` 디자인 시스템 유지**(컴포넌트별 CSS 분리 대신). 컴포넌트는 `.btn`·`.error`
+  같은 공용 클래스를 className으로 참조한다 — 가이드라인의 "컴포넌트별 CSS 동반"에서 의도적으로 벗어난 부분.
+- 언어는 기존대로 **TypeScript 유지**(가이드라인 예시는 JSX지만 원칙은 언어 무관, TS를 JS로 낮추지 않음).
 
 ## 백엔드 계약 관련 주의사항 (코드에 주석으로도 표기)
 

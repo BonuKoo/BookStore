@@ -1,18 +1,15 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signin, socialLoginUrl } from '../api/auth';
-import type { SocialProvider } from '../api/auth';
+import { signin } from '../api/auth';
 import { useAuth } from '../auth/AuthContext';
-
-const PROVIDERS: Array<{ id: SocialProvider; label: string }> = [
-  { id: 'google', label: 'Google' },
-  { id: 'naver', label: '네이버' },
-  { id: 'kakao', label: '카카오' },
-  { id: 'github', label: 'GitHub' },
-];
+import { usePageTitle } from '../hooks/usePageTitle';
+import Button from '../components/Button';
+import Message from '../components/Message';
+import SocialButtons from '../components/SocialButtons';
 
 export default function LoginPage() {
+  usePageTitle('로그인');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -61,20 +58,14 @@ export default function LoginPage() {
             required
           />
         </label>
-        {error && <p className="error">{error}</p>}
-        <button className="btn btn-primary" disabled={loading}>
+        {error && <Message variant="error">{error}</Message>}
+        <Button variant="primary" disabled={loading}>
           {loading ? '로그인 중…' : '로그인'}
-        </button>
+        </Button>
       </form>
 
       <div className="divider">또는 소셜 계정으로</div>
-      <div className="social-buttons">
-        {PROVIDERS.map((p) => (
-          <a key={p.id} className={`btn btn-social ${p.id}`} href={socialLoginUrl(p.id)}>
-            {p.label}
-          </a>
-        ))}
-      </div>
+      <SocialButtons />
 
       <p className="muted">
         계정이 없으신가요? <Link to="/signup">회원가입</Link>

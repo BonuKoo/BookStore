@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>로그인 · core 북스토어 (vanilla)</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header" id="app-header"></header>
+<main class="main">
+  <div class="card auth-card">
+    <h1>로그인</h1>
+    <form class="form" id="login-form">
+      <label>아이디
+        <input name="username" autocomplete="username" required />
+      </label>
+      <label>비밀번호
+        <input type="password" name="password" autocomplete="current-password" required />
+      </label>
+      <p class="error" id="login-error" hidden></p>
+      <button class="btn btn-primary" id="login-submit">로그인</button>
+    </form>
+
+    <div class="divider">또는 소셜 계정으로</div>
+    <div class="social-buttons" id="social-buttons"></div>
+
+    <p class="muted" style="margin-top:1rem">
+      계정이 없으신가요? <a href="signup.html">회원가입</a>
+    </p>
+  </div>
+</main>
+
+<script type="module">
+  import { mountHeader } from './js/layout.js';
+  import { signin, socialLoginUrl, SOCIAL_PROVIDERS } from './js/domain.js';
+  import { setSession } from './js/api.js';
+
+  mountHeader('login');
+
+  document.getElementById('social-buttons').innerHTML = SOCIAL_PROVIDERS.map(
+    (p) => `<a class="btn btn-social ${p.id}" href="${socialLoginUrl(p.id)}">${p.label}</a>`
+  ).join('');
+
+  const form = document.getElementById('login-form');
+  const errorEl = document.getElementById('login-error');
+  const submitBtn = document.getElementById('login-submit');
+  const from = new URLSearchParams(location.search).get('from') || 'books.html';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.hidden = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = '로그인 중…';
+    const data = new FormData(form);
+    try {
+      const account = await signin(data.get('username'), data.get('password'));
+      if (!account.token) throw new Error('토큰이 응답에 없습니다.');
+      setSession(account.token, account.username);
+      location.href = from;
+    } catch (err) {
+      errorEl.textContent = err.message || '로그인에 실패했습니다.';
+      errorEl.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '로그인';
+    }
+  });
+</script>
+</body>
+</html>

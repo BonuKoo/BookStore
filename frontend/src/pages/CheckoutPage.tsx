@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import type { CheckoutResult } from '../types/api';
+import { usePageTitle } from '../hooks/usePageTitle';
+import { formatWon } from '../util/format';
+import Button from '../components/Button';
+import Message from '../components/Message';
 
 const CLIENT_KEY: string = import.meta.env.VITE_TOSS_CLIENT_KEY ?? '';
 
@@ -25,6 +29,7 @@ interface PaymentWidgets {
  * 백엔드 /v1/toss/confirm 승인으로 이어진다.
  */
 export default function CheckoutPage() {
+  usePageTitle('결제');
   const location = useLocation();
   const navigate = useNavigate();
   const order = (location.state as { order?: CheckoutResult } | null)?.order;
@@ -67,10 +72,10 @@ export default function CheckoutPage() {
     // 새로고침 등으로 주문 정보가 없으면 장바구니로 되돌린다 (멱등키 덕분에 재주문해도 동일 주문)
     return (
       <div className="center">
-        <p className="muted">주문 정보가 없습니다. 장바구니에서 다시 시도해 주세요.</p>
-        <button className="btn btn-primary" onClick={() => navigate('/cart')}>
+        <Message variant="muted">주문 정보가 없습니다. 장바구니에서 다시 시도해 주세요.</Message>
+        <Button variant="primary" onClick={() => navigate('/cart')}>
           장바구니로
-        </button>
+        </Button>
       </div>
     );
   }
@@ -104,22 +109,18 @@ export default function CheckoutPage() {
           <span className="muted">주문번호</span> <code>{order.orderId}</code>
         </p>
         {order.status === 'ALREADY_EXISTS' && (
-          <p className="notice">이미 생성된 주문입니다. 이어서 결제를 진행합니다.</p>
+          <Message variant="notice">이미 생성된 주문입니다. 이어서 결제를 진행합니다.</Message>
         )}
-        <p className="price big">{order.amount.toLocaleString()}원</p>
+        <p className="price big">{formatWon(order.amount)}</p>
       </div>
 
       <div id="payment-method" />
       <div id="agreement" />
 
-      {error && <p className="error">{error}</p>}
-      <button
-        className="btn btn-primary btn-lg full"
-        disabled={!ready || paying}
-        onClick={handlePay}
-      >
-        {paying ? '결제창 여는 중…' : `${order.amount.toLocaleString()}원 결제하기`}
-      </button>
+      {error && <Message variant="error">{error}</Message>}
+      <Button variant="primary" size="lg" full disabled={!ready || paying} onClick={handlePay}>
+        {paying ? '결제창 여는 중…' : `${formatWon(order.amount)} 결제하기`}
+      </Button>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useRunOnce } from '../hooks/useRunOnce';
+import Message from '../components/Message';
 
 /**
  * 소셜 로그인 콜백: OAuthSuccessHandler가 /sociallogin?token=... 으로 리다이렉트한다.
@@ -9,12 +10,8 @@ import { useAuth } from '../auth/AuthContext';
 export default function SocialLoginCallbackPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const handled = useRef(false);
 
-  useEffect(() => {
-    if (handled.current) return;
-    handled.current = true;
-
+  useRunOnce(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
 
@@ -26,7 +23,7 @@ export default function SocialLoginCallbackPage() {
     } else {
       navigate('/login', { replace: true });
     }
-  }, [login, navigate]);
+  });
 
-  return <p className="muted center">소셜 로그인 처리 중…</p>;
+  return <Message variant="muted" center>소셜 로그인 처리 중…</Message>;
 }

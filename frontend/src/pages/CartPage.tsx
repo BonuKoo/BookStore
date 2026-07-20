@@ -1,30 +1,18 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchCart, removeCartItem, setCartItemAmount } from '../api/cart';
 import { createCheckout } from '../api/checkout';
+import { useCart } from '../hooks/useCart';
+import { usePageTitle } from '../hooks/usePageTitle';
+import { formatWon } from '../util/format';
 import QuantityStepper from '../components/QuantityStepper';
+import Button from '../components/Button';
+import Message from '../components/Message';
 
 export default function CartPage() {
-  const queryClient = useQueryClient();
+  usePageTitle('장바구니');
   const navigate = useNavigate();
-
-  const { data: cart, isLoading, isError } = useQuery({
-    queryKey: ['cart'],
-    queryFn: fetchCart,
-  });
-
-  const invalidateCart = () => queryClient.invalidateQueries({ queryKey: ['cart'] });
-
-  const amountMutation = useMutation({
-    mutationFn: ({ isbn, amount }: { isbn: string; amount: number }) =>
-      setCartItemAmount(isbn, amount),
-    onSuccess: invalidateCart,
-  });
-
-  const removeMutation = useMutation({
-    mutationFn: (isbn: string) => removeCartItem(isbn),
-    onSuccess: invalidateCart,
-  });
+  const { cartQuery, amountMutation, removeMutation } = useCart();
+  const { data: cart, isLoading, isError } = cartQuery;
 
   const checkoutMutation = useMutation({
     mutationFn: (cartItemIds: number[]) => createCheckout(cartItemIds),
@@ -34,8 +22,8 @@ export default function CartPage() {
     },
   });
 
-  if (isLoading) return <p className="muted">장바구니 불러오는 중…</p>;
-  if (isError) return <p className="error">장바구니를 불러오지 못했습니다.</p>;
+  if (isLoading) return <Message variant="muted">장바구니 불러오는 중…</Message>;
+  if (isError) return <Message variant="error">장바구니를 불러오지 못했습니다.</Message>;
 
   const lines = cart?.cartList ?? [];
   const total = cart?.totalPrice?.cartTotPrice ?? 0;
@@ -46,7 +34,7 @@ export default function CartPage() {
     return (
       <div className="center">
         <h1>장바구니</h1>
-        <p className="muted">장바구니가 비어 있습니다.</p>
+        <Message variant="muted">장바구니가 비어 있습니다.</Message>
         <Link to="/books" className="btn btn-primary">
           도서 보러 가기
         </Link>
@@ -73,25 +61,24 @@ export default function CartPage() {
               <td>
                 <Link to={`/books/${line.isbn}`} dangerouslySetInnerHTML={{ __html: line.name }} />
               </td>
-              <td>{line.price.toLocaleString()}원</td>
+              <td>{formatWon(line.price)}</td>
               <td>
                 <QuantityStepper
                   value={line.amount}
                   disabled={busy}
-                  onChange={(next) =>
-                    amountMutation.mutate({ isbn: line.isbn, amount: next })
-                  }
+                  onChange={(next) => amountMutation.mutate({ isbn: line.isbn, amount: next })}
                 />
               </td>
-              <td>{line.totPrice.toLocaleString()}원</td>
+              <td>{formatWon(line.totPrice)}</td>
               <td>
-                <button
-                  className="btn btn-sm btn-danger"
+                <Button
+                  variant="danger"
+                  size="sm"
                   disabled={busy}
                   onClick={() => removeMutation.mutate(line.isbn)}
                 >
                   삭제
-                </button>
+                </Button>
               </td>
             </tr>
           ))}
@@ -99,21 +86,22 @@ export default function CartPage() {
       </table>
 
       <div className="cart-footer">
-        <strong className="price big">총 {total.toLocaleString()}원</strong>
-        <button
-          className="btn btn-primary btn-lg"
+        <strong className="price big">총 {formatWon(total)}</strong>
+        <Button
+          variant="primary"
+          size="lg"
           disabled={busy}
           onClick={() => checkoutMutation.mutate(lines.map((l) => l.cartItemId))}
         >
           {checkoutMutation.isPending ? '주문 생성 중…' : '주문하기'}
-        </button>
+        </Button>
       </div>
       {checkoutMutation.isError && (
-        <p className="error">
+        <Message variant="error">
           {checkoutMutation.error instanceof Error
             ? checkoutMutation.error.message
             : '주문 생성에 실패했습니다.'}
-        </p>
+        </Message>
       )}
     </div>
   );
