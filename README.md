@@ -90,9 +90,9 @@ flowchart LR
 | 리포 | 역할 |
 |---|---|
 | **BookStore**  | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 + 프론트엔드 |
-| ledger-worker | 복식부기 장부 기록 워커 (PC3) |
-| settlement-worker | 판매자별 지갑 정산 워커 (PC3) |
-| notification-worker | 결제 완료 알림 워커 (PC3) |
+| ledger-worker | 복식부기 장부 기록  |
+| settlement-worker | 판매자별 지갑 정산  |
+| notification-worker | 결제 완료 알림 |
 
 ## 로컬 실행
 
@@ -103,4 +103,3 @@ flowchart LR
 # 프론트엔드 (React)
 cd frontend && npm install && npm run dev   # http://localhost:5173
 ```
-> 설정: `application.yml`은 gitignore 처리되며, `application-template.yml`을 복사해 DB·RabbitMQ·API 키를 채운다.
