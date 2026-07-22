@@ -7,38 +7,6 @@
 > **물리적으로 분리된 3대 PC의 RabbitMQ 파이프라인**으로 구성했습니다.
 ---
 
-## 아키텍처
-
-```mermaid
-flowchart LR
-    U[사용자] -->|"결제 확정<br/>POST /v1/toss/confirm"| C
-
-    subgraph PC1 ["PC1 · 프로듀서"]
-        C[core-spa] -->|"같은 트랜잭션"| O[(Outbox)]
-        O -.->|"커밋 후 즉시 발행<br/>+ 1초 릴레이 재시도"| EX
-        SD[재고 차감 consumer]
-        CMP[완결 수신]
-        DB[(MySQL)]
-    end
-
-    subgraph PC2 ["PC2 · 브로커"]
-        EX{{"payment.exchange (topic)"}}
-    end
-
-    subgraph PC3 ["PC3 · 워커 3종"]
-        WS[settlement-worker<br/>판매자 정산]
-        WL[ledger-worker<br/>복식부기 장부]
-        WN[notification-worker<br/>알림]
-    end
-
-    EX -->|payment.confirmed| SD
-    EX -->|payment.confirmed| WS
-    EX -->|payment.confirmed| WL
-    EX -->|payment.confirmed| WN
-    WS -->|완결 통지| CMP
-    WL -->|완결 통지| CMP
-    CMP -->|"둘 다 완료 시"| DB
-```
 
 - **Transactional Outbox**: 결제 상태 전이와 같은 트랜잭션에 발행을 예약 → 커밋 직후 발행 → 실패 시 1초 릴레이 재발행. **발행 유실 원천 차단**.
 - **at-least-once + 멱등 컨슈머**: 모든 워커가 `order_id`/`seller_id` UNIQUE 제약으로 중복 처리 차단.
@@ -82,6 +50,40 @@ flowchart LR
 - 정산·장부 완결 통지를 수신해 결제를 최종 완결 처리(`is_payment_done`).
 
 ---
+
+## 아키텍처
+
+```mermaid
+flowchart LR
+    U[사용자] -->|"결제 확정<br/>POST /v1/toss/confirm"| C
+
+    subgraph PC1 ["PC1 · 프로듀서"]
+        C[core-spa] -->|"같은 트랜잭션"| O[(Outbox)]
+        O -.->|"커밋 후 즉시 발행<br/>+ 1초 릴레이 재시도"| EX
+        SD[재고 차감 consumer]
+        CMP[완결 수신]
+        DB[(MySQL)]
+    end
+
+    subgraph PC2 ["PC2 · 브로커"]
+        EX{{"payment.exchange (topic)"}}
+    end
+
+    subgraph PC3 ["PC3 · 워커 3종"]
+        WS[settlement-worker<br/>판매자 정산]
+        WL[ledger-worker<br/>복식부기 장부]
+        WN[notification-worker<br/>알림]
+    end
+
+    EX -->|payment.confirmed| SD
+    EX -->|payment.confirmed| WS
+    EX -->|payment.confirmed| WL
+    EX -->|payment.confirmed| WN
+    WS -->|완결 통지| CMP
+    WL -->|완결 통지| CMP
+    CMP -->|"둘 다 완료 시"| DB
+```
+
 
 
 ## 저장소 구성 (멀티 리포)
