@@ -53,7 +53,7 @@ flowchart LR
 | **Language / Framework** | **Java 21, Spring Boot 3.4.8** | 서버 구축, 4개 독립 애플리케이션(프로듀서 + 워커 3종) |
 | **Messaging** | **RabbitMQ (Spring AMQP)** | 결제 확정 이벤트의 비동기 분산 처리. Publisher Confirms · Manual ACK · DLX/DLQ |
 | **Database** | **MySQL 8** | 주문·결제·장바구니 데이터를 ACID 트랜잭션으로 관리. 결제 과정의 데이터 일관성 책임 |
-| **ORM / Query** | **Spring Data JPA, QueryDSL** | 엔티티 매핑 및 타입 안전 동적 쿼리 |
+| **ORM / Query** | **Spring Data JPA** | 엔티티 매핑 및 타입 안전 동적 쿼리 |
 | **Payment Gateway** | **Toss Payments (OpenFeign)** | 결제 승인·검증 등 실제 금융 거래 처리 (결제위젯 SDK + 승인 REST API) |
 | **Security** | **Spring Security, OAuth2, JWT** | 소셜 로그인(Google·네이버·카카오·GitHub) 후 JWT 발급, Stateless 인가 |
 | **Frontend** | **React 18 + TypeScript / Vanilla JS** | 동일 API를 소비하는 SPA·MPA 2종 (성능 비교용) |
