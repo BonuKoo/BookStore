@@ -7,13 +7,6 @@
 > **물리적으로 분리된 3대 PC의 RabbitMQ 파이프라인**으로 구성했습니다.
 ---
 
-
-- **Transactional Outbox**: 결제 상태 전이와 같은 트랜잭션에 발행을 예약 → 커밋 직후 발행 → 실패 시 1초 릴레이 재발행. **발행 유실 원천 차단**.
-- **at-least-once + 멱등 컨슈머**: 모든 워커가 `order_id`/`seller_id` UNIQUE 제약으로 중복 처리 차단.
-- **Dead Letter Queue + Manual ACK**: 처리 불가 메시지는 즉시 DLQ로 격리(무한 재전달 없음).
-
----
-
 ## 기술 스택 (Tech Stack)
 
 | 구분 | 기술 / 라이브러리 | 역할 |
@@ -50,6 +43,13 @@
 - 정산·장부 완결 통지를 수신해 결제를 최종 완결 처리(`is_payment_done`).
 
 ---
+
+- **Transactional Outbox**: 결제 상태 전이와 같은 트랜잭션에 발행을 예약 → 커밋 직후 발행 → 실패 시 1초 릴레이 재발행. **발행 유실 원천 차단**.
+- **at-least-once + 멱등 컨슈머**: 모든 워커가 `order_id`/`seller_id` UNIQUE 제약으로 중복 처리 차단.
+- **Dead Letter Queue + Manual ACK**: 처리 불가 메시지는 즉시 DLQ로 격리(무한 재전달 없음).
+
+---
+
 
 ## 아키텍처
 
