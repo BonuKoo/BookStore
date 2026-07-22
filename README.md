@@ -44,12 +44,11 @@
 
 ---
 
-- **Transactional Outbox**: 결제 상태 전이와 같은 트랜잭션에 발행을 예약 → 커밋 직후 발행 → 실패 시 1초 릴레이 재발행. **발행 유실 원천 차단**.
+- **Transactional Outbox**: 결제 상태 전이와 같은 트랜잭션에 발행을 예약 → 커밋 직후 발행 → 실패 시 1초 릴레이 재발행.
 - **at-least-once + 멱등 컨슈머**: 모든 워커가 `order_id`/`seller_id` UNIQUE 제약으로 중복 처리 차단.
-- **Dead Letter Queue + Manual ACK**: 처리 불가 메시지는 즉시 DLQ로 격리(무한 재전달 없음).
+- **Dead Letter Queue + Manual ACK**: 처리 불가 메시지는 즉시 DLQ로 격리
 
 ---
-
 
 ## 아키텍처
 
@@ -90,15 +89,10 @@ flowchart LR
 
 | 리포 | 역할 |
 |---|---|
-| **BookStore** (현재) | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 + 프론트엔드 |
+| **BookStore**  | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 + 프론트엔드 |
 | ledger-worker | 복식부기 장부 기록 워커 (PC3) |
 | settlement-worker | 판매자별 지갑 정산 워커 (PC3) |
 | notification-worker | 결제 완료 알림 워커 (PC3) |
-
-## 문서
-
-- [분산 메시징 전체 기획안](docs/distributed-mq-plan.md) — 물리 배치·설계 결정·페이즈 로드맵
-- [장애 주입 실험](docs/failure-experiments.md) — 브로커/컨슈머 장애 복원력
 
 ## 로컬 실행
 
