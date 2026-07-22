@@ -96,10 +96,7 @@ flowchart LR
 ## 문서
 
 - [분산 메시징 전체 기획안](docs/distributed-mq-plan.md) — 물리 배치·설계 결정·페이즈 로드맵
-- [부하 테스트 결과](docs/load-test-results.md) — HikariCP 병목·오버셀링·완결 동시성 버그
-- [동시성 전략 벤치마크](docs/concurrency-benchmark.md) — 락 4종 실측 + 독립 검증
 - [장애 주입 실험](docs/failure-experiments.md) — 브로커/컨슈머 장애 복원력
-- [프론트엔드 성능 비교](docs/frontend-comparison.md) — React vs 바닐라
 
 ## 로컬 실행
 
