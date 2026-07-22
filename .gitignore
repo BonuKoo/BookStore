@@ -47,3 +47,10 @@ out/
 
 # Python 벤치/검증 스크립트 캐시
 __pycache__/
+
+# 내부 작업/세션 문서 (포트폴리오 비공개 — 로컬 보존)
+docs/session-prompts.md
+docs/codebase-state.md
+docs/progress-and-roadmap.md
+docs/paymentmodel-analysis.md
+docs/NOTION_*.md
