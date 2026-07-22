@@ -1,8 +1,8 @@
-# application.yml 템플릿 — 실제 application.yml은 git에 커밋되지 않는다(.gitignore).
-# PC1을 새로 세팅할 때 이 파일을 application.yml로 복사한 뒤 <값>을 채울 것.
+# application.yml
+# 새로 세팅할 때 이 파일을 application.yml로 복사한 뒤 <값>을 채울 것.
 
 server:
-  port: 8080
+  port: 임의
 spring:
   application:
     core
@@ -12,14 +12,14 @@ spring:
     username: root
     password: <MYSQL_PASSWORD>
   hikari:
-    connection-timeout: 5000
-    maximum-pool-size: 120
+    connection-timeout: 임의
+    maximum-pool-size: 임의
   jpa:
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
-        jdbc.batch_size: 1000
+        jdbc.batch_size: 임의
         order_inserts: true
         generate_statistics: false
   batch:
@@ -31,8 +31,8 @@ spring:
     mongodb:
       uri: 
   rabbitmq:
-    host: 192.168.0.6
-    port: 5672
+    host: 임의
+    port: 임의
     username: app 이름
     password: <RABBITMQ_PASSWORD>
     virtual-host: app이름_vhost
