@@ -97,8 +97,8 @@ flowchart LR
 
 ### 🔗 Related Repositories
 
-- 📘 Ledger Service → [:contentReference[oaicite:0]{index=0}](https://github.com/BonuKoo/BookStore_ledger.git)  
-- 💰 Settlement Service → [:contentReference[oaicite:1]{index=1}](https://github.com/BonuKoo/BookStore_settlement.git)  
+- 📘 Ledger Service → [BookStore_Ledger](https://github.com/your-org/BookStore_Ledger)  
+- 💰 Settlement Service → [BookStore_Settlement](https://github.com/your-org/BookStore_Settlement)  
 
 ## 저장소 구성 (멀티 리포)
 
