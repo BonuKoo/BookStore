@@ -8,22 +8,6 @@
 > **물리적으로 분리된 3대 PC의 RabbitMQ 파이프라인**으로 구성했습니다.
 ---
 
-## 기술 스택 (Tech Stack)
-
-| 구분 | 기술 / 라이브러리 | 역할 |
-| :--- | :--- | :--- |
-| **Language / Framework** | **Java 21, Spring Boot 3.4.8** | 서버 구축, 4개 독립 애플리케이션(프로듀서 + 워커 3종) |
-| **Messaging** | **RabbitMQ (Spring AMQP)** | 결제 확정 이벤트의 비동기 분산 처리. Publisher Confirms · Manual ACK · DLX/DLQ |
-| **Database** | **MySQL 8** | 주문·결제·장바구니 데이터를 ACID 트랜잭션으로 관리. 결제 과정의 데이터 일관성 책임 |
-| **ORM / Query** | **Spring Data JPA** | 엔티티 매핑 및 타입 안전 동적 쿼리 |
-| **Payment Gateway** | **Toss Payments (OpenFeign)** | 결제 승인·검증 등 실제 금융 거래 처리 (결제위젯 SDK + 승인 REST API) |
-| **Security** | **Spring Security, OAuth2, JWT** | 소셜 로그인(Google·네이버·카카오·GitHub) 후 JWT 발급, Stateless 인가 |
-| **Frontend** | **React 18 + TypeScript / Vanilla JS** | 동일 API를 소비하는 SPA·MPA 2종 (성능 비교용) |
-| **Test / Load** | **JUnit 5, k6** | 단위 테스트, 부하 테스트(HikariCP 병목·동시성 버그 발견) |
-| **Build** | **Gradle** | 의존성 관리 및 빌드 자동화 |
-
----
-
 ## 주요 기능 상세 (Key Features)
 
 ### 1. 결제 모듈 (Toss Payments 연동)
@@ -95,11 +79,6 @@ flowchart LR
 | **settlement-worker** | 판매자 정산 처리 |
 | **notification-worker** | 결제 완료 알림 |
 
-### 🔗 Related Repositories
-
-- 📘 Ledger Service → [BookStore_Ledger](https://github.com/your-org/BookStore_Ledger)  
-- 💰 Settlement Service → [BookStore_Settlement](https://github.com/your-org/BookStore_Settlement)  
-
 ## 저장소 구성 (멀티 리포)
 
 | 리포 | 역할 |
@@ -107,7 +86,9 @@ flowchart LR
 | **BookStore**  | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 + 프론트엔드 |
 | ledger-worker | 복식부기 장부 기록  |
 | settlement-worker | 판매자별 지갑 정산  |
-| notification-worker | 결제 완료 알림 |
+
+- Ledger Service → [BookStore_Ledger](https://github.com/your-org/BookStore_Ledger)  
+- Settlement Service → [BookStore_Settlement](https://github.com/your-org/BookStore_Settlement)  
 
 ## 로컬 실행
 
@@ -118,3 +99,19 @@ flowchart LR
 # 프론트엔드 (React)
 cd frontend && npm install && npm run dev   # http://localhost:5173
 ```
+
+## 기술 스택 (Tech Stack)
+
+| 구분 | 기술 / 라이브러리 | 역할 |
+| :--- | :--- | :--- |
+| **Language / Framework** | **Java 21, Spring Boot 3.4.8** | 서버 구축, 4개 독립 애플리케이션(프로듀서 + 워커 3종) |
+| **Messaging** | **RabbitMQ (Spring AMQP)** | 결제 확정 이벤트의 비동기 분산 처리. Publisher Confirms · Manual ACK · DLX/DLQ |
+| **Database** | **MySQL 8** | 주문·결제·장바구니 데이터를 ACID 트랜잭션으로 관리. 결제 과정의 데이터 일관성 책임 |
+| **ORM / Query** | **Spring Data JPA** | 엔티티 매핑 및 타입 안전 동적 쿼리 |
+| **Payment Gateway** | **Toss Payments (OpenFeign)** | 결제 승인·검증 등 실제 금융 거래 처리 (결제위젯 SDK + 승인 REST API) |
+| **Security** | **Spring Security, OAuth2, JWT** | 소셜 로그인(Google·네이버·카카오·GitHub) 후 JWT 발급, Stateless 인가 |
+| **Frontend** | **React 18 + TypeScript / Vanilla JS** | 동일 API를 소비하는 SPA·MPA 2종 (성능 비교용) |
+| **Test / Load** | **JUnit 5, k6** | 단위 테스트, 부하 테스트(HikariCP 병목·동시성 버그 발견) |
+| **Build** | **Gradle** | 의존성 관리 및 빌드 자동화 |
+
+---
