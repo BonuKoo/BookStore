@@ -97,9 +97,8 @@ flowchart LR
 
 ### 🔗 Related Repositories
 
-- 📘 Ledger Service → :contentReference[oaicite:0]{index=0}  
-- 💰 Settlement Service → :contentReference[oaicite:1]{index=1}  
-- 🔔 Notification Service → :contentReference[oaicite:2]{index=2}
+- 📘 Ledger Service → [:contentReference[oaicite:0]{index=0}](https://github.com/BonuKoo/BookStore_ledger.git)  
+- 💰 Settlement Service → [:contentReference[oaicite:1]{index=1}](https://github.com/BonuKoo/BookStore_settlement.git)  
 
 ## 저장소 구성 (멀티 리포)
 
