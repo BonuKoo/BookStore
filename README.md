@@ -68,17 +68,6 @@ flowchart LR
     CMP -->|"둘 다 완료 시"| DB
 ```
 
-## 🧩 Repository Structure (Multi-Repo)
-
-이 프로젝트는 역할별로 분리된 마이크로서비스 구조로 구성되어 있습니다.
-
-| Repository | 역할 |
-|-----------|------|
-| **core-spa** | 결제·주문·인증 처리 (Producer) + 재고 차감 + 결제 완료 처리 + 프론트엔드 |
-| **ledger-worker** | 복식부기 장부 기록 |
-| **settlement-worker** | 판매자 정산 처리 |
-| **notification-worker** | 결제 완료 알림 |
-
 ## 저장소 구성 (멀티 리포)
 
 | 리포 | 역할 |
