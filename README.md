@@ -72,12 +72,14 @@ flowchart LR
 
 | 리포 | 역할 |
 |---|---|
-| **BookStore**  | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 + 프론트엔드 |
+| **BookStore**  | core-spa — 프로듀서(결제·주문·인증) + 재고 차감 컨슈머 + 완결 수신 |
+| BookStore_frontend | 프론트엔드 — `react`/`vanilla` 브랜치에 SPA·MPA 2종 + 성능 비교 |
 | ledger-worker | 복식부기 장부 기록  |
 | settlement-worker | 판매자별 지갑 정산  |
 
 - Ledger Service → [BookStore_Ledger](https://github.com/your-org/BookStore_Ledger)  
 - Settlement Service → [BookStore_Settlement](https://github.com/your-org/BookStore_Settlement)  
+- Frontend → [BookStore_frontend](https://github.com/BonuKoo/BookStore_frontend)  
 
 ## 로컬 실행
 
@@ -85,9 +87,12 @@ flowchart LR
 # 백엔드 (MySQL·RabbitMQ 필요)
 ./gradlew bootRun
 
-# 프론트엔드 (React)
-cd frontend && npm install && npm run dev   # http://localhost:5173
+# 프론트엔드 — 별도 리포(BookStore_frontend)
+git clone -b react https://github.com/BonuKoo/BookStore_frontend.git
+cd BookStore_frontend/frontend && npm install && npm run dev   # http://localhost:5173
 ```
+> 프론트엔드는 `react`(React SPA) / `vanilla`(바닐라 MPA) 브랜치로 나뉜다. 백엔드 CORS 허용
+> 오리진(`WebSecurityConfig`)이 `localhost:5173`·`localhost:3000`으로 고정되어 있으니 포트를 유지한다.
 
 ## 기술 스택 (Tech Stack)
 
@@ -99,7 +104,7 @@ cd frontend && npm install && npm run dev   # http://localhost:5173
 | **ORM / Query** | **Spring Data JPA** | 엔티티 매핑 및 타입 안전 동적 쿼리 |
 | **Payment Gateway** | **Toss Payments (OpenFeign)** | 결제 승인·검증 등 실제 금융 거래 처리 (결제위젯 SDK + 승인 REST API) |
 | **Security** | **Spring Security, OAuth2, JWT** | 소셜 로그인(Google·네이버·카카오·GitHub) 후 JWT 발급, Stateless 인가 |
-| **Frontend** | **React 18 + TypeScript / Vanilla JS** | 동일 API를 소비하는 SPA·MPA 2종 (성능 비교용) |
+| **Frontend** | **React 18 + TypeScript / Vanilla JS** | 동일 API를 소비하는 SPA·MPA 2종 (성능 비교용) — 별도 리포 `BookStore_frontend` |
 | **Test / Load** | **JUnit 5, k6** | 단위 테스트, 부하 테스트(HikariCP 병목·동시성 버그 발견) |
 | **Build** | **Gradle** | 의존성 관리 및 빌드 자동화 |
 
