@@ -1,4 +1,4 @@
-# BookStore — Toss 결제 + 분산 메시징 온라인 서점 (core-mq)
+# BookStore — Toss 결제 + 분산 메시징 온라인 서점
 
 ## 프로젝트 개요
 
