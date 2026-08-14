@@ -90,6 +90,12 @@ public class JpaPaymentEventRepository implements PaymentEventRepository {
         }
     }
 
+    @Override
+    @Transactional
+    public boolean tryMarkPaymentDone(String orderId) {
+        return springDataJpaPaymentEventRepository.tryMarkPaymentDone(orderId);
+    }
+
     // M4: wallet/ledger 완결 통지를 받을 때마다 각각의 플래그만 별도로 반영한다.
     // 완료 여부(complete())와는 별개 — 호출측(PaymentCompletionService)이
     // completeIfDone() 판단 후 필요할 때만 complete()를 호출한다.

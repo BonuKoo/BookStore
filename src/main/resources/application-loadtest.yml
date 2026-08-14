@@ -7,10 +7,9 @@
 # 실행: SPRING_PROFILES_ACTIVE=loadtest 로 기동 (또는 --spring.profiles.active=loadtest)
 # 이 파일은 application.yml 위에 덧붙여 로드되므로 DB/RabbitMQ 접속 정보는 그대로 상속한다.
 
-# HikariCP 풀 튜닝. 주의: 기본 application.yml의 hikari 블록은 spring.datasource.hikari가
-# 아니라 spring.hikari 위치(잘못된 들여쓰기)라 무시되고 기본 풀 10이 적용된다. 여기서
-# 올바른 경로(spring.datasource.hikari)로 재지정해 오버셀링 실험의 동시 confirm(VU 20)이
-# 풀 고갈로 타임아웃나지 않게 한다.
+# HikariCP 풀 튜닝. 기본 application.yml의 hikari 블록 위치 오류(spring.hikari로 무시되던
+# 문제)는 수정 완료 — 이제 spring.datasource.hikari에 정상 반영된다(기본 풀 120).
+# 이 프로파일은 부하 실험 조건(VU 20)에 맞춰 별도로 64를 지정해 재현성을 유지한다.
 spring:
   datasource:
     hikari:

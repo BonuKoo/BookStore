@@ -73,6 +73,11 @@ public class PaymentPersistentAdapter implements SavePaymentPort, PaymentStatusU
     }
 
     @Override
+    public boolean tryMarkPaymentDone(String orderId) {
+        return paymentEventRepository.tryMarkPaymentDone(orderId);
+    }
+
+    @Override
     public void handleWalletUpdate(PaymentEventDto paymentEvent) {
         paymentEventRepository.handleWalletUpdate(paymentEvent);
     }

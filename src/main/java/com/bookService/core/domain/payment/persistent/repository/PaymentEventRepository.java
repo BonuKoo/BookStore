@@ -26,6 +26,8 @@ public interface PaymentEventRepository {
 
     void complete(PaymentEventDto paymentEventDto);
 
+    boolean tryMarkPaymentDone(String orderId);
+
     // M4: 메시지 큐 연동 (settlement-worker/ledger-worker의 완결 통지 수신)
     void handleWalletUpdate(PaymentEventDto paymentEventDto);
     void handleLedgerUpdate(PaymentEventDto paymentEventDto);

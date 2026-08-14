@@ -8,6 +8,7 @@ import com.bookService.core.domain.payment.dto.PendingPaymentRowDto;
 import com.bookService.core.domain.payment.entity.QPaymentEvent;
 import com.bookService.core.domain.payment.entity.QPaymentOrder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -117,6 +118,22 @@ public class PaymentEventRepository4QueryImpl implements PaymentEventRepository4
                 .fetchOne();
 
         return Optional.ofNullable(projectionOpt);
+    }
+
+    @Override
+    public boolean tryMarkPaymentDone(String orderId) {
+        long updated = queryFactory.update(paymentEvent)
+                .set(paymentEvent.isPaymentDone, true)
+                .where(paymentEvent.orderId.eq(orderId)
+                        .and(paymentEvent.isPaymentDone.eq(false))
+                        .and(JPAExpressions.selectOne()
+                                .from(paymentOrder)
+                                .where(paymentOrder.orderId.eq(orderId)
+                                        .and(paymentOrder.isWalletUpdated.eq(false)
+                                                .or(paymentOrder.isLedgerUpdated.eq(false))))
+                                .notExists()))
+                .execute();
+        return updated > 0;
     }
 
     @Override

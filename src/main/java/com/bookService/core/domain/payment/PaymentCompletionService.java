@@ -46,9 +46,12 @@ public class PaymentCompletionService {
         confirmUpdate.accept(dto);
         persistFlag.accept(dto);
 
-        dto.completeIfDone();
-        if (dto.isPaymentDone()) {
-            completePaymentPort.complete(dto);
+        // dto.completeIfDone()/isPaymentDone()은 이 스레드가 조회 시점에 들고 있던
+        // in-memory 스냅샷으로 판정하므로, wallet/ledger 통지가 병렬로 도착하면
+        // 서로 상대방의 커밋을 보지 못해 아무도 완결 처리를 하지 않는 레이스가 있었다.
+        // tryMarkPaymentDone은 DB의 현재 상태를 조건으로 원자적으로 재확인하므로
+        // 정확히 한 번만 true를 반환한다.
+        if (completePaymentPort.tryMarkPaymentDone(orderId)) {
             log.info("결제 완결 처리됨: orderId={}", orderId);
         }
     }
